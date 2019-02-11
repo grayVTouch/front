@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="./css/MenuSwitch.css" />
+</head>
+<body>
+
+    <!-- 功能导航菜单 -->
+    <div class="menu-switch-container">
+        <div class='menu-switch menu-switch-for-1'>
+            <div class='item cur'>测试 1</div>
+            <div class='item'>测试 2</div>
+        </div>
+    </div>
+
+    <script src="../SmallJs/SmallJs.js"></script>
+    <script src="./js/MenuSwitch.js"></script>
+    <script>
+        (function(){
+            'use strict';
+
+            var con = G('.menu-switch-container').first();
+
+            var m = MenuSwitch(con.get() , {});
+
+            console.log(m);
+        })();
+    </script>
+
+</body>
+</html>

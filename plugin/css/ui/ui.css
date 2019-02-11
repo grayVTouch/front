@@ -1,0 +1,941 @@
+s/*
+ * 开关组件
+ */
+.switch_control {
+	background-color:#16a085;
+	display:inline-block;
+	zoom:1;
+	vertical-align:middle;
+	width: 32px;
+	height:20px;
+	border-radius: 12px;
+	padding: 2px 2px;
+	cursor:pointer;
+}
+
+.switch_control .switch_scroll_btn {
+	width:20px;
+	height:20px;
+	display:inline-block;
+	vertical-align:top;
+	zoom:1;
+	border-radius:20px;
+	background-color:white;
+	position:absolute;
+	left:14px;
+}
+
+/*
+ * 弹层组件
+ */
+.elastic_layer {
+	position:absolute;
+	opacity:0;
+	z-index:1;
+	transform:translateY(100%);
+	-webkit-transform:translateY(100%);
+	-moz-transform:translateY(100%);
+	-o-transform:translateY(100%);
+	-ms-transform:translateY(100%);
+}
+
+/**
+ *******************
+ * 按钮组件
+ *******************
+ */
+
+/*
+ * 按钮风格 1，小型按钮
+ */
+.btn-1 {
+	display:inline-block !important;
+	padding:0px 10px;
+	height:25px;
+	line-height:23px;
+	background-color:#F7F7F7 !important;
+	font-size:12px;
+	color:#666;;
+	border:1px solid #ddd !important;;
+	border-radius:2px;
+	cursor:pointer;
+	transition:all 0.15s linear;
+	-webkit-transition:all 0.15s linear;
+	-moz-transition:all 0.15s linear;
+	-o-transition:all 0.15s linear;
+	-ms-transition:all 0.15s linear;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+}
+
+.btn-1:hover {
+	background-color:#E74649 !important;
+	color:#fff;;
+	border-color:#E74649 !important;;
+}
+
+.btn-1-disabled {
+    background-color: transparent !important;
+    color: #999;
+    border: 1px solid #eee !important;
+    cursor: default;
+}
+
+.btn-1-disabled:hover {
+    background-color: transparent !important;
+    color: #999;
+    border: 1px solid #eee !important;
+    cursor: default;
+}
+
+
+/*
+ * 按钮风格 2，中型按钮（表单提交型按钮）
+ */
+.btn-2 {
+    height: 30px;
+	line-height:30px;
+    padding: 0px 60px;
+    border-radius: 2px;
+	display:inline-block !important;
+    background-color: #C21A1A !important;
+    border: none;
+    color: white;
+    font-size: 12px;;
+    font-family: inherit;
+	cursor:pointer;
+	transition:all 0.15s linear;
+	-webkit-transition:all 0.15s linear;
+	-moz-transition:all 0.15s linear;
+	-o-transition:all 0.15s linear;
+	-ms-transition:all 0.15s linear;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+}
+
+.btn-2:hover {
+	background-color:#E74649 !important;
+}
+
+/*
+ * 按钮风格 3，微型按钮
+ */
+.btn-3 {
+	display:inline-block !important;
+	padding:0px 6px;
+	height:22px;
+	line-height:20px;
+	background-color:#F7F7F7 !important;
+	font-size:12px;
+	color:#666;;
+	border:1px solid #ddd !important;;
+	border-radius:2px;
+	cursor:pointer;
+	transition:all 0.15s linear;
+	-webkit-transition:all 0.15s linear;
+	-moz-transition:all 0.15s linear;
+	-o-transition:all 0.15s linear;
+	-ms-transition:all 0.15s linear;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+}
+
+.btn-3:hover {
+	background-color:rgba(239, 42, 45, 0.6) !important;
+	color:#fff;;
+	border-color:#E74649 !important;;
+}
+
+.btn-3-disabled {
+    background-color: transparent !important;
+    color: #999;
+    border: 1px solid #eee !important;
+    cursor: default;
+}
+
+.btn-3-disabled:hover {
+    background-color: transparent !important;
+    color: #999;
+    border: 1px solid #eee !important;
+    cursor: default;
+}
+
+/*
+ * 按钮风格 4
+ */
+.btn-4 {
+	display:inline-block !important;
+	padding:0px 6px;
+	height:25px;
+	line-height:23px;
+	background-color:#F7F7F7 !important;
+	font-size:12px;
+	color:#666;;
+	border:1px solid #ddd !important;;
+	border-radius:1px;
+	cursor:pointer;
+	transition:all 0.15s linear;
+	-webkit-transition:all 0.15s linear;
+	-moz-transition:all 0.15s linear;
+	-o-transition:all 0.15s linear;
+	-ms-transition:all 0.15s linear;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+}
+
+
+/**
+ * 按钮风格 5：普通纯文本风格
+ */
+.btn-5 {
+	font-size:12px;
+	color:#999;
+	padding:0px;
+	cursor:pointer;
+}
+
+.btn-5:hover {
+	color:#555;
+}
+
+.btn-5-cur {
+	color:#555;
+}
+
+/**
+ * 按钮风格 6：普通纯文本风格 + SimSun 字体
+ */
+.btn-6 {
+	font-size:12px;
+	color:#999;
+	font-family:SimSun;
+	cursor:pointer;
+}
+
+.btn-6-cur {
+	color:#555;
+}
+
+.btn-6:hover {
+	color:#555;
+}
+
+/*
+ * 按钮风格 7
+ */
+.btn-7 {
+	display:inline-block !important;
+	padding: 0px 15px;
+	height: 32px;
+	line-height:32px;
+	background-color: #B61D1D !important;
+	font-size:12px;
+	color: #eee !important;
+	border: none;
+	border-radius:2px;
+	cursor:pointer;
+	transition:all 0.15s linear;
+	-webkit-transition:all 0.15s linear;
+	-moz-transition:all 0.15s linear;
+	-o-transition:all 0.15s linear;
+	-ms-transition:all 0.15s linear;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+}
+
+.btn-7:hover {
+	background-color:#E82C2C !important;
+}
+
+/**
+ * 风格 8
+ */
+.btn-8 {
+	display:inline-block;
+	height:30px;
+	line-height:30px;
+	padding:0px 12px;
+	background-color:#3C65B5;
+	color:white;
+	font-size:12px;
+	cursor:pointer;
+	transition:all 0.12s linear;
+	-webkit-transition:all 0.12s linear;
+	-moz-transition:all 0.12s linear;
+	-ms-transition:all 0.12s linear;
+	-o-transition:all 0.12s linear;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+}
+
+.btn-8:hover {
+	background-color:#4279E2;
+}
+
+/*
+ * 加粗
+ */
+.weight {
+	font-weight:bold;
+}
+
+/*
+ * 红色
+ */
+.red {
+	color:red !important;
+}
+
+/*
+ * 绿色
+ */
+.green {
+	color:green !important;
+}
+
+/*
+ * purple
+ */
+.purple {
+	color:purple !important;
+}
+
+/*
+ * 禁用
+ */
+.gray {
+	color:#7B7B7B !important;
+}
+
+/**
+ * 为空时文本提示提示
+ */
+.empty-text-tip {
+	color: red;
+	font-size:14px;
+	font-weight: bold;
+}
+
+/**
+ * 背景颜色
+ */
+
+/**
+ * 禁用
+ */
+.bg-gray {
+	background-color:gray !important;
+}
+
+
+/**
+ * 组件：标题设置
+ */
+.component-title {
+	height:40px;
+	line-height:40px;
+	padding:0px 15px;
+	border:1px solid #ccc;
+	position:relative;
+	border-top-left-radius:2px;
+	border-top-right-radius:2px;
+	color:#555;
+	background-color:#f5f5f5;
+	font-size:14px;
+	bottom: -2px;
+}
+
+.component-title:after {
+	display:block;
+	content:'';
+	clear:both;
+}
+
+.component-title .left , .component-title .right {
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+	-o-box-sizing:border-box;
+}
+
+.component-title .left {
+	float:left;
+	font-size:14px;
+}
+
+.component-title .right {
+	float:right;
+	font-size:12px;
+}
+
+.component-title .right:after {
+	display:block;
+	content:'';
+	clear:both;
+}
+
+.component-title .right .link {
+	float:left;
+	margin-right:8px;
+}
+
+.component-title .right .link:nth-last-of-type(1) {
+	margin-right:0px;
+}
+
+.component-title .right .link:hover {
+	text-decoration:underline;
+}
+
+
+/**
+ *************************************
+ * 单选、多选表单组件
+ *************************************
+ */
+.component-select {
+	height:24px;
+	line-height:24px;
+}
+
+.component-select:hover {
+	cursor:pointer;
+}
+
+.component-select:after {
+	display:block;
+	content:'';
+	clear:both;
+}
+
+.component-select .pic-con , .component-select .text-con {
+	float:left;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+	-o-box-sizing:border-box;
+}
+
+.component-select .pic-con {
+	width:24px;
+	height:24px;
+	position:relative;
+}
+
+.component-select .pic-con .pic {
+	width:16px;
+	height:16px;
+	position:absolute;
+	left:50%;
+	top:50%;
+	transform:translate3d(-50% , -50% , 0px);
+	-webkit-transform:translate3d(-50% , -50% , 0px);
+	-moz-transform:translate3d(-50% , -50% , 0px);
+	-ms-transform:translate3d(-50% , -50% , 0px);
+	-o-transform:translate3d(-50% , -50% , 0px);
+	-o-transform:translate3d(-50% , -50% , 0px);
+}
+
+.component-select .text-con {
+	font-size:12px;
+	white-space:nowrap;
+}
+
+/**
+ *******************
+ * 输入表单项集成样式
+ *******************
+ */
+.component-input {
+	position:relative;
+	margin-bottom:26px;
+	/*
+    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -ms-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    */
+}
+
+.component-input:nth-last-of-type(1) {
+	margin-bottom:0px;
+}
+
+/*
+ * 调试的时候可打开使用
+.component-input:hover::after {
+	width:100%;
+}
+
+.component-input:hover .field {
+	font-size:12px;
+	color:#999;
+	transform:translate3d(0px , -24px , 0px);
+}
+*/
+
+.component-input > .field , .component-input .value {
+	height:40px;
+	line-height:40px;
+	transform-origin:left top;
+	-webkit-transform-origin:left top;
+	-moz-transform-origin:left top;
+	-ms-transform-origin:left top;
+	-o-transform-origin:left top;
+	transition:all 0.3s linear;
+	-webkit-transition:all 0.3s linear;
+	-moz-transition:all 0.3s linear;
+	-ms-transition:all 0.3s linear;
+	-o-transition:all 0.3s linear;
+}
+
+.component-input > .field {
+	color:#8f8f8f;
+	font-size:13px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	transform: translate3d(12px , 0% , 0px);
+	-webkit-transform: translate3d(12px , 0% , 0px);
+	-moz-transform: translate3d(12px , 0% , 0px);
+	-ms-transform: translate3d(12px , 0% , 0px);
+	-o-transform: translate3d(12px , 0% , 0px);
+}
+
+.component-input > .value {
+	position:relative;
+	z-index:1;
+	background-color:transparent;
+	border-bottom:2px solid #ddd;
+	margin-bottom:8px;
+}
+
+.component-input .value:after {
+	display:block;
+	content:'';
+	width:0%;
+	height:2px;
+	position:absolute;
+	bottom:0px;
+	left:50%;
+	transform:translate3d(-50% , 100% , 0px);
+	-webkit-transform:translate3d(-50% , 100% , 0px);
+	-moz-transform:translate3d(-50% , 100% , 0px);
+	-ms-transform:translate3d(-50% , 100% , 0px);
+	-o-transform:translate3d(-50% , 100% , 0px);
+	background-color:#589fc6;
+	transition:all 0.3s linear;
+	-webkit-transition:all 0.3s linear;
+	-moz-transition:all 0.3s linear;
+	-ms-transition:all 0.3s linear;
+	-o-transition:all 0.3s linear;
+}
+
+.component-input > .value > .form-text {
+	display:block;
+	width:100%;
+	height:100%;
+	text-indent:0px;
+	border-color:transparent;
+	box-shadow:none;
+	background-color:transparent;
+	-webkit-box-shadow:none;
+	-moz-box-shadow:none;
+	-ms-box-shadow:none;
+	-o-box-shadow:none;
+}
+
+.component-input .explain {
+	font-size:12px;
+	color:#555;
+}
+
+/***获取焦点的时候***/
+.focus-component-input .value::after {
+	width:100%;
+}
+
+.not-empty-component-input > .field {
+	font-size:12px;
+	color:#999;
+	transform:translate3d(0px , -30px , 0px);
+	-webkit-transform:translate3d(0px , -30px , 0px);
+	-moz-transform:translate3d(0px , -30px , 0px);
+	-ms-transform:translate3d(0px , -30px , 0px);
+	-o-transform:translate3d(0px , -30px , 0px);
+}
+
+
+/***
+ ******************
+ * 按钮组件：风格 9
+ ******************
+ */
+.btn-9 {
+
+}
+
+
+.btn-9 {
+	margin-left:12px;
+	position:relative;
+	display:inline-block;
+	zoom:1;
+	vertical-align:middle;
+	padding:0px;
+	padding-bottom:8px;
+	font-size:12px;
+	cursor:pointer;
+	transition:all 0.3s linear;
+	-webkit-transition:all 0.3s linear;
+	-moz-transition:all 0.3s linear;
+	-ms-transition:all 0.3s linear;
+	-o-transition:all 0.3s linear;
+}
+
+.btn-9:hover {
+	color:#00a1d6;
+}
+
+.btn-9:hover::before , .btn-9:hover::after {
+	opacity:1;
+}
+
+.btn-9:before {
+	display:block;
+	content:'';
+	height:1px;
+	background-color:#00a1d6;
+	width:100%;
+	opacity:0;
+	position:absolute;
+	bottom:0px;
+	transition:all 0.3s linear;
+	-webkit-transition:all 0.3s linear;
+	-moz-transition:all 0.3s linear;
+	-ms-transition:all 0.3s linear;
+	-o-transition:all 0.3s linear;
+}
+
+.btn-9:after {
+	display:block;
+	content:'';
+	width:0px;
+	height:0px;
+	position:absolute;
+	bottom:0px;
+	left:50%;
+	opacity:0;
+	transform:translateX(-50%);
+	-webkit-transform:translateX(-50%);
+	-moz-transform:translateX(-50%);
+	-ms-transform:translateX(-50%);
+	-o-transform:translateX(-50%);
+	border-left:5px solid transparent;
+	border-right:5px solid transparent;
+	border-bottom:5px solid #00a1d6;
+	transition:all 0.3s linear;
+	-webkit-transition:all 0.3s linear;
+	-moz-transition:all 0.3s linear;
+	-ms-transition:all 0.3s linear;
+	-o-transition:all 0.3s linear;
+}
+
+.btn-9.cur {
+	color:#00a1d6;
+}
+
+.btn-9.cur::before , .btn-9.cur::after {
+	opacity:1;
+}
+
+/**
+ *******************
+ * 按钮组件：风格 10
+ *******************
+ */
+.btn-10 {
+	display:inline-block;
+	zoom:1;
+	vertical-align:middle;
+	border:1px solid #ccc;
+	height:24px;
+	line-height:24px;
+	padding:0px 10px;
+	font-size:12px;
+	border-radius:5px;
+	cursor:pointer;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	transition:all 0.3s linear;
+	-webkit-transition:all 0.3s linear;
+	-moz-transition:all 0.3s linear;
+	-ms-transition:all 0.3s linear;
+	-o-transition:all 0.3s linear;
+}
+
+.btn-10:hover {
+	background-color:#ccd0d7;
+}
+
+.btn-10:hover .big-than {
+	padding-left:5px;
+}
+
+.btn-10 .big-than {
+	font-family:SimSun;
+	transition:all 0.3s linear;
+	-webkit-transition:all 0.3s linear;
+	-moz-transition:all 0.3s linear;
+	-ms-transition:all 0.3s linear;
+	-o-transition:all 0.3s linear;
+}
+
+/**
+ * ************
+ * 按钮风格 11
+ * ************
+ */
+.btn-11 {
+	display:inline-block;
+	vertical-align:middle;
+	zoom:1;
+	height:40px;
+	line-height:40px;
+	padding:0px 30px;
+	border: 1px solid rgba(255, 0, 0, 0.5);
+	font-size:13px;
+	color:#333;
+	cursor:pointer;
+	transition:all 0.3s linear;
+	-webkit-transition:all 0.3s linear;
+	-moz-transition:all 0.3s linear;
+	-ms-transition:all 0.3s linear;
+	-o-transition:all 0.3s linear;
+}
+
+.btn-11 .sign {
+	font-family:SimSun;
+}
+
+.btn-11:hover {
+	border-color:rgba(255, 0, 0, 1);
+}
+
+/**
+ *****************************
+ * 通用标题设置 风格 1
+ *****************************
+ */
+.component-title-1 {
+
+}
+
+
+.component-title-1 {
+	height:50px;
+	line-height:50px;
+	position:relative;
+	border-bottom:2px solid #B61D1D;
+	margin-bottom:15px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.component-title-1:before {
+	display:block;
+	content:'';
+	position:absolute;
+	left:0px;
+	top:50%;
+	width:5px;
+	height:24px;
+	background-color:#B61D1D;
+	transform:translate3d(0px , -50% , 0px);
+	-webkit-transform:translate3d(0px , -50% , 0px);
+	-moz-transform:translate3d(0px , -50% , 0px);
+	-o-transform:translate3d(0px , -50% , 0px);
+	-ms-transform:translate3d(0px , -50% , 0px);
+}
+
+.component-title-1:after {
+	display:block;
+	content:'';
+	clear:both;
+}
+
+.component-title-1 > * {
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+}
+
+.component-title-1 .subject {
+	float:left;
+	font-size:16px;
+	margin-left:15px;
+}
+
+.component-title-1 .more {
+	float:right;
+}
+
+/**
+ *************************
+ * 标题风格-2
+ *************************
+ */
+.component-title-2 {
+	height:32px;
+	line-height:32px;
+}
+
+.component-title-2:after {
+	display:block;
+	content:'';
+	clear:both;
+}
+
+.component-title-2 > * {
+	height:100%;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+	-o-box-sizing:border-box;
+}
+
+.component-title-2 .subject {
+	float:left;
+	font-size:24px;
+}
+
+.component-title-2 .more {
+	float:right;
+}
+
+/**
+ *****************************
+ * 通用标题设置 风格 3
+ *****************************
+ */
+.component-title-3 {
+
+}
+
+
+.component-title-3 {
+	height:50px;
+	line-height:50px;
+	position:relative;
+	border-bottom:1px solid #ccc;
+	margin-bottom:15px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.component-title-3:before {
+	display:block;
+	content:'';
+	position:absolute;
+	left:0px;
+	top:50%;
+	width:5px;
+	height:24px;
+	background-color:#A9A9A9;
+	transform:translate3d(0px , -50% , 0px);
+	-webkit-transform:translate3d(0px , -50% , 0px);
+	-moz-transform:translate3d(0px , -50% , 0px);
+	-o-transform:translate3d(0px , -50% , 0px);
+	-ms-transform:translate3d(0px , -50% , 0px);
+}
+
+.component-title-3:after {
+	display:block;
+	content:'';
+	clear:both;
+}
+
+.component-title-3 > * {
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+}
+
+.component-title-3 .subject {
+	float:left;
+	font-size:16px;
+	margin-left:15px;
+}
+
+.component-title-3 .more {
+	float:right;
+}
+/**
+ * ***********
+ * 各种风格
+ * ***********
+ */
+.line-through {
+	text-decoration:line-through;
+}
+
+.f-12 {
+	font-size:12px;
+}
+
+.f-13 {
+	font-size:13px;
+}
+
+.f-14 {
+	font-size:14px;
+}
+
+.f-15 {
+	font-size:15px;
+}
+
+.f-16 {
+	font-size:16px;
+}
+
+/**
+ * *************
+ * 悬浮时下划线
+ * *************
+ */
+.underline-for-hover:hover {
+	text-decoration:underline;
+}
+

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv='content-type' content='text/html;charset=utf8' />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/ui/ui.css" />
+    <link rel="stylesheet" href="css/Loading.css" />
+</head>
+<body>
+<style>
+    .con {
+        width:500px;
+        height:500px;
+        border:1px solid red;
+        position:relative;
+    }
+</style>
+
+<div id="container" class="con">
+
+    <!-- 加载元素 -->
+    <div class="Loading">
+        <!-- 背景颜色 -->
+        <div class='bg'></div>
+        <div class="cons">
+            <div class="text">
+                <span class="line">上传基本信息开始</span>
+                <span class="line">上传基本信息结束</span>
+                <span class="line">上传图片开始</span>
+                <span class="line">上传图片开始结束</span>
+                <span class="line">添加用户成功</span>
+            </div>
+            <div class="animate">
+                <!-- 图片加载动画 -->
+                <div class="_image">
+                    <img src='image/style-1.png' data-style="1" class='image'>
+                    <img src='image/style-2.png' data-style="2" class='image'>
+                    <img src='image/style-3.png' data-style="3" class='image'>
+                </div>
+
+                <!-- 线条加载动画 -->
+                <div class="html">
+                    <div class="item line-scale" data-style="1">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+
+                    <div class="item ball-pulse" data-style="2">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<button type="button" id="btn" class="btn-2">隐藏</button>
+
+<script src="../SmallJs/SmallJs.js"></script>
+<script src="js/Loading.js"></script>
+<script>
+    (function(){
+        'use strict';
+
+        var con = G('#container');
+        var l = new Loading(con.get(0) , {
+            status: 'show' ,
+            type: 'html' ,
+            style: 1 ,
+            text: 'fsaf'
+        });
+
+        var btn = G('#btn');
+        var count = 1;
+        btn.on('click' , function(){
+            if (count === 1) {
+                l.hide();
+                count++;
+            } else {
+                l.show();
+                count--;
+            }
+        } , true , false);
+
+        window.setTimeout(function(){
+            l.text('fuckyou');
+        } , 3000);
+
+        window.setTimeout(function(){
+            l.text([
+                'one' ,
+                'two' ,
+                'three'
+            ]);
+        } , 5000);
+
+        window.setTimeout(function(){
+            l.text('');
+        } , 8000);
+    })();
+</script>
+</body>
+</html>

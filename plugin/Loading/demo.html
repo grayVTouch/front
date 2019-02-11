@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv='content-type' content='text/html;charset=utf8' />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/ui/ui.css" />
+    <link rel="stylesheet" href="css/Loading.css" />
+</head>
+<body>
+<style>
+    .con {
+        min-width:300px;
+        height:500px;
+        border:1px solid red;
+        position:relative;
+        overflow: auto;
+    }
+
+    .content {
+        width: 800px;
+        height: 900px;
+        background-color: green;
+    }
+</style>
+
+<div id="container" class="con">
+
+    <div class="content"></div>
+
+    <!-- 加载元素 -->
+    <div class="Loading">
+        <!-- 背景颜色 -->
+        <div class='bg'></div>
+        <div class="cons">
+            <div class="text">
+                <span class="line">上传基本信息开始</span>
+                <span class="line">上传基本信息结束</span>
+                <span class="line">上传图片开始</span>
+                <span class="line">上传图片开始结束</span>
+                <span class="line">添加用户成功</span>
+            </div>
+            <!-- 加载动画 -->
+            <div class="animate">
+                <!-- 图片加载动画 -->
+                <div class="_image">
+                    <img src='image/style-1.png' class='image'>
+                    <img src='image/style-2.png' class='image'>
+                    <img src='image/style-3.png' class='image'>
+                </div>
+
+                <!-- 线条加载动画 -->
+                <div class="html">
+                    <div class="item line-scale">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+
+                    <div class="item ball-pulse">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 关闭按钮 -->
+        <div class="btns">
+            <div class="btn close">
+                <div class="positive"></div>
+                <div class="negative"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<button type="button" id="btn" class="btn-2">隐藏</button>
+
+<script src="../SmallJs/SmallJs.js"></script>
+<script src="js/Loading.js"></script>
+<script>
+    (function(){
+        'use strict';
+
+        var con = G('#container');
+        var l = new Loading(con.get(0) , {
+            status: 'show' ,
+            type: 'html' ,
+            style: 1 ,
+            text: 'fsaf'
+        });
+
+        var btn = G('#btn');
+        btn.on('click' , function(){
+            if (l.status === 'show') {
+                l.hide();
+            } else {
+                l.show();
+            }
+        } , true , false);
+    })();
+</script>
+</body>
+</html>

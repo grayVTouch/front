@@ -1,0 +1,152 @@
+/*
+ * 展示型数据 
+ */
+.line-tb {
+	width:100%;
+	font-size:12px;
+}
+
+.line-tb thead tr , .line-tb tbody tr {
+	transition:all 0.15s linear;
+	-webkit-transition:all 0.15s linear;
+	-moz-transition:all 0.15s linear;
+	-o-transition:all 0.15s linear;
+	-ms-transition:all 0.15s linear;
+}
+
+.line-tb thead tr {
+	background-color:#f2f2f2;
+}
+
+.line-tb thead tr th , .line-tb tbody tr td {
+	height:40px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-align:center;
+	text-overflow: ellipsis;
+	padding: 0px 8px;
+	border:1px solid #ccc;
+}
+
+.line-tb thead tr:hover , .line-tb tbody tr:hover {
+	background-color:#f8f8f8;
+}
+
+.line-tb tbody .focus {
+    background-color: #f8f8f8;
+}
+
+.line-tb thead tr .th-cbox {
+	width:40px;
+}
+
+.line-tb thead tr .th-id {
+	width:100px;
+}
+
+.line-tb thead tr .th-name {
+	width:160px;
+}
+
+.line-tb thead tr .th-time {
+	width:150px;
+}
+
+.line-tb thead tr .th-number {
+	width:130px;
+}
+
+.line-tb thead tr .th-status {
+	width:130px;
+}
+
+.line-tb thead tr .th-desc {
+	width:250px;
+}
+
+.line-tb thead tr .th-sex {
+	width:80px;
+}
+
+.line-tb thead tr .th-type {
+	width:80px;
+}
+
+.line-tb thead tr .th-mobile {
+	width:130px;
+}
+
+.line-tb thead tr .th-addr {
+	width:300px;
+}
+
+.line-tb thead tr .th-preview {
+	width:200px;
+}
+
+.line-tb thead tr .th-dir {
+	width:250px;
+}
+
+.line-tb thead tr .th-group {
+	width:130px;
+}
+
+.line-tb thead tr .th-account {
+	width:160px;
+}
+
+.line-tb thead tr .th-note {
+	width:250px;
+}
+
+/*
+ * question | answer 型的字段
+ */
+.line-tb thead tr .th-qa {
+	width:250px;
+}
+
+.line-tb thead tr .th-opr {
+	width:130px;
+}
+
+.line-tb tbody tr td .image {
+	max-height:80px;
+}
+
+/*
+ * 一列多行
+ */
+.line-tb tbody tr .multiple-rows {
+	text-align:left;
+	padding:0px;
+	margin:0px 8px;
+}
+
+.line-tb tbody tr .multiple-rows .row {
+	padding:3px 0px;
+	margin:0px 5px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	margin-bottom:3px;
+}
+
+.line-tb tbody tr .multiple-rows .row:nth-of-type(1) {
+	margin-top:3px;
+}
+
+.line-tb tbody tr .multiple-rows .status {
+	
+}
+
+.line-tb tbody tr .multiple-rows .explain {
+	
+}
+
+.line-tb .preview {
+	/* ie 10 中需要用到！ */
+	width: auto;
+	max-height:80px;
+}
