@@ -6,57 +6,42 @@
     'use strict';
 
     if (typeof module != 'undefined' && typeof module.exports == 'object') {
-       module.exports = global.document ?
-		   factory(global , true) :
-		   function(w){
-       			if (!w.document) {
-       				throw new Error('非 window 环境');
-				}
-
-				return factory(w);
-		   }
+       module.exports = factory(global , true);
     } else {
 		factory(window);
     }
-})(typeof window !== 'undefined' ? window : this , function(global , noGlobal){
-    function Loading(dom , opt){
+})(typeof window !== 'undefined' ? window : this , function(window , noGlobal){
+    function Loading(selector , opt){
         var thisRange = [undefined , null , window];
-
         if (G.contain(this , thisRange) || !G.contain(this , thisRange) && this.constructor !== Loading) {
-            return new Loading(dom , opt);
-        }
-
-        if (!G.isDom(dom)) {
-            throw new TypeError('参数 1 类型错误');
+            return new Loading(selector , opt);
         }
 
         this._default = {
+            // 动画时间
             time: 300 ,
-            // Loading.png 图片存放路径
-            pluginUrl: '' ,
+            // 类名
             class: 'Loading' ,
             // 支持 'show' , 'hide'
             status: 'show' ,
-            // 类型：image 、 html
-            type: 'html' ,
-            // 具体风格
-            style: 1 ,
+            // 具体风格: line-scale ball-pulse
+            type: 'line-scale' ,
 			// 加载文本提示，支持字符串 & 数组
+            // 实际上就是展示进度信息
 			text: '' ,
             // 点击关闭后回调函数
             close: null ,
         };
 
         this._statusRange = ['show' , 'hide'];
-        this._typeRange       = ['image' , 'html'];
+        this._typeRange = ['roll-loader' , 'line-scale' , 'ball-pulse'];
+        this._textRange = ['String' , 'Array'];
 
-        this._con	  		= G(dom);
+        this._con	  		= G(selector);
         this._time 			= G.type(opt['time'])	 !== 'Number'			 			? this._default['time']	   : opt['time'];
-        this._pluginUrl	  	= G.type(opt['pluginUrl'])		 !== 'String'			 	? this._default['pluginUrl']  : opt['pluginUrl'];
         this._status 		= !G.contain(opt['status'] , this._statusRange) 			? this._default['status']  : opt['status'];
         this._type 			= !G.contain(opt['type'] , this._typeRange) 				? this._default['type']  : opt['type'];
-        this._style 		= G.type(opt['style']) !== 'Number' 						? this._default['style']  : opt['style'];
-        this._text 			= opt['text'];
+        this._text 			= !G.contain(G.type(opt['text']) , this._textRange) ? this.default['text'] : opt['text'];
         this._close 	    = G.isFunction(opt.close) ? opt.close : this._default.close;
 
         this._run();
@@ -77,16 +62,13 @@
             this._cons		= G('.cons' , this._loading.get(0));
             this._text_		= G('.text' , this._cons.get(0));
             this._animate	= G('.animate' , this._cons.get(0));
-            this._image	= G('._image' , this._animate.get(0));
-            this._images	= G('.image' , this._image.get(0));
-            this._html 		= G('.html' , this._animate.get(0));
-            this._items		= G('.item' , this._html.get(0));
+            this._items		= G('.item' , this._animate.get(0));
             this._btns      = G('.btns' , this._loading.get(0)).first();
-            this._close_     = G('.close' , this._btns.get(0));
+            this._close_    = G('.close' , this._btns.get(0));
 
             // 获取容器元素高度
-            this._startOpacity = 0;
-            this._endOpacity = 0.7;
+            this._startOpacity  = 0;
+            this._endOpacity    = 1;
 
             this.status = this._status;
         } ,
@@ -97,35 +79,11 @@
         	// 处理文本
 			this.text(this._text);
 
-			// 设置 id
-            this._images.each(function(dom , k){
+			// 仅显示给定的加载容器
+            this._items.each(function(dom){
                 dom = G(dom);
-                dom.data('style' , k + 1);
-            });
-
-            this._items.each(function(dom , k){
-                dom = G(dom);
-                dom.data('style' , k + 1);
-            });
-
-        	// 处理动画
-        	var set = null;
-        	if (this._type === 'image') {
-                this._html.addClass('hide');
-                set = this._images;
-            } else if (this._type === 'html') {
-        		this._image.addClass('hide');
-        		set = this._items;
-			} else {
-        		// 这边可继续扩展
-				throw new Error('不支持的类型');
-			}
-
-			// 循环处理
-            set.each(function(dom){
-                dom = G(dom);
-                if (dom.data('style') != self._style) {
-                    dom.addClass('hide');
+                if (dom.hasClass(self._type)) {
+                    dom.removeClass('hide');
                 }
             });
         } ,
@@ -173,7 +131,7 @@
             this._loading.removeClass('hide');
             this.status = 'show';
 
-            this._bg.animate({
+            this._loading.animate({
                 opacity: this._endOpacity
             });
         } ,
@@ -181,7 +139,7 @@
         hide: function(){
             var self = this;
             this.status = 'hide';
-            this._bg.animate({
+            this._loading.animate({
                 opacity: this._startOpacity
             } , function(){
                 self._loading.addClass('hide');
@@ -193,35 +151,27 @@
                 this._text_.html('');
                 return ;
             }
-
         	var self = this;
         	var res = [];
-
         	if (!G.isValid(text)) {
         		this._text_.addClass('hide');
         		return ;
 			}
-
 			this._text_.removeClass('hide');
-
 			if (G.isString(text)) {
 				res.push(text);
 			}
-
 			if (G.isArray(text)) {
 				res = text;
 			}
-
 			// 清空原内容
 			this._text_.html('');
-
 			// 新增内容
 			res.forEach(function(v){
 				var span = document.createElement('span');
 					span = G(span);
 					span.attr('class' , 'line');
 					span.text(v);
-
 				self._text_.append(span.get(0));
 			});
 		} ,
@@ -252,7 +202,6 @@
         // 定义事件
         _defineEvent: function(){
             var win = G(window);
-
             this._close_.on('click' , this._closeEvent.bind(this) , true , false);
             win.on('resize' , this._resizeEvent.bind(this) , true , false);
         } ,

@@ -34,27 +34,18 @@
     // 这尤其适用于通过 nodejs 进行打包的情况！
     // 兼容浏览器端 js 和 服务器端 js
 	if (typeof module !== 'undefined' && typeof module.exports == 'object') {
-		module.exports = global.document ?
-			factory(global , true) :
-			function(w){
-				if (!w.document) {
-					throw new Error('非 window 环境');
-				}
-
-				return factory(w);
-			}
-
+		module.exports = factory(global , true);
 	} else {
 		factory(global);
 	}
 })(typeof window !== undefined ? window : this , function(window , noGlobal){
 	"use strict";
 
-    function UploadImage(con , opt){
+    function UploadImage(selector , opt){
         var thisRange = [undefined , null , window];
 
         if (G.contain(this , thisRange) || !G.contain(this , thisRange) && this.constructor !== UploadImage) {
-            return new UploadImage(con , opt);
+            return new UploadImage(selector , opt);
         }
 
         // 图片初始化，直接在图片列表中，填充 img 标签即可
@@ -99,7 +90,7 @@
         this.modeRange = ['override' , 'append'];
 
         // 相关元素
-        this._con = G(con);
+        this._con = G(selector);
         this._uploadImage = G('.upload-image' , this._con.get(0));
 
         // 设置项

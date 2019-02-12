@@ -13,15 +13,11 @@
 })(typeof window !== 'undefined' ? window : this , function(global , noGlobal){
 	"use strict";
 
-    function InfiniteClassification(dom , opt){
+    function InfiniteClassification(selector , opt){
         var thisRange = [undefined , null , window];
 
         if (G.contain(this , thisRange) || !G.contain(this , thisRange) && this.constructor !== InfiniteClassification) {
-            return new InfiniteClassification(dom , opt);
-        }
-
-        if (!G.isDom(dom)) {
-            throw new TypeError('参数 1 类型错误');
+            return new InfiniteClassification(selector , opt);
         }
 
         // 默认设置
@@ -57,7 +53,7 @@
         }
 
         // 元素容器
-        this._con = G(dom);
+        this._con = G(selector);
 
         this._iconRange  	= ['number' , 'switch'];
         this._statusRange    		= ['spread' , 'shrink'];

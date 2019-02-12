@@ -13,15 +13,11 @@
 })(typeof window === 'undefined' ? this : window , function(window , noGlobal){
 	"use strict";
 
-    function PicShow(con , opt){
+    function PicShow(selector , opt){
         var thisRange = [undefined , null , window];
 
         if (G.contain(this , thisRange) || !G.contain(this , thisRange) && this.constructor !== PicShow) {
-            return new PicShow(con , opt);
-        }
-
-        if (!G.isDom(con)) {
-            throw new Error('参数 1 类型错误');
+            return new PicShow(selector , opt);
         }
 
         // 默认设置
@@ -57,7 +53,7 @@
         }
 
         // 相关元素
-        this._con = G(con);
+        this._con = G(selector);
 
         // 设置项
         this._time 		= G.type(opt['time']) === 'Number' ? opt['time'] : this._defaultOpt['time'];

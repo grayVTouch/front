@@ -4658,7 +4658,7 @@
 
     // 动画定时器
     g.RAF = function(fn){
-        var freq = 1000 / 60;
+        var freq = Math.floor(1000 / 60);
         var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || false;
 
         if (requestAnimationFrame) {
@@ -5662,12 +5662,9 @@
     Animate.runtimeRange    = g.browser() === 'mobile' ? 120 : 30;
 
     Animate.prototype = {
-        version: '6.0' ,
-
+        version: '7.0' ,
         cTime: '2016/09/16 10:20:00' ,
-
         constructor: Animate ,
-
         _initStaticArgs: function(){
             // 用户设置
             this._styles = {};
@@ -5677,7 +5674,7 @@
 
             // 时间相关
             if (Animate.prevTime > 0) {
-                let duration = 0;
+                var duration = 0;
                 if ((duration = Math.abs(timestamp - Animate.prevTime)) <= Animate.startRange) {
                     this._extraDuration = duration;
                     timestamp = Animate.prevTime;

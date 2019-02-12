@@ -15,17 +15,12 @@
 })(typeof window === 'undefined' ? this : window , function(window , noGlobal){
     'use strict';
 
-    function Switch(con , option){
+    function Switch(selector , option){
         var thisRange = [window , null , undefined];
 
         if (G.contain(this , thisRange) || this.constructor !== Switch) {
-            return new Switch(con , option);
+            return new Switch(selector , option);
         }
-
-        if (!G.isDom(con)) {
-            throw new Error('参数 1 类型错误');
-        }
-
         this._default = {
             id: '' ,
             // 动画过度时间
@@ -38,7 +33,7 @@
             option = this._default;
         }
 
-        this._con   = G(con);
+        this._con   = G(selector);
         this._time  = G.isInt(option.time)  ? option.time   : this._default.time;
         this._id    = G.isValid(option.id) ? option.id  : this._default.id;
         this._switch = G.isFunction(option.switch) ? option.switch  : this._default.switch;

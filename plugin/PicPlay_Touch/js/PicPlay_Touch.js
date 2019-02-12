@@ -15,11 +15,11 @@
 })(typeof window === 'undefined' ? this : window , function(window , noGlobal){
     "use strict";
 
-    function PicPlayTouch(dom , opt){
+    function PicPlayTouch(selector , opt){
         var thisRange = [window , null , undefined];
 
         if (G.contain(this , thisRange) || (!G.contain(this , thisRange) && this.constructor !== PicPlayTouch)) {
-            return new PicPlayTouch(dom , opt);
+            return new PicPlayTouch(selector , opt);
         }
 
         this._default = {
@@ -35,6 +35,7 @@
             placementType: 'horizontal' ,
             // 索引摆放位置（top|right|bottom|left）
             // placementType = horizontal，则允许的值有 top|bottom；placementType = vertical，则允许的值有 left|right
+            // todo placementType=horizontal 时，placementPos=top，存在问题，请勿使用此种布局！
             placementPos: '' ,
             // 链接点击后回调
             link: null ,
@@ -67,7 +68,7 @@
         this._indexPosRange					= ['outside' , 'inside'];
 
         // 容器元素
-        this._con				= G(dom);
+        this._con				= G(selector);
         this._time			= G.type(opt['time']) !== 'Number'			? this._default['time']		: opt['time'];
         this._duration		= G.type(opt['duration']) !== 'Number'		? this._default['duration']	: opt['duration'];
         this._indexType			= !G.contain(opt['indexType'] , this._indexTypeRange)   ? this._default['indexType']		: opt['indexType'];
@@ -849,10 +850,10 @@
                 var mousemove = browser === 'mobile' ? 'touchmove'  : 'mousemove';
                 var mouseup   = browser === 'mobile' ? 'touchend'   : 'mouseup';
 
-                this._s_images.on('click' , function(e){
-                    G.prevent(e);
-                    G.stop(e , true);
-                } , false , false);
+                // this._s_images.on('click' , function(e){
+                //     // G.prevent(e);
+                //     // G.stop(e , true);
+                // } , false , false);
 
                 this.__images.on(mousedown , this._mouseDownEvent.bind(this) , true , false);
 

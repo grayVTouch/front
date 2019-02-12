@@ -797,13 +797,13 @@ s/*
 	-ms-box-sizing:border-box;
 }
 
-.component-title-1 .subject {
+.component-title-1 .left {
 	float:left;
 	font-size:16px;
 	margin-left:15px;
 }
 
-.component-title-1 .more {
+.component-title-1 .right {
 	float:right;
 }
 
@@ -832,12 +832,12 @@ s/*
 	-o-box-sizing:border-box;
 }
 
-.component-title-2 .subject {
+.component-title-2 .left {
 	float:left;
 	font-size:24px;
 }
 
-.component-title-2 .more {
+.component-title-2 .right {
 	float:right;
 }
 
@@ -892,13 +892,13 @@ s/*
 	-ms-box-sizing:border-box;
 }
 
-.component-title-3 .subject {
+.component-title-3 .left {
 	float:left;
 	font-size:16px;
 	margin-left:15px;
 }
 
-.component-title-3 .more {
+.component-title-3 .right {
 	float:right;
 }
 /**

@@ -11,11 +11,11 @@
 })(typeof window === 'undefined' ? this : window , function(window , noGlobal){
     'use strict';
 
-    function MenuSwitch(con , opt){
+    function MenuSwitch(selector , opt){
         var thisRange = [undefined , null , window];
 
         if (G.contain(this , thisRange) || this.constructor !== MenuSwitch) {
-            return new MenuSwitch(con , opt);
+            return new MenuSwitch(selector , opt);
         }
 
         this._default = {
@@ -31,7 +31,7 @@
             opt = this._default;
         }
 
-        this._con = G(con);
+        this._con = G(selector);
 
         // 参数
         this._id        = G.isValid(opt.id)     ? opt.id : this._default.id;

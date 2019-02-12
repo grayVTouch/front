@@ -24,7 +24,11 @@
             status: 'show' ,
             click: null ,
             // 侧边栏方向: left , right
-            dir: 'left'
+            dir: 'left' ,
+            // 滑块展示出来回调
+            open: null ,
+            // 滑块隐藏回调
+            close: null ,
         };
 
         if (G.isUndefined(option)) {
@@ -42,6 +46,8 @@
         this._opacity   = G.isFloat(option.opacity) ? option.opacity : this._default.opacity;
         this._status    = G.contain(option.status , this._statusRange) ? option.status : this._default.status;
         this._dir = G.contain(option.dir , this._dirRange) ? option.dir : this._default.dir;
+        this._open  = option.open;
+        this._close  = option._close;
 
         // 相关参数初始化
         this._run();
@@ -78,6 +84,8 @@
             this._startVal = 0;
             this._endVal = 0;
             this._once = true;
+
+            this.status = this._status;
         } ,
 
         _initStatic: function(){
@@ -140,26 +148,31 @@
 
         // 显示
         show: function(){
-            this._status = 'show';
-            this._con.removeClass('hide');
+            this.status = 'show';
+            // this._con.removeClass('hide');
             this._slidebar.removeClass('hide');
 
             var endOpacity  = this._maxOpacity;
             var endVal      = this._maxVal + 'px';
             var json        = {};
+            var self        = this;
 
             json[this._attr] = endVal;
 
             this._con_.animate(json , null , this._time);
             this._mask.animate({
                 opacity: endOpacity
-            } , null , this._time);
+            } , function(){
+                if (G.isFunction(self._open)) {
+                    self._open();
+                }
+            } , this._time);
         } ,
 
         // 隐藏
         hide: function(){
             var self = this;
-            this._status = 'hide';
+            this.status = 'hide';
             var endOpacity  = this._minOpacity;
             var endVal      = this._minVal + 'px';
             var json        = {};
@@ -167,8 +180,10 @@
             json[this._attr] = endVal;
 
             this._con_.animate(json , function(){
-                self._con.addClass('hide');
                 self._slidebar.addClass('hide');
+                if (G.isFunction(self._close)) {
+                    self._close();
+                }
             } , this._time);
             this._mask.animate({
                 opacity: endOpacity
@@ -177,7 +192,7 @@
 
         // 还原
         origin: function(){
-            if (this._status === 'show') {
+            if (this.status === 'show') {
                 this.show();
             } else {
                 this.hide();
@@ -220,7 +235,7 @@
             var duration = this._eTime - this._sTime;
 
             if (duration <= this._duration || distance > this._amount) {
-                this._status = status;
+                this.status = status;
             }
 
             this.origin();

@@ -34,35 +34,30 @@
         <div class='bg'></div>
         <div class="cons">
             <div class="text">
+                <!-- 进度信息：仅在开发时保留 -->
                 <span class="line">上传基本信息开始</span>
-                <span class="line">上传基本信息结束</span>
-                <span class="line">上传图片开始</span>
-                <span class="line">上传图片开始结束</span>
-                <span class="line">添加用户成功</span>
             </div>
             <!-- 加载动画 -->
             <div class="animate">
-                <!-- 图片加载动画 -->
-                <div class="_image">
-                    <img src='image/style-1.png' class='image'>
-                    <img src='image/style-2.png' class='image'>
-                    <img src='image/style-3.png' class='image'>
+                <!-- line-scale -->
+                <div class="item center line-scale hide">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
-
-                <!-- 线条加载动画 -->
-                <div class="html">
-                    <div class="item line-scale">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-
-                    <div class="item ball-pulse">
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                <!-- ball-purlse -->
+                <div class="item center ball-pulse hide">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <!-- loader -->
+                <div class="item roll-loader hide">
+                    <div class="loader">
+                        <div class="loader-outter"></div>
+                        <div class="loader-inner"></div>
                     </div>
                 </div>
             </div>
@@ -78,7 +73,7 @@
 
 </div>
 
-<button type="button" id="btn" class="btn-2">隐藏</button>
+<button type="button" id="btn" class="btn-2">切换</button>
 
 <script src="../SmallJs/SmallJs.js"></script>
 <script src="js/Loading.js"></script>
@@ -89,9 +84,11 @@
         var con = G('#container');
         var l = new Loading(con.get(0) , {
             status: 'show' ,
-            type: 'html' ,
-            style: 1 ,
-            text: 'fsaf'
+            type: 'ball-pulse' ,
+            text: ['第一步' , '第二部' , '第三部'] ,
+            close: function(){
+                console.log('请求已经关闭');
+            }
         });
 
         var btn = G('#btn');
