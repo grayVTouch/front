@@ -4,12 +4,20 @@
 
 # 导航菜单
 
-- [Boundary](#Boundary)
-- [css](#css)
-- [FunctionNav](#FunctionNav)
-- [InfiniteClassification](#InfiniteClassification)
-- [Load](#Load)
-- [MenuSwitch](#MenuSwitch)
+- [Boundary，滚动检查](#Boundary)
+- [css，通用型样式风格](#css)
+- [FunctionNav，导航菜单切换-适用于 pc/mobile](#FunctionNav)
+- [InfiniteClassification，无限极分类菜单](#InfiniteClassification)
+- [Load，下拉刷新/上拉加载](#Load)
+- [MenuSwitch，导航菜单切换](#MenuSwitch)
+- [PicPlay_Touch，图片轮播](#PicPlay_Touch)
+- [PicShow，图片展示，图片索引，会根据索引位置自动滚动到可视位置](#PicShow)
+- [Prompt，提示框](#Prompt)
+- [Slidebar，侧边栏滑动](#Slidebar)
+- [Switch，内容切换，参考移动端手指左右滑动内容切换](#Switch)
+- [UploadImage，图片上传](#UploadImage)
+- [Zoom，图片缩放，仅适用于移动端，存在尚未修复的 `bug`，请勿使用！](#Zoom)
+- [MultipleTab，多标签。](#MultipleTab)
 
 
 # 插件列表
@@ -1086,7 +1094,7 @@ weight 加粗
 
 ## MultipleTab
 
-多标签页面。
+多标签。
 
 ```
 <link rel='stylesheet' href='../base/base.css'>
