@@ -2,6 +2,16 @@
 
 前端插件库
 
+# 导航菜单
+
+- [Boundary](#Boundary)
+- [css](#css)
+- [FunctionNav](#FunctionNav)
+- [InfiniteClassification](#InfiniteClassification)
+- [Load](#Load)
+- [MenuSwitch](#MenuSwitch)
+
+
 # 插件列表
 
 ## Boundary
