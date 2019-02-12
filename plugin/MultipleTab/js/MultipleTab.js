@@ -29,15 +29,11 @@
 })(typeof window === 'undefined' ? this : window , function(window , noGlobal){
     "use strict";
 
-    function MultipleTab(dom , opt){
+    function MultipleTab(selector , opt){
         var thisRange = [undefined , null , window];
 
         if (G.contain(this , thisRange) || !G.contain(this , thisRange) && this.constructor !== MultipleTab) {
-            return new MultipleTab(dom , opt);
-        }
-
-        if (!G.isDom(dom)) {
-            throw new TypeError('参数 1 类型错误');
+            return new MultipleTab(selector , opt);
         }
 
         // 默认设置
@@ -53,7 +49,7 @@
             // 内容
             title: '新标签页' ,
             // 动画时间
-            time: 200
+            time: 300
         };
 
         if (G.type(opt) === 'Undefined') {
@@ -61,7 +57,7 @@
         }
 
         // 元素容器
-        this._con = G(dom);
+        this._con = G(selector);
 
         this._created = G.type(opt['created']) !== 'Function' ? this._default['created']   : opt['created'];
         this._deleted = G.type(opt['deleted']) !== 'Function' ? this._default['deleted']   : opt['deleted'];

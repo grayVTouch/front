@@ -82,25 +82,25 @@
             this._preview		= G('.preview'  , this._picShow.get(0));
             this._content		= G('.content'  , this._picShow.get(0));
             this._listForBig	= G('.list'  	, this._content.get(0));
-            this._imagesForBig	= G('.image'	, this._listForBig.get(0));
+            this._links                 = G('.link' , this._listForBig.get(0));
             this._index_		= G('.index' 	, this._picShow.get(0));
             this._small			= G('.small'   	, this._index_.get(0));
             this._listForSmall	= G('.list'	   	, this._small.get(0));
 
             // 初始化设置索引
             var html = [];
-            this._imagesForBig.each(function(dom , k){
+            this._links.each(function(dom , k){
                 dom = G(dom);
-
+                var image = G('.image' , dom.get(0)).first();
                 var index = k + 1;
-                html.push('<div class="item" data-index="' + index + '" data-id="' + k + '"><img src="' + dom.attr('src') + '" class="image" /></div>')
+                html.push('<div class="item" data-index="' + index + '" data-id="' + k + '"><img src="' + image.attr('src') + '" class="image" /></div>')
             });
 
             this._listForSmall.html(html.join(''));
 
             // 大图新增头尾元素
-            var first = this._imagesForBig.first(true);
-            var last  = this._imagesForBig.last(true);
+            var first = this._links.first(true);
+            var last  = this._links.last(true);
 
             G.insertBefore(last.clone().get(0) , first.get(0));
             this._listForBig.append(first.clone().get(0));
@@ -108,9 +108,9 @@
 
         // 静态参数
         _initStaticArgs: function(){
-            this._imagesForBig			= G('.image'	, this._listForBig.get(0));
             this._prevForBig			= G('.prev'		, this._preview.get(0));
             this._nextForBig			= G('.next'		, this._preview.get(0));
+            this._links                 = G('.link' , this._listForBig.get(0));
             this._items					= G('.item'	   , this._listForSmall.get(0));
             this._prevForSmall			= G('.prev'	   , this._index_.get(0));
             this._imageForPrevWithSmall	= G('.image'	   , this._prevForSmall.get(0));
@@ -119,7 +119,7 @@
 
             // 范围值
             this._minID 	= 0;
-            this._maxID 	= this._imagesForBig.length - 1;
+            this._maxID 	= this._links.length - 1;
             this._minIndex 	= 1;
             this._maxIndex 	= this._items.length;
 
@@ -134,15 +134,15 @@
             var cur = null;
 
             // 设置大图
-            for (i = 0; i < this._imagesForBig.length; ++i)
+            for (i = 0; i < this._links.length; ++i)
             {
-                cur = this._imagesForBig.jump(i , true);
+                cur = this._links.jump(i , true);
 
                 cur.data('id' , i);
 
                 if (i === 0) {
-                    cur.data('index' , this._imagesForBig.length - 2);
-                } else if (i === this._imagesForBig.length - 1) {
+                    cur.data('index' , this._links.length - 2);
+                } else if (i === this._links.length - 1) {
                     cur.data('index' , 1);
                 } else {
                     cur.data('index' , i);
@@ -189,7 +189,7 @@
             this._previewH  = Math.floor((this._picShowH - this._interval) * this._bigRatio);
 
             // 图片容器的宽度
-            this._listForBigW = this._previewW * this._imagesForBig.length;
+            this._listForBigW = this._previewW * this._links.length;
 
             this._index_W    = this._picShowW;
             this._index_H	= this._picShowH - this._interval - this._previewH;
@@ -221,7 +221,7 @@
             });
 
             // 设置小图的宽！
-            this._imagesForBig.css({
+            this._links.css({
                 width: this._previewW + 'px'
             });
 
@@ -271,9 +271,9 @@
             var i 	= 0;
             var cur = null;
 
-            for (; i < this._imagesForBig.length; ++i)
+            for (; i < this._links.length; ++i)
             {
-                cur = this._imagesForBig.jump(i , true);
+                cur = this._links.jump(i , true);
 
                 if (cur.data('id') == id) {
                     return cur.get(0);
@@ -327,7 +327,7 @@
                 var image = self.big(id);
                 image = G(image);
 
-                image.highlight('cur' , self._imagesForBig.get(0));
+                image.highlight('cur' , self._links.get(0));
             } , this._time);
         } ,
 

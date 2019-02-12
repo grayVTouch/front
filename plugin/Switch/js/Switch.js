@@ -24,7 +24,7 @@
         this._default = {
             id: '' ,
             // 动画过度时间
-            time: 200 ,
+            time: 300 ,
             // 切换事件
             switch: null
         };

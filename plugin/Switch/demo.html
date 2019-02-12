@@ -22,10 +22,10 @@
     <!-- 切换容器 -->
     <div class="switch">
         <div class="items">
-            <div class="item" data-id="1">内容1</div>
-            <div class="item" id="second">内容2</div>
-            <div class="item">内容3</div>
-            <div class="item">内容4</div>
+            <div class="item" data-id="one">内容1</div>
+            <div class="item" data-id="two">内容2</div>
+            <div class="item" data-id="thr">内容3</div>
+            <div class="item" data-id="four">内容4</div>
         </div>
     </div>
 
@@ -41,7 +41,13 @@
 
         // 强烈声明！不要嵌套！！
         var s = new Switch(con.get(0) , {
-
+            id: 'two' ,
+            // 动画过度时间
+            time: 300 ,
+            // 切换事件
+            switch: function(id){
+                console.log('内容切换成功' , id);
+            }
         });
     })();
 </script>

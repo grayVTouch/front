@@ -12,8 +12,8 @@
     <!-- 功能导航菜单 -->
     <div class="menu-switch-container">
         <div class='menu-switch menu-switch-for-1'>
-            <div class='item cur'>测试 1</div>
-            <div class='item'>测试 2</div>
+            <div class='item cur' data-id="one">测试 1</div>
+            <div class='item' data-id="two">测试 2</div>
         </div>
     </div>
 
@@ -25,7 +25,14 @@
 
             var con = G('.menu-switch-container').first();
 
-            var m = MenuSwitch(con.get() , {});
+            var m = MenuSwitch(con.get() , {
+                // 默认选中的项
+                id: 'one' ,
+                // 项点击后回调
+                click: null ,
+                // 切换后回调
+                switch: null
+            });
 
             console.log(m);
         })();

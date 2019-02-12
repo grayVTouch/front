@@ -15,11 +15,11 @@
 })(typeof window === 'undefined' ? this : window , function(window , noGlobal){
     "use strict";
 
-    function PicPlayTouch(selector , opt){
+    function PicPlay_Touch(selector , opt){
         var thisRange = [window , null , undefined];
 
-        if (G.contain(this , thisRange) || (!G.contain(this , thisRange) && this.constructor !== PicPlayTouch)) {
-            return new PicPlayTouch(selector , opt);
+        if (G.contain(this , thisRange) || (!G.contain(this , thisRange) && this.constructor !== PicPlay_Touch)) {
+            return new PicPlay_Touch(selector , opt);
         }
 
         this._default = {
@@ -89,12 +89,12 @@
         this._run();
     }
 
-    PicPlayTouch.prototype = {
+    PicPlay_Touch.prototype = {
         version: '1.0' ,
 
         cTime: '2016-09-16 10:20:00' ,
 
-        constructor: PicPlayTouch ,
+        constructor: PicPlay_Touch ,
 
         timerGroup: 'PicPlay_Touch' ,
 
@@ -102,12 +102,12 @@
             // 图片一开始选中索引
             this.index = this._index;
             this._focus = 'cur';
-            this._picPlay   = G('.pic-play' , this._con.get(0));
-            this._images    = G('.images' , this._picPlay.get(0));
+            this._picPlayTouch   = G('.pic-play-touch' , this._con.get(0));
+            this._images    = G('.images' , this._picPlayTouch.get(0));
             this.__images   = G('._images' , this._images.get(0));
 
             // 索引
-            this._index    = G('.index' , this._picPlay.get(0));
+            this._index    = G('.index' , this._picPlayTouch.get(0));
             this.__index   = G('._index' , this._index.get(0));
             this.__image     = G('._image' , this._index.get(0));
             // 连接
@@ -204,8 +204,8 @@
         } ,
 
         _initDynamicArgs: function(){
-            this._maxW = Math.max(0 , this._picPlay.width('content-box'));
-            this._maxH = Math.max(0 , this._picPlay.height('content-box'));
+            this._maxW = Math.max(0 , this._picPlayTouch.width('content-box'));
+            this._maxH = Math.max(0 , this._picPlayTouch.height('content-box'));
 
             // 索引 与 图片分离时，间隔
             this._marginForImage = 20;
@@ -915,8 +915,8 @@
     };
 
     if (!noGlobal) {
-        window.PicPlayTouch = PicPlayTouch;
+        window.PicPlay_Touch = PicPlay_Touch;
     }
 
-    return PicPlayTouch;
+    return PicPlay_Touch;
 });

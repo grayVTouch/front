@@ -1,3 +1,8 @@
+/**
+ * *******************
+ * 侧边栏 by 陈学龙
+ * *******************
+ */
 (function(global , factory){
     "use strict";
 
@@ -17,17 +22,21 @@
         }
 
         this._default = {
-            id: 'image' ,
+            // 动画时间
             time: 300 ,
+            // 滑块宽度
             width: '75%' ,
+            // 滑块遮罩层透明度
             opacity: 0.3 ,
+            // 状态：show | hide
             status: 'show' ,
+            // 点击时回调
             click: null ,
             // 侧边栏方向: left , right
             dir: 'left' ,
-            // 滑块展示出来回调
+            // 侧边栏展示时回调
             open: null ,
-            // 滑块隐藏回调
+            // 侧边栏隐藏时回调
             close: null ,
         };
 
@@ -40,7 +49,6 @@
         this._statusRange = ['show' , 'hide'];
         this._dirRange = ['left' , 'right'];
 
-        this.id         = G.isValid(option.id) ? option.id : this._default.id;
         this._time      = G.isNumber(option.time) ? option.time : this._default.time;
         this._width     = G.isValid(option.width) ? option.width : this._default.width;
         this._opacity   = G.isFloat(option.opacity) ? option.opacity : this._default.opacity;
@@ -61,6 +69,7 @@
         } ,
 
         _initStaticArgs: function(){
+            this._slidebar = G('.slidebar' , this._con.get(0));
             this._mask = this._slidebar.children({
                 class: 'mask'
             });
@@ -92,7 +101,7 @@
             this._con_.css({
                 width: this._width
             });
-
+            this._slidebar.removeClass('hide');
             this._mask.css('opacity' , this._minOpacity);
         } ,
 
@@ -138,19 +147,17 @@
         } ,
 
         _before: function(){
-            this._slidebar = G('.slidebar' , this._con.get(0));
-            this._slidebar.removeClass('hide');
+
         } ,
 
         _after: function(){
-            this._slidebar.addClass('hide');
+
         } ,
 
         // 显示
         show: function(){
             this.status = 'show';
-            // this._con.removeClass('hide');
-            this._slidebar.removeClass('hide');
+            this._con.removeClass('hide');
 
             var endOpacity  = this._maxOpacity;
             var endVal      = this._maxVal + 'px';
@@ -180,7 +187,7 @@
             json[this._attr] = endVal;
 
             this._con_.animate(json , function(){
-                self._slidebar.addClass('hide');
+                self._con.addClass('hide');
                 if (G.isFunction(self._close)) {
                     self._close();
                 }

@@ -21,6 +21,8 @@
         this._default = {
             // 默认展示的界面
             id: '' ,
+            // 菜单展示风格
+            type: 1 ,
             // 项点击后回调
             click: null ,
             // 切换后回调
@@ -31,10 +33,13 @@
             opt = this._default;
         }
 
+        var typeRange = [1 , 2 , 3 , 4];
+
         this._con = G(selector);
 
         // 参数
         this._id        = G.isValid(opt.id)     ? opt.id : this._default.id;
+        this._type      = G.contain(opt.type , this._typeRange)  ? opt.type : this._default.type;
         this._click     = G.isFunction(opt.click)  ? opt.click : this._default.click;
         this._switch    = G.isFunction(opt.switch)  ? opt.switch : this._default.switch;
 
@@ -54,6 +59,9 @@
         } ,
 
         _initStatic: function(){
+            // 设置容器元素样式风格
+            this._menuSwitch.addClass('menu-switch-for-' + this._type);
+
             // 针对未设置 id 的元素设置 id!
             // 确保导航菜单项能够通过给定一个标识符被唯一找到！！
             var i   = 0;
@@ -73,7 +81,7 @@
             }
 
             this._id = G.isValid(this._id) ? this._id : id;
-            this.switch(this._id)
+            this.switch(this._id);
         } ,
 
         _initDynamicHTML: function(){
