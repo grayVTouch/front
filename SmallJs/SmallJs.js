@@ -98,6 +98,7 @@
 41. 2019-02-16 21:06
     1. 完善 Ajax，data 类型允许 Blob 类型的数据
     2. 优化 Ajax 设置请求头部分代码
+	3. Http 动词全部统一大写！且不做限制
  命名规则：
  1. 变量：首字母小写 + 驼峰法
  2. 函数：首字母小写 + 驼峰法
@@ -7094,17 +7095,18 @@
             if (!g.isObject(url)) {
                 throw new Error('未传入配置参数');
             }
-
             option = url
         }
 
-        this._methodRange		 = ['get' , 'post' , 'option' , 'put' , 'dispatch' , 'delete' , 'GET' , 'POST' , 'PUT' , 'DISPATCH' , 'DELETE'];
+        // this._methodRange		 = ['GET' , 'POST' , 'PUT' , 'DISPATCH' , 'DELETE'];
         this._dataType		     = ['String' , 'FormData' , 'Blob'];
         this._responseTypeRange	 = ['' , 'text' , 'document' , 'json' , 'blob'];
         this._enctypeRange		 = ['text/plain' , 'application/x-www-form-urlencoded' , 'multipart/form-data'];
         this._headers			 = g.type(option['headers']) === 'Undefined'				? this._default['headers']		: option['headers'];
-        this._method			 = !g.contain(option['method'] , this._methodRange)				? this._default['method']		: option['method'];
-        this._url				 = !g.isValid(option['url'])									? this._default['url']			: option['url'];
+
+        // this._method			 = !g.contain(option['method'] , this._methodRange)				? this._default['method']		: option['method'];
+        this._method			 = option.method.toUpperCase();
+		this._url				 = !g.isValid(option['url'])									? this._default['url']			: option['url'];
         this._async			        = g.type(option['async']) !== 'Boolean'					? this._default['async']		: option['async'];
         this._additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this._default['additionalTimestamp']		: option['additionalTimestamp'];
         this._data			        = !g.contain(g.type(option['data']) , this._dataType) ? this._default['data']		: option['data'];
@@ -7196,9 +7198,6 @@
         } ,
 
         _initialize: function(){
-            // 值修正
-            this._method = this._method.toLowerCase();
-
             // 是否追加时间戳，防止请求被缓存
             if (this._additionalTimestamp) {
                 var time = new Date().getTime();
@@ -7213,7 +7212,7 @@
             }
 
             // 设置请求头
-            if (this._method === 'post') {
+            if (this._method === 'POST') {
                 if (g.type(this._data) !== 'FormData') {
                     this._setHeader('Content-Type' , 'application/x-www-form-urlencoded');
                 } else {
@@ -7416,7 +7415,7 @@
                 Ajax.beforeSend.call(this);
             }
 
-            if (this._method === 'get') {
+            if (this._method === 'GET') {
                 // get 方法在 url 中发送数据
                 this._xhr.send(null);
             } else {
