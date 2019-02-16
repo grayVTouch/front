@@ -95,6 +95,9 @@
     3. 修复元素查找属性查找不到的 bug
 40. 2018-07-22 22:38:00
     完善 Ajax 生命周期钩子
+41. 2019-02-16 21:06
+    1. 完善 Ajax，data 类型允许 Blob 类型的数据
+    2. 优化 Ajax 设置请求头部分代码
  命名规则：
  1. 变量：首字母小写 + 驼峰法
  2. 函数：首字母小写 + 驼峰法
@@ -7096,7 +7099,7 @@
         }
 
         this._methodRange		 = ['get' , 'post' , 'POST' , 'GET' , 'option' , 'put' , 'dispatch'];
-        this._dataType		     = ['String' , 'FormData'];
+        this._dataType		     = ['String' , 'FormData' , 'Blob'];
         this._responseTypeRange	 = ['' , 'text' , 'document' , 'json' , 'blob'];
         this._enctypeRange		 = ['text/plain' , 'application/x-www-form-urlencoded' , 'multipart/form-data'];
         this._headers			 = g.type(option['headers']) === 'Undefined'				? this._default['headers']		: option['headers'];
@@ -7210,14 +7213,10 @@
             }
 
             // 设置请求头
-            if (this._method === 'post' && g.type(this._data) !== 'FormData') {
-                if (this._getHeader('Content-Type') !== 'application/x-www-form-urlencoded') {
+            if (this._method === 'post') {
+                if (g.type(this._data) !== 'FormData') {
                     this._setHeader('Content-Type' , 'application/x-www-form-urlencoded');
-                }
-            }
-
-            if (this._method === 'post' && g.type(this._data) === 'FormData') {
-                if (this._getHeader('Content-Type') !== false) {
+                } else {
                     this._removeHeader('Content-Type');
                 }
             }
@@ -7225,7 +7224,9 @@
             // 追加 AJAX 请求标识符头部
             // 这里请求设置有一个要求！不允许使用 _（下划线） ！！只能使用 - （中划线）
             if (this._isAllowAjaxHeader) {
+                // 兼容使用 jQuery 库的项目
                 this._setHeader('X-Request-With' , 'XMLHttpRequest');
+                // SmallJs 独有
                 this._setHeader('AJAX-REQUEST' , true);
             }
         } ,
