@@ -7098,7 +7098,7 @@
             option = url
         }
 
-        this._methodRange		 = ['get' , 'post' , 'POST' , 'GET' , 'option' , 'put' , 'dispatch'];
+        this._methodRange		 = ['get' , 'post' , 'option' , 'put' , 'dispatch' , 'delete' , 'GET' , 'POST' , 'PUT' , 'DISPATCH' , 'DELETE'];
         this._dataType		     = ['String' , 'FormData' , 'Blob'];
         this._responseTypeRange	 = ['' , 'text' , 'document' , 'json' , 'blob'];
         this._enctypeRange		 = ['text/plain' , 'application/x-www-form-urlencoded' , 'multipart/form-data'];
