@@ -6,9 +6,9 @@
     'use strict';
 
     if (typeof module != 'undefined' && typeof module.exports == 'object') {
-       module.exports = factory(global , true);
+        module.exports = factory(global , true);
     } else {
-		factory(window);
+        factory(window);
     }
 })(typeof window !== 'undefined' ? window : this , function(window , noGlobal){
     function Loading(selector , opt){
@@ -26,9 +26,9 @@
             status: 'show' ,
             // 具体风格: line-scale ball-pulse
             type: 'line-scale' ,
-			// 加载文本提示，支持字符串 & 数组
+            // 加载文本提示，支持字符串 & 数组
             // 实际上就是展示进度信息
-			text: '' ,
+            text: '' ,
             // 点击关闭后回调函数
             close: null ,
         };
@@ -41,7 +41,7 @@
         this._time 			= G.type(opt['time'])	 !== 'Number'			 			? this._default['time']	   : opt['time'];
         this._status 		= !G.contain(opt['status'] , this._statusRange) 			? this._default['status']  : opt['status'];
         this._type 			= !G.contain(opt['type'] , this._typeRange) 				? this._default['type']  : opt['type'];
-        this._text 			= !G.contain(G.type(opt['text']) , this._textRange) ? this.default['text'] : opt['text'];
+        this._text 			= !G.contain(G.type(opt['text']) , this._textRange) ? this._default['text'] : opt['text'];
         this._close 	    = G.isFunction(opt.close) ? opt.close : this._default.close;
 
         this._run();
@@ -74,12 +74,12 @@
         } ,
 
         _initStatic: function(){
-        	var self = this;
+            var self = this;
 
-        	// 处理文本
-			this.text(this._text);
+            // 处理文本
+            this.text(this._text);
 
-			// 仅显示给定的加载容器
+            // 仅显示给定的加载容器
             this._items.each(function(dom){
                 dom = G(dom);
                 if (dom.hasClass(self._type)) {
@@ -146,35 +146,35 @@
             });
         } ,
 
-		text: function(text){
+        text: function(text){
             if (!G.isValid(text)) {
                 this._text_.html('');
                 return ;
             }
-        	var self = this;
-        	var res = [];
-        	if (!G.isValid(text)) {
-        		this._text_.addClass('hide');
-        		return ;
-			}
-			this._text_.removeClass('hide');
-			if (G.isString(text)) {
-				res.push(text);
-			}
-			if (G.isArray(text)) {
-				res = text;
-			}
-			// 清空原内容
-			this._text_.html('');
-			// 新增内容
-			res.forEach(function(v){
-				var span = document.createElement('span');
-					span = G(span);
-					span.attr('class' , 'line');
-					span.text(v);
-				self._text_.append(span.get(0));
-			});
-		} ,
+            var self = this;
+            var res = [];
+            if (!G.isValid(text)) {
+                this._text_.addClass('hide');
+                return ;
+            }
+            this._text_.removeClass('hide');
+            if (G.isString(text)) {
+                res.push(text);
+            }
+            if (G.isArray(text)) {
+                res = text;
+            }
+            // 清空原内容
+            this._text_.html('');
+            // 新增内容
+            res.forEach(function(v){
+                var span = document.createElement('span');
+                span = G(span);
+                span.attr('class' , 'line');
+                span.text(v);
+                self._text_.append(span.get(0));
+            });
+        } ,
 
         // 缩放事件
         _resizeEvent: function(){
@@ -185,9 +185,6 @@
             // 根据当前状态设置
             if (this.status === 'show') {
                 this._loading.removeClass('hide');
-                this._bg.css({
-                    opacity: this._endOpacity
-                });
             }
         } ,
 
@@ -219,8 +216,8 @@
     };
 
     if (!noGlobal) {
-    	window.Loading = Loading;
-	}
+        window.Loading = Loading;
+    }
 
     return Loading;
 });

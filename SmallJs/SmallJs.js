@@ -102,37 +102,22 @@
  命名规则：
  1. 变量：首字母小写 + 驼峰法
  2. 函数：首字母小写 + 驼峰法
-
  2.1 函数参数：1. 无扩展性的采取 function(args1 , args2 ..){....}
-
  2. 考虑到将来有可能会进行扩展的采取
-
  2.1 function(option){...}
  2.1.1 option = {key:val}
-
  2.2 function (){....}
  2.2.1 内部使用 arguments 对象来操作参数
-
  3. 搜索型：function search(val , range){..}					  // 待搜索的值   ， 搜索的范围
-
  4. 追加型：function add(obj , val){...}						  // 待追加的对象 ， 追加的值
-
  5. 替换型：function replace(obj , originalVal , endVal)		  // 待操作的对象 ， 原值		     ，最终值
-
  6. 删除型：function remove(obj , val){...}					  // 待删除的对象 ， 待删除的值
-
  7. 切换型：function switchCn(focusCn , focusEle , list){...}  // 命中元素的类名 ，命中元素 ， 元素所在的集合
-
  8. 取值型：function getDocOffsetVal(doc , type){...}
-
  3. 类：  首字母大小 + 驼峰法
-
  3.1 类参数： 采取 {key:val} 格式（无扩展：直接参数 args1 , args2 ....）
-
  4. 类属性： 私有属性|受保护属性 _ + 首字母小写 + 驼峰法
-
  5. 类方法： 私有方法|受保护方法 _ + 首字母小写 + 驼峰法
-
  * 使用时注意： 前面带有 _ 的属性或方法，全都是不允许调用的（虽然实际上是可执行的，但是不赞成调用！因为调用后得到的结果未知....）！
  */
 
@@ -2932,7 +2917,6 @@
          * 闰年判断规则
          * 1. 普通年能被4整除且不能被100整除的为闰年.
          * 2. 世纪年能被400整除的是闰年
-
          * 满足以上任一规则都是闰年
          */
         if (this.isLeapYear(year)) {
@@ -2965,7 +2949,6 @@
      * 闰年判断规则
      * 1. 普通年能被4整除且不能被100整除的为闰年.
      * 2. 世纪年能被400整除的是闰年
-
      * 满足以上任一规则都是闰年
      */
     g.isLeapYear = function(year){
@@ -3328,7 +3311,6 @@
 
     /*
      * 普通对象继承 （不支持元素）
-
      * 第一种模式
      * @param  isOverExistsKey   是否覆盖已有键名的键值
      * @param  isExtends         是否直接在原对象上进行更改
@@ -3337,7 +3319,6 @@
      * @param Object  args4      被继承对象
      * @param Object  args5      被继承对象
      ....
-
      * 第二种模式
      * @param Object args1 继承对象
      * @param Object args2 被继承对象
@@ -5900,7 +5881,6 @@
 
     /*
      * author 陈学龙 2016/09/16
-
      * 元素移动类
      * 条件： dom 需设置 position:absolute ， 且初始化设置了 left , top 值
      * @param Element dom  待移动元素
@@ -6261,7 +6241,6 @@
          * @param  Mixed(Array|Object) args4
          ....
          * @return Mixed(Array|Object)
-
          * 第二种模式
          * @param  Mixed(Array|Object) args1
          * @param  Mixed(Array|Object) args2
@@ -6413,7 +6392,6 @@
          * @param  Mixed(Array|Object) args4
          ....
          * @return Mixed(Array|Object)
-
          * 第二种模式
          * @param  Mixed(Array|Object) args1
          * @param  Mixed(Array|Object) args2
@@ -6626,7 +6604,6 @@
          * @param  Mixed(Array|Object) args4
          ....
          * @return Mixed(Array|Object)
-
          * 第二种模式
          * @param  Mixed(Array|Object) args1
          * @param  Mixed(Array|Object) args2
@@ -7106,10 +7083,11 @@
 
         // this._method			 = !g.contain(option['method'] , this._methodRange)				? this._default['method']		: option['method'];
         this._method			 = option.method.toUpperCase();
-		this._url				 = !g.isValid(option['url'])									? this._default['url']			: option['url'];
+        this._url				 = !g.isValid(option['url'])									? this._default['url']			: option['url'];
         this._async			        = g.type(option['async']) !== 'Boolean'					? this._default['async']		: option['async'];
         this._additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this._default['additionalTimestamp']		: option['additionalTimestamp'];
-        this._data			        = !g.contain(g.type(option['data']) , this._dataType) ? this._default['data']		: option['data'];
+        this._data                  = g.isObject(option.data) ? g.formData(option.data) : option.data;
+        this._data			        = !g.contain(g.type(this._data) , this._dataType) ? this._default['data']		: this._data;
         this._responseType	 	    = !g.contain(option['responseType'] , this._responseTypeRange)  ? this._default['responseType']	: option['responseType'];
         this._wait		            = g.type(option['wait']) !== 'Number'				? this._default['wait']	: option['wait'];
         this._withCredentials		= g.type(option['withCredentials']) !== 'Boolean'				? this._default['withCredentials']	: option['withCredentials'];
@@ -7286,35 +7264,22 @@
                  *
                  */
                 if (this.readyState === 4) {
-                    if (this.status === 200) {
-                        if (g.isFunction(Ajax.response)) {
-                            var next = Ajax.response.call(self , this.response);
-
-                            if (next === false) {
-                                return ;
-                            }
+                    if (g.isFunction(Ajax.response)) {
+                        var next = Ajax.response.call(self , this.status , this.response);
+                        if (next === false) {
+                            return ;
                         }
-
-                        if (g.type(self._success) === 'Function') {
-                            if (self._isReturnXHR) {
-                                self._success(this);
-                            } else {
-                                // 可能是 responseText || responseXML
-                                self._success(this.response);
-                            }
+                    }
+                    if (g.type(self._success) === 'Function') {
+                        if (self._isReturnXHR) {
+                            self._success(this.response , this.status , this);
+                        } else {
+                            // 可能是 responseText || responseXML
+                            self._success(this.response , this.status);
                         }
-
-                        if (g.isFunction(Ajax.after)) {
-                            Ajax.after.call(self , this.response);
-                        }
-                    } else {
-                        // 发生错误
-                        if (this.status !== 0) {
-                            // 发生未知错误
-                            if (g.type(self._netError) === 'Function') {
-                                self._netError();
-                            }
-                        }
+                    }
+                    if (g.isFunction(Ajax.after)) {
+                        Ajax.after.call(self , this.status , this.response);
                     }
                 }
             } , true , false);
