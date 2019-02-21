@@ -7264,22 +7264,28 @@
                  *
                  */
                 if (this.readyState === 4) {
+                    var response = this.response;
+                    var contentType = this._xhr.getResponseHeader('Content-Type');
+                        contentType = g.type(contentType) == 'String' ? contentType.toLowerCase() : '';
+                    if (contentType == 'application/json') {
+                        response = g.jsonDecode(this.response);
+                    }
                     if (g.isFunction(Ajax.response)) {
-                        var next = Ajax.response.call(self , this.status , this.response);
+                        var next = Ajax.response.call(self , this.status , response);
                         if (next === false) {
                             return ;
                         }
                     }
                     if (g.type(self._success) === 'Function') {
                         if (self._isReturnXHR) {
-                            self._success(this.response , this.status , this);
+                            self._success(response , this.status , this);
                         } else {
                             // 可能是 responseText || responseXML
-                            self._success(this.response , this.status);
+                            self._success(response , this.status);
                         }
                     }
                     if (g.isFunction(Ajax.after)) {
-                        Ajax.after.call(self , this.status , this.response);
+                        Ajax.after.call(self , this.status , response);
                     }
                 }
             } , true , false);
