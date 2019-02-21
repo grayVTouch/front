@@ -323,6 +323,15 @@
             });
         } ,
 
+        // 调用对象原生方法
+        origin: function(event){
+            var ctx = this.get(0);
+            var args = arguments;
+            args = g.array(args);
+            args = args.slice(1);
+            return ctx[event].apply(ctx , args);
+        } ,
+
         /*
          * 1. 获取 DOM 元素
          * 2. 转换为 SmallJs 对象，并将 _cur 属性设置为当前元素
@@ -7143,6 +7152,14 @@
             return false;
         } ,
 
+        // 调用原声方法
+        origin: function(event){
+            var args = arguments;
+            args = g.array(args);
+            args = args.slice(1);
+            return this._xhr[event].apply(this._xhr , args);
+        } ,
+
         _setHeader: function(key , val){
             this._headers[key] = val;
         } ,
@@ -7265,13 +7282,13 @@
                  */
                 if (this.readyState === 4) {
                     var response = this.response;
-                    var contentType = this._xhr.getResponseHeader('Content-Type');
+                    var contentType = xhr.origin('getResponseHeader' , 'Content-Type');
                         contentType = g.type(contentType) == 'String' ? contentType.toLowerCase() : '';
                     if (contentType == 'application/json') {
                         response = g.jsonDecode(this.response);
                     }
                     if (g.isFunction(Ajax.response)) {
-                        var next = Ajax.response.call(self , this.status , response);
+                        var next = Ajax.response.call(self , response , this.status);
                         if (next === false) {
                             return ;
                         }
@@ -7285,7 +7302,7 @@
                         }
                     }
                     if (g.isFunction(Ajax.after)) {
-                        Ajax.after.call(self , this.status , response);
+                        Ajax.after.call(self , response , this.status);
                     }
                 }
             } , true , false);
