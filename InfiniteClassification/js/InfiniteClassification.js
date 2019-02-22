@@ -1,6 +1,12 @@
 /**
  * InfiniteClassification 无限极分类
  * author 陈学龙 2017-09-10 14:00:00
+ *
+ * 具备子级的项
+ * 不具备子级的项
+ *
+ * 具备子级的项，点击（父级项）
+ * 不具备子级的项，点击（子级项）
  */
 (function(global , factory) {
     "use strict";
@@ -45,7 +51,11 @@
             // 点击项后是否选中
             focus: true ,
             // 是否选中顶级菜单
-            topFocus: false
+            topFocus: false ,
+            // 父级项点击后回调 ,
+            parent: null ,
+            // 子级项点击后回调
+            child: null
         };
 
         if (G.isUndefined(opt)) {
@@ -70,6 +80,8 @@
         this._menuFocus  	= G.isBoolean(opt.menuFocus) ? opt.menuFocus : this._default.menuFocus;
         this._focus  	= G.isBoolean(opt.focus) ? opt.focus : this._default.focus;
         this._topFocus  	= G.isBoolean(opt.topFocus) ? opt.topFocus : this._default.topFocus;
+        this._parent   	= G.isFunction(opt.parent) 	? opt.parent : this._default.parent;
+        this._child   	= G.isFunction(opt.child) 	? opt.child : this._default.child;
 
         this._run();
     }
@@ -416,21 +428,25 @@
             var item    = tar.parent();
             var id      = item.data('id');
             var status  = item.data('status');
+            var isEmpty = item.data('isEmpty');
 
             if (status === 'spread') {
                 this.shrink(id);
             } else {
                 this.spread(id);
             }
-
             if (this._focus) {
                 this.focus(id);
             }
-
             if (this._topFocus) {
                 this.topFocus(id);
             }
-
+            if (isEmpty == 'y' && G.isFunction(this._child)) {
+                this._child.call(this , id);
+            }
+            if (isEmpty == 'n' && G.isFunction(this._parent)) {
+                this._parent.call(this , id);
+            }
             if (G.isFunction(this._click)) {
                 this._click.call(this , id);
             }

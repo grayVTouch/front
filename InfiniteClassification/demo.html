@@ -14,13 +14,34 @@
     <div class='infinite-classification'>
         <div class="list">
 
+            <div class="item" data-id="30">
+                <div class="function">
+                    <div class="icon"><img src="image/default/test.png" class="image"></div>
+                    <div class="explain">
+                        <div class="in">
+                            <div class="ico"><img src="image/default/ring.png" class="image"></div>
+                            <div class="text">控制面板</div>
+                        </div>
+                    </div>
+                    <div class="flag hide">
+                        <div class="new">新的</div>
+                        <div class="number">10</div>
+                        <div class="switch"><img src="image/default/spread.png" class="image"></div>
+                    </div>
+                </div>
+
+                <div class="child">
+                    <div class="list"></div>
+                </div>
+            </div>
+
             <div class="item" data-id="1">
                 <div class="function">
                     <div class="icon"><img src="image/default/test.png" class="image"></div>
                     <div class="explain">
                         <div class="in">
                             <div class="ico"><img src="image/default/ring.png" class="image"></div>
-                            <div class="text">车辆列表</div>
+                            <div class="text">用户管理</div>
                         </div>
                     </div>
                     <div class="flag hide">
@@ -39,7 +60,7 @@
                                 <div class="explain">
                                     <div class="in">
                                         <div class="ico"><img src="image/default/ring.png" class="image"></div>
-                                        <div class="text">车辆列表</div>
+                                        <div class="text">用户列表</div>
                                     </div>
                                 </div>
                                 <div class="flag hide">
@@ -58,7 +79,7 @@
                                             <div class="explain">
                                                 <div class="in">
                                                     <div class="ico"><img src="image/default/ring.png" class="image"></div>
-                                                    <div class="text">车辆列表</div>
+                                                    <div class="text">编辑用户</div>
                                                 </div>
                                             </div>
                                             <div class="flag hide">
@@ -79,7 +100,7 @@
                                             <div class="explain">
                                                 <div class="in">
                                                     <div class="ico"><img src="image/default/ring.png" class="image"></div>
-                                                    <div class="text">车辆列表</div>
+                                                    <div class="text">添加用户</div>
                                                 </div>
                                             </div>
                                             <div class="flag hide">
@@ -104,7 +125,7 @@
                                 <div class="explain">
                                     <div class="in">
                                         <div class="ico"><img src="image/default/ring.png" class="image"></div>
-                                        <div class="text">车辆列表</div>
+                                        <div class="text">评论列表</div>
                                     </div>
                                 </div>
                                 <div class="flag hide">
@@ -129,7 +150,7 @@
                     <div class="explain">
                         <div class="in">
                             <div class="ico"><img src="image/default/ring.png" class="image"></div>
-                            <div class="text">车辆列表</div>
+                            <div class="text">系统管理</div>
                         </div>
                     </div>
                     <div class="flag hide">
@@ -148,7 +169,7 @@
                                 <div class="explain">
                                     <div class="in">
                                         <div class="ico"><img src="image/default/ring.png" class="image"></div>
-                                        <div class="text">车辆列表</div>
+                                        <div class="text">分类管理</div>
                                     </div>
                                 </div>
                                 <div class="flag hide">
@@ -167,7 +188,7 @@
                                             <div class="explain">
                                                 <div class="in">
                                                     <div class="ico"><img src="image/default/ring.png" class="image"></div>
-                                                    <div class="text">车辆列表</div>
+                                                    <div class="text">分类列表</div>
                                                 </div>
                                             </div>
                                             <div class="flag hide">
@@ -188,7 +209,7 @@
                                             <div class="explain">
                                                 <div class="in">
                                                     <div class="ico"><img src="image/default/ring.png" class="image"></div>
-                                                    <div class="text">车辆列表</div>
+                                                    <div class="text">分类结构</div>
                                                 </div>
                                             </div>
                                             <div class="flag hide">
@@ -213,7 +234,7 @@
                                 <div class="explain">
                                     <div class="in">
                                         <div class="ico"><img src="image/default/ring.png" class="image"></div>
-                                        <div class="text">车辆列表</div>
+                                        <div class="text">主体管理</div>
                                     </div>
                                 </div>
                                 <div class="flag hide">
@@ -269,7 +290,17 @@
             console.log('click:' + id);
         } ,
         // 是否菜单也可被选中
-        menuFocus: true
+        menuFocus: false ,
+        // 点击项后是否选中
+        focus: true ,
+        // 是否选中顶级菜单
+        topFocus: false ,
+        parent: function(id){
+            console.log('我是父级项：' , id);
+        } ,
+        child: function(id){
+            console.log('我是子级项：' , id);
+        } ,
     });
 
 </script>
