@@ -7015,7 +7015,7 @@
 
     /*
      * ****************************************************************************************************************************************************
-     SmallJs 函数的组成部分之一，同属于基础函数库，但直接使用拆开描述并不能清晰的表达该部分，所以采取 构造函数 的方式进行描述，然后归并到 SmallJs 函数上
+     * SmallJs 函数的组成部分之一，同属于基础函数库，但直接使用拆开描述并不能清晰的表达该部分，所以采取 构造函数 的方式进行描述，然后归并到 SmallJs 函数上
      * ****************************************************************************************************************************************************
      */
 
@@ -7037,6 +7037,7 @@
             url: '' ,                                // 请求路径
             async: true ,                          // 是否异步
             data: null ,                         // 发送的数据
+            direct: false ,                      // 直接发生请求，这将绕过生命周期钩子的拦截
             responseType: '' ,                       // 相应类型
             additionalTimestamp: true , 			 // 是否在 url 末尾追加时间戳
             wait: 0 ,                         // 请求：设置超时时间，单位：ms，默认值：0
@@ -7128,6 +7129,7 @@
         this._password			 = !g.isValid(option['password'])								? this._default['password']		: option['password'];
 
         this._isAllowAjaxHeader = !g.isValid(option['isAllowAjaxHeader'])								? this._default['isAllowAjaxHeader']		: option['isAllowAjaxHeader'];
+        this._direct = g.isBoolean(option.direct) ? option.direct : this._default.direct;
 
         this._run();
     }
@@ -7138,6 +7140,11 @@
         cTime: '2016/10/25 17:32:00' ,
 
         author: '陈学龙' ,
+
+        // 服务器响应
+       _response: '' ,
+        // 服务器响应的状态码
+        _status: 200 ,
 
         constructor: Ajax ,
 
@@ -7259,6 +7266,18 @@
             this._xhr.timeout = this._wait;
         } ,
 
+        // 响应客户端请求
+        response: function(){
+            if (g.type(this._success) === 'Function') {
+                if (this._isReturnXHR) {
+                    this._success(this._response , this._status , this._xhr);
+                } else {
+                    // 可能是 responseText || responseXML
+                    this._success(this._response , this._status);
+                }
+            }
+        } ,
+
         // 设置请求事件
         _setEvent: function(){
             var self    = this;
@@ -7281,29 +7300,20 @@
                  *
                  */
                 if (this.readyState === 4) {
-                    var response = this.response;
+                    self._response = this.response;
+                    self._status = this.status;
                     var contentType = xhr.origin('getResponseHeader' , 'Content-Type');
                         contentType = g.type(contentType) == 'String' ? contentType.toLowerCase() : '';
                     if (contentType == 'application/json') {
-                        response = g.jsonDecode(this.response);
+                        self._response = g.jsonDecode(this.response);
                     }
-                    if (g.isFunction(Ajax.response)) {
-                        var next = Ajax.response.call(self , response , this.status);
+                    if (!this._direct && g.isFunction(Ajax.response)) {
+                        var next = Ajax.response.call(self , self._response , self._status);
                         if (next === false) {
                             return ;
                         }
                     }
-                    if (g.type(self._success) === 'Function') {
-                        if (self._isReturnXHR) {
-                            self._success(response , this.status , this);
-                        } else {
-                            // 可能是 responseText || responseXML
-                            self._success(response , this.status);
-                        }
-                    }
-                    if (g.isFunction(Ajax.after)) {
-                        Ajax.after.call(self , response , this.status);
-                    }
+                    self.response();
                 }
             } , true , false);
 
@@ -7414,7 +7424,7 @@
 
         _before_: function() {
             if (g.isFunction(Ajax.before)) {
-                Ajax.before.call(this);
+                return Ajax.before.call(this);
             }
         } ,
 
@@ -7423,9 +7433,14 @@
                 Ajax.after.call(this);
             }
         } ,
-
+        // 重新执行
+        restart: function(){
+            this._run();
+        } ,
         _run: function(){
-            this._before_();
+            if (!this._direct && this._before_() != true) {
+                return ;
+            }
             this._create();
             // 初始化参数
             this._initialize();
@@ -7441,7 +7456,9 @@
             this._setEvent();
             // 发送数据
             this._request();
-            this._after_();
+            if (!this._direct) {
+                this._after_();
+            }
         }
     };
 
