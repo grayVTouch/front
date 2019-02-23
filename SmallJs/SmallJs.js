@@ -2967,12 +2967,12 @@
     /*
      * 阻止事件冒泡
      */
-    g.stop = function(e , once){
-        once = g.isBoolean(once) ? once : false;
-        if (once) {
-            g.stopImmediate(e);
-        } else {
+    g.stop = function(e , isAll){
+        isAll = g.isBoolean(isAll) ? isAll : false;
+        if (isAll) {
             e.stopPropagation();
+        } else {
+            g.stopImmediate(e);
         }
     };
 
