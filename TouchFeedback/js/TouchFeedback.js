@@ -46,10 +46,10 @@
         } ,
 
         initStaticArgs: function(){
-            this.touchFeedback = this.con.children({
-                tagName: 'div' ,
-                className: 'touch-feedback'
-            } , false , true);
+            var touchFeedback = document.createElement('div');
+                touchFeedback.className = 'touch-feedback';
+            this.con.append(touchFeedback);
+            this.touchFeedback = G(touchFeedback);
 
             this.conW = this.touchFeedback.width('border-box');
             this.conH = this.touchFeedback.height('border-box');
