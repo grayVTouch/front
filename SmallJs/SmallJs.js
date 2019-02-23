@@ -7142,7 +7142,7 @@
         author: '陈学龙' ,
 
         // 服务器响应
-       _response: '' ,
+        _response: '' ,
         // 服务器响应的状态码
         _status: 200 ,
 
@@ -7210,7 +7210,7 @@
                     this._url += '&';
                 }
 
-                this._url += '_time=' + time;
+                this._url += '__timestamp__=' + time;
             }
 
             // 设置请求头
@@ -7303,7 +7303,7 @@
                     self._response = this.response;
                     self._status = this.status;
                     var contentType = xhr.origin('getResponseHeader' , 'Content-Type');
-                        contentType = g.type(contentType) == 'String' ? contentType.toLowerCase() : '';
+                    contentType = g.type(contentType) == 'String' ? contentType.toLowerCase() : '';
                     if (contentType == 'application/json') {
                         self._response = g.jsonDecode(this.response);
                     }
@@ -7426,6 +7426,7 @@
             if (g.isFunction(Ajax.before)) {
                 return Ajax.before.call(this);
             }
+            return true;
         } ,
 
         _after_: function(){
