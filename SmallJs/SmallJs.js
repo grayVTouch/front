@@ -2967,12 +2967,12 @@
     /*
      * 阻止事件冒泡
      */
-    g.stop = function(e , isAll){
-        isAll = g.isBoolean(isAll) ? isAll : false;
-        if (isAll) {
-            e.stopPropagation();
-        } else {
+    g.stop = function(e , once){
+        once = g.isBoolean(once) ? once : false;
+        if (once) {
             g.stopImmediate(e);
+        } else {
+            e.stopPropagation();
         }
     };
 
@@ -3102,6 +3102,18 @@
         }
 
         return formData;
+    };
+
+    g.buildQuery = function(obj){
+        var str = '';
+        var k = null;
+        var v = null;
+        for (k in obj)
+        {
+            v = obj[k];
+            str += k + '=' + v + '&';
+        }
+        return str.slice(0 , -1);
     };
 
     /**
@@ -7032,7 +7044,7 @@
         }
 
         this._default = {
-            headers:   {} ,                          // 发送的请求头部信息 格式： {'Content-Type' : 'text/html; charset=utf-8' , 'Cache-Control' : 'false'}
+            header:   {} ,                          // 发送的请求头部信息 格式： {'Content-Type' : 'text/html; charset=utf-8' , 'Cache-Control' : 'false'}
             method: 'get' ,                          // 请求方法 get | GET | post | POST
             url: '' ,                                // 请求路径
             async: true ,                          // 是否异步
@@ -7089,14 +7101,14 @@
         this._dataType		     = ['String' , 'FormData' , 'Blob'];
         this._responseTypeRange	 = ['' , 'text' , 'document' , 'json' , 'blob'];
         this._enctypeRange		 = ['text/plain' , 'application/x-www-form-urlencoded' , 'multipart/form-data'];
-        this._headers			 = g.type(option['headers']) === 'Undefined'				? this._default['headers']		: option['headers'];
+        this._header			 = g.type(option['header']) === 'Undefined'				? this._default['header']		: option['header'];
 
         // this._method			 = !g.contain(option['method'] , this._methodRange)				? this._default['method']		: option['method'];
         this._method			 = option.method.toUpperCase();
         this._url				 = !g.isValid(option['url'])									? this._default['url']			: option['url'];
         this._async			        = g.type(option['async']) !== 'Boolean'					? this._default['async']		: option['async'];
         this._additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this._default['additionalTimestamp']		: option['additionalTimestamp'];
-        this._data                  = g.isObject(option.data) ? g.formData(option.data) : option.data;
+        this._data                  = g.isObject(option.data) ? g.buildQuery(option.data) : option.data;
         this._data			        = !g.contain(g.type(this._data) , this._dataType) ? this._default['data']		: this._data;
         this._responseType	 	    = !g.contain(option['responseType'] , this._responseTypeRange)  ? this._default['responseType']	: option['responseType'];
         this._wait		            = g.type(option['wait']) !== 'Number'				? this._default['wait']	: option['wait'];
@@ -7149,10 +7161,10 @@
         constructor: Ajax ,
 
         _getHeader: function(key){
-            for (var k in this._headers)
+            for (var k in this._header)
             {
                 if (k === key) {
-                    return this._headers[k];
+                    return this._header[k];
                 }
             }
 
@@ -7168,14 +7180,14 @@
         } ,
 
         _setHeader: function(key , val){
-            this._headers[key] = val;
+            this._header[key] = val;
         } ,
 
         _removeHeader: function(key){
-            for (var k in this._headers)
+            for (var k in this._header)
             {
                 if (k === key) {
-                    delete this._headers[k];
+                    delete this._header[k];
                 }
             }
 
@@ -7214,12 +7226,10 @@
             }
 
             // 设置请求头
-            if (this._method === 'POST') {
-                if (g.type(this._data) !== 'FormData') {
-                    this._setHeader('Content-Type' , 'application/x-www-form-urlencoded');
-                } else {
-                    this._removeHeader('Content-Type');
-                }
+            if (g.type(this._data) !== 'FormData') {
+                this._setHeader('Content-Type' , 'application/x-www-form-urlencoded');
+            } else {
+                this._removeHeader('Content-Type');
             }
 
             // 追加 AJAX 请求标识符头部
@@ -7245,9 +7255,10 @@
 
         // 设置 AJAX 请求头
         _setRequestHeader: function(){
-            for (var key in this._headers)
+            for (var key in this._header)
             {
-                this.setRequestHeader(key , this._headers[key]);
+                // this._removeHeader(key);
+                this.setRequestHeader(key , this._header[key]);
             }
         } ,
 
@@ -7439,7 +7450,9 @@
             this._run();
         } ,
         _run: function(){
-            if (!this._direct && this._before_() != true) {
+            var t = null;
+            if (!this._direct && (t = this._before_()) != true) {
+                console.log(this._direct , t);
                 return ;
             }
             this._create();
