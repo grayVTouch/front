@@ -7043,14 +7043,14 @@
             return new Ajax(url , option);
         }
 
-        this._default = {
+        this.default = {
             header:   {} ,                          // 发送的请求头部信息 格式： {'Content-Type' : 'text/html; charset=utf-8' , 'Cache-Control' : 'false'}
             method: 'get' ,                          // 请求方法 get | GET | post | POST
             url: '' ,                                // 请求路径
             async: true ,                          // 是否异步
             data: null ,                         // 发送的数据
-            direct: false ,                      // 直接发生请求，这将绕过生命周期钩子的拦截
-            responseType: '' ,                       // 相应类型
+            direct: false ,                      // 直接发出请求，这将绕过生命周期钩子的拦截
+            responseType: 'text' ,                       // 相应类型
             additionalTimestamp: true , 			 // 是否在 url 末尾追加时间戳
             wait: 0 ,                         // 请求：设置超时时间，单位：ms，默认值：0
             withCredentials: false ,					 // 跨域请求是否允许携带 cookie
@@ -7097,61 +7097,66 @@
             option = url
         }
 
-        // this._methodRange		 = ['GET' , 'POST' , 'PUT' , 'DISPATCH' , 'DELETE'];
-        this._dataType		     = ['String' , 'FormData' , 'Blob'];
-        this._responseTypeRange	 = ['' , 'text' , 'document' , 'json' , 'blob'];
-        this._enctypeRange		 = ['text/plain' , 'application/x-www-form-urlencoded' , 'multipart/form-data'];
-        this._header			 = g.type(option['header']) === 'Undefined'				? this._default['header']		: option['header'];
+        // this.methodRange		 = ['GET' , 'POST' , 'PUT' , 'DISPATCH' , 'DELETE'];
+        this.dataType		     = ['String' , 'FormData' , 'Blob'];
+        // 会根据不同的 responseType 将响应数据做一些转换后在返回给用户
+        this.responseTypeRange	 = ['' , 'text' , 'document' , 'json' , 'blob'];
+        this.enctypeRange		 = ['text/plain' , 'application/x-www-form-urlencoded' , 'multipart/form-data'];
+        this.header			 = g.type(option['header']) === 'Undefined'				? this.default['header']		: option['header'];
 
-        // this._method			 = !g.contain(option['method'] , this._methodRange)				? this._default['method']		: option['method'];
-        this._method			 = option.method.toUpperCase();
-        this._url				 = !g.isValid(option['url'])									? this._default['url']			: option['url'];
-        this._async			        = g.type(option['async']) !== 'Boolean'					? this._default['async']		: option['async'];
-        this._additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this._default['additionalTimestamp']		: option['additionalTimestamp'];
-        this._data                  = g.isObject(option.data) ? g.buildQuery(option.data) : option.data;
-        this._data			        = !g.contain(g.type(this._data) , this._dataType) ? this._default['data']		: this._data;
-        this._responseType	 	    = !g.contain(option['responseType'] , this._responseTypeRange)  ? this._default['responseType']	: option['responseType'];
-        this._wait		            = g.type(option['wait']) !== 'Number'				? this._default['wait']	: option['wait'];
-        this._withCredentials		= g.type(option['withCredentials']) !== 'Boolean'				? this._default['withCredentials']	: option['withCredentials'];
+        // this.method			 = !g.contain(option['method'] , this.methodRange)				? this.default['method']		: option['method'];
+        this.method			 = option.method.toUpperCase();
+        this.url				 = !g.isValid(option['url'])									? this.default['url']			: option['url'];
+        this.async			        = g.type(option['async']) !== 'Boolean'					? this.default['async']		: option['async'];
+        this.additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this.default['additionalTimestamp']		: option['additionalTimestamp'];
+        this.data                  = g.isObject(option.data) ? g.buildQuery(option.data) : option.data;
+        this.data			        = !g.contain(g.type(this.data) , this.dataType) ? this.default['data']		: this.data;
+        this.responseType	 	    = !g.contain(option['responseType'] , this.responseTypeRange)  ? this.default['responseType']	: option['responseType'];
+        this.wait		            = g.type(option['wait']) !== 'Number'				? this.default['wait']	: option['wait'];
+        this.withCredentials		= g.type(option['withCredentials']) !== 'Boolean'				? this.default['withCredentials']	: option['withCredentials'];
 
         // 下载事件
-        this._before			 = g.type(option['before']) !== 'Function'				? this._default['before']		: option['before'];
-        this._success			 = g.type(option['success']) !== 'Function'				? this._default['success']		: option['success'];
-        this._netError			 = g.type(option['netError']) !== 'Function'				? this._default['netError']		: option['netError'];
-        this._error				 = g.type(option['error']) !== 'Function'					? this._default['error']			: option['error'];
-        this._progress			 = g.type(option['progress']) !== 'Function'				? this._default['progress']		: option['progress'];
-        this._loadstart			 = g.type(option['loadstart']) !== 'Function'				? this._default['loadstart']		: option['loadstart'];
-        this._load				 = g.type(option['load']) !== 'Function'					? this._default['load']			: option['load'];
-        this._loadend			 = g.type(option['loadend']) !== 'Function'				? this._default['loadend']	    : option['loadend'];
-        this._timeout			 = g.type(option['timeout']) !== 'Function'				? this._default['timeout']		: option['timeout'];
-        this._abort				 = g.type(option['abort']) !== 'Function'					? this._default['abort']			: option['abort'];
+        this.before			 = g.type(option['before']) !== 'Function'				? this.default['before']		: option['before'];
+        this.success			 = g.type(option['success']) !== 'Function'				? this.default['success']		: option['success'];
+        this.netError			 = g.type(option['netError']) !== 'Function'				? this.default['netError']		: option['netError'];
+        this.error				 = g.type(option['error']) !== 'Function'					? this.default['error']			: option['error'];
+        this.progress			 = g.type(option['progress']) !== 'Function'				? this.default['progress']		: option['progress'];
+        this.loadstart			 = g.type(option['loadstart']) !== 'Function'				? this.default['loadstart']		: option['loadstart'];
+        this.load				 = g.type(option['load']) !== 'Function'					? this.default['load']			: option['load'];
+        this.loadend			 = g.type(option['loadend']) !== 'Function'				? this.default['loadend']	    : option['loadend'];
+        this.timeout			 = g.type(option['timeout']) !== 'Function'				? this.default['timeout']		: option['timeout'];
+        this.abort				 = g.type(option['abort']) !== 'Function'					? this.default['abort']			: option['abort'];
 
         // 上传事件
-        this._uError			 = g.type(option['uError']) !== 'Function'					? this._default['uError']		: option['uError'];
-        this._uProgress			 = g.type(option['uProgress']) !== 'Function'				? this._default['uProgress']		: option['uProgress'];
-        this._uLoadstart		 = g.type(option['uLoadstart']) !== 'Function'				? this._default['uLoadstart']	: option['uLoadstart'];
-        this._uLoad				 = g.type(option['uLoad']) !== 'Function'					? this._default['uLoad']			: option['uLoad'];
-        this._uLoadend			 = g.type(option['uLoadend']) !== 'Function'				? this._default['uLoadend']	    : option['uLoadend'];
-        this._uTimeout			 = g.type(option['uTimeout']) !== 'Function'				? this._default['uTimeout']		: option['uTimeout'];
-        this._uAbort			 = g.type(option['uAbort']) !== 'Function'					? this._default['uAbort']		: option['uAbort'];
+        this.uError			 = g.type(option['uError']) !== 'Function'					? this.default['uError']		: option['uError'];
+        this.uProgress			 = g.type(option['uProgress']) !== 'Function'				? this.default['uProgress']		: option['uProgress'];
+        this.uLoadstart		 = g.type(option['uLoadstart']) !== 'Function'				? this.default['uLoadstart']	: option['uLoadstart'];
+        this.uLoad				 = g.type(option['uLoad']) !== 'Function'					? this.default['uLoad']			: option['uLoad'];
+        this.uLoadend			 = g.type(option['uLoadend']) !== 'Function'				? this.default['uLoadend']	    : option['uLoadend'];
+        this.uTimeout			 = g.type(option['uTimeout']) !== 'Function'				? this.default['uTimeout']		: option['uTimeout'];
+        this.uAbort			 = g.type(option['uAbort']) !== 'Function'					? this.default['uAbort']		: option['uAbort'];
 
-        this._isReturnXHR		 = g.type(option['isReturnXHR']) !== 'Boolean'				? this._default['isReturnXHR']   : option['isReturnXHR'];
+        this.isReturnXHR		 = g.type(option['isReturnXHR']) !== 'Boolean'				? this.default['isReturnXHR']   : option['isReturnXHR'];
 
-        this._username			 = !g.isValid(option['username'])								? this._default['username']		: option['username'];
-        this._password			 = !g.isValid(option['password'])								? this._default['password']		: option['password'];
+        this.username			 = !g.isValid(option['username'])								? this.default['username']		: option['username'];
+        this.password			 = !g.isValid(option['password'])								? this.default['password']		: option['password'];
 
-        this._isAllowAjaxHeader = !g.isValid(option['isAllowAjaxHeader'])								? this._default['isAllowAjaxHeader']		: option['isAllowAjaxHeader'];
-        this._direct = g.isBoolean(option.direct) ? option.direct : this._default.direct;
+        this.isAllowAjaxHeader = !g.isValid(option['isAllowAjaxHeader'])								? this.default['isAllowAjaxHeader']		: option['isAllowAjaxHeader'];
+        this.direct = g.isBoolean(option.direct) ? option.direct : this.default.direct;
 
-        this._run();
+        this.run();
     }
+
+    /**
+     * *****************************************
+     * 在各类钩子函数中都可以拦截请求的执行流程
+     * *****************************************
+     */
 
     // 创建 xhr 之前
     Ajax.before = null;
     // 创建 xhr 之后
     Ajax.created = null;
-    // 发送之前
-    Ajax.beforeSend = null;
     // xhr open 之后
     Ajax.opened = null;
     // xhr 接收到响应之后
@@ -7161,154 +7166,180 @@
 
     Ajax.prototype = {
         version: '1.0' ,
-
         cTime: '2016/10/25 17:32:00' ,
-
         author: '陈学龙' ,
-
-        // 服务器响应
-        _response: '' ,
-        // 服务器响应的状态码
-        _status: 200 ,
-
         constructor: Ajax ,
 
-        _getHeader: function(key){
-            for (var k in this._header)
-            {
-                if (k === key) {
-                    return this._header[k];
-                }
-            }
+        // 当前创建的 XMLHttpRequest
+        xhr: null ,
+        // 请求头
+        url: null ,
+        method: null ,
+        async: null ,
+        header: null ,
+        additionalTimestamp: null ,
+        data: null ,
+        responseType: null ,
+        wait: null ,
+        withCredentials: null ,
+        before: null ,
+        success: null ,
+        netError: null ,
+        error: null ,
+        progress: null ,
+        loadstart: null ,
+        load: null ,
+        loadend: null ,
+        timeout: null ,
+        abort: null ,
+        uError: null ,
+        uProgress: null ,
+        uLoadstart: null ,
+        uLoad: null ,
+        uLoadend: null ,
+        uTimeout: null ,
+        uAbort: null ,
+        isReturnXHR: null ,
+        username: null ,
+        password: null ,
+        isAllowAjaxHeader: null ,
+        direct: null ,
 
-            return false;
-        } ,
-
-        // 调用原声方法
-        origin: function(event){
+        // 调用原生方法
+        native: function(event){
             var args = arguments;
             args = g.array(args);
             args = args.slice(1);
-            return this._xhr[event].apply(this._xhr , args);
+            return this.xhr[event].apply(this.xhr , args);
         } ,
 
-        _setHeader: function(key , val){
-            this._header[key] = val;
-        } ,
-
-        _removeHeader: function(key){
-            for (var k in this._header)
-            {
-                if (k === key) {
-                    delete this._header[k];
-                }
+        // 获取或设置原生属性
+        attr: function(key , val){
+            if (G.isUndefined(val)) {
+                return this.xhr[key];
             }
+            this.xhr[key] = val;
+        } ,
 
-            return false;
+        // 获取请求头
+        getHeader: function(key){
+            return this.header[key];
+        } ,
+
+        // 设置请求头
+        setHeader: function(key , val){
+            this.header[key] = val;
+        } ,
+
+        // 从现有请求头集合中移除指定请求头
+        removeHeader: function(key){
+            delete this.header[key];
         } ,
 
         // 获取 XMLHttpRequest 对象
         get: function(){
-            return this._xhr;
+            return this.xhr;
         } ,
 
-        _create: function(){
-            this._xhr = new XMLHttpRequest();
-            if (!this._direct && g.isFunction(Ajax.created)) {
+        // 创建 ajax
+        create: function(){
+            var xhr = this.xhr = new XMLHttpRequest();
+            if (!this.direct && g.isFunction(Ajax.created)) {
                 if (Ajax.created.call(this) !== true) {
                     return false;
                 }
             }
-            if (g.isFunction(this._before)) {
-                this._before.call(this);
+            if (g.isFunction(this.before)) {
+                this.before.call(this);
             }
             return true;
         } ,
 
-        _initialize: function(){
-            // 是否追加时间戳，防止请求被缓存
-            if (this._additionalTimestamp) {
+        // 初始化 ajax
+        initialize: function(){
+            /**
+             * ***********************
+             * 初始化请求
+             * ***********************
+             */
+            if (this.additionalTimestamp) {
+                // 是否追加时间戳，防止请求被缓存
                 var time = new Date().getTime();
-
-                if (this._url.lastIndexOf('?') === -1) {
-                    this._url += '?';
+                if (this.url.lastIndexOf('?') === -1) {
+                    this.url += '?';
                 } else {
-                    this._url += '&';
+                    this.url += '&';
                 }
-
-                this._url += '__timestamp__=' + time;
+                this.url += '__timestamp__=' + time;
             }
-
-            // 设置请求头
-            if (g.type(this._data) !== 'FormData') {
-                this._setHeader('Content-Type' , 'application/x-www-form-urlencoded');
+            // 初始化要设置的请求头
+            if (g.type(this.data) !== 'FormData') {
+                // 表单提交默认的 content-type
+                this.setHeader('Content-Type' , 'application/x-www-form-urlencoded');
             } else {
-                this._removeHeader('Content-Type');
+                // 如果是 FormData，请勿设置任何请求头
+                this.removeHeader('Content-Type');
             }
-
             // 追加 AJAX 请求标识符头部
             // 这里请求设置有一个要求！不允许使用 _（下划线） ！！只能使用 - （中划线）
-            if (this._isAllowAjaxHeader) {
+            if (this.isAllowAjaxHeader) {
                 // 兼容使用 jQuery 库的项目
-                this._setHeader('X-Request-With' , 'XMLHttpRequest');
+                this.setHeader('X-Request-With' , 'XMLHttpRequest');
                 // SmallJs 独有
-                this._setHeader('AJAX-REQUEST' , true);
+                this.setHeader('Ajax-Request' , 'yes');
             }
+            // 设置请求头
+            this.setRequestHeader();
+            /**
+             * **************************
+             * 初始化必要属性
+             * **************************
+             */
+            this.attr('timeout' , this.timeout);
+            /**
+             * ************************
+             * 初始化响应
+             * ************************
+             */
+            this.attr('responseType' , this.responseType);
+            /**
+             * ******************
+             * 初始化事件
+             * ******************
+             */
+            this.defineEvent();
         } ,
 
-        _open: function(){
+        // 初始化上传对象
+        initializeUpload: function(){
+
+        } ,
+
+        // 打开 ajax 请求
+        open: function(){
             /**
              * 支持使用了验证的请求
              */
-            this._xhr.open(this._method , this._url , this._async , this._username , this._password);
-
-            if (!this._direct && g.isFunction(Ajax.opened)) {
+            this.xhr.open(this.method , this.url , this.async , this.username , this.password);
+            if (!this.direct && g.isFunction(Ajax.opened)) {
                 return Ajax.opened.call(this);
             }
             return true;
         } ,
 
-        // 设置 AJAX 请求头
-        _setRequestHeader: function(){
-            for (var key in this._header)
+        // 设置 ajax 请求头
+        setRequestHeader: function(){
+            for (var key in this.header)
             {
-                // this._removeHeader(key);
-                this.setRequestHeader(key , this._header[key]);
+                this.native('setRequestHeader' , key , this.header[key]);
             }
         } ,
 
-        // 设置请求头
-        setRequestHeader: function(k , v){
-            this._xhr.setRequestHeader(k , v);
-        } ,
-
-        // 设置 AJAX 响应类型
-        _setResponseType: function(){
-            this._xhr.responseType = this._responseType;
-        } ,
-
-        // 设置请求超时时间
-        _setTimeout: function(){
-            this._xhr.timeout = this._wait;
-        } ,
-
-        // 响应客户端请求
-        response: function(){
-            if (g.type(this._success) === 'Function') {
-                if (this._isReturnXHR) {
-                    this._success(this._response , this._status , this._xhr);
-                } else {
-                    // 可能是 responseText || responseXML
-                    this._success(this._response , this._status);
-                }
-            }
-        } ,
-
-        // 设置请求事件
-        _setEvent: function(){
+        // 定义 xhr 事件
+        defineEvent: function(){
             var self    = this;
-            var xhr     = g(this._xhr);
-            var upload  = g(this._xhr.upload);
+            var xhr     = g(this.xhr);
+            var upload  = g(this.xhr.upload);
 
             // 响应
             xhr.on('readystatechange' , function(){
@@ -7326,58 +7357,65 @@
                  *
                  */
                 if (this.readyState === 4) {
-                    self._response = this.response;
-                    self._status = this.status;
-                    var contentType = xhr.origin('getResponseHeader' , 'Content-Type');
+                    var response = this.response;
+                    var status   = this.status;
+                    var contentType = self.native('getResponseHeader' , 'Content-Type');
                     contentType = g.type(contentType) == 'String' ? contentType.toLowerCase() : '';
-                    if (contentType == 'application/json') {
-                        self._response = g.jsonDecode(this.response);
+                    if (contentType == 'application/json' && self.responseType != 'json') {
+                        response = g.jsonDecode(this.response);
                     }
-                    if (!this._direct && g.isFunction(Ajax.responded)) {
-                        var next = Ajax.responded.call(self , self._response , self._status);
+                    if (!this.direct && g.isFunction(Ajax.responded)) {
+                        var next = Ajax.responded.call(self , response , status);
                         if (next === false) {
                             return ;
                         }
                     }
-                    self.response();
+                    if (g.type(this.success) === 'Function') {
+                        if (this.isReturnXHR) {
+                            this.success(response , status , self.xhr);
+                        } else {
+                            // 可能是 responseText || responseXML
+                            this.success(response , status);
+                        }
+                    }
                 }
             } , true , false);
 
             /*** 下载事件 ***/
 
             // error
-            if (g.type(this._error) === 'Function') {
-                xhr.on('error' , self._error , true , false);
+            if (g.type(this.error) === 'Function') {
+                xhr.on('error' , self.error , true , false);
             }
 
             // timeout
-            if (g.type(this._timeout) === 'Function') {
-                xhr.on('timeout' , this._timeout , true , false);
+            if (g.type(this.timeout) === 'Function') {
+                xhr.on('timeout' , this.timeout , true , false);
             }
 
             // loadstart
-            if (g.type(this._loadstart) === 'Function') {
-                xhr.on('loadstart' , this._loadstart , true , false);
+            if (g.type(this.loadstart) === 'Function') {
+                xhr.on('loadstart' , this.loadstart , true , false);
             }
 
             // progress
-            if (g.type(this._progress) === 'Function') {
-                xhr.on('timeout' , this._progress , true , false);
+            if (g.type(this.progress) === 'Function') {
+                xhr.on('timeout' , this.progress , true , false);
             }
 
             // load
-            if (g.type(this._load) === 'Function') {
-                xhr.on('load' , this._load , true , false);
+            if (g.type(this.load) === 'Function') {
+                xhr.on('load' , this.load , true , false);
             }
 
             // loadend
-            if (g.type(this._loadend) === 'Function') {
-                xhr.on('loadend' , this._loadend , true , false);
+            if (g.type(this.loadend) === 'Function') {
+                xhr.on('loadend' , this.loadend , true , false);
             }
 
             // abort
-            if (g.type(this._abort) === 'Function') {
-                xhr.on('abort' , this._abort , true , false);
+            if (g.type(this.abort) === 'Function') {
+                xhr.on('abort' , this.abort , true , false);
             }
 
             /*
@@ -7391,106 +7429,101 @@
              * onloadend
              */
             // error
-            if (g.type(this._uError) === 'Function') {
-                upload.on('error' , self._uError , true , false);
+            if (g.type(this.uError) === 'Function') {
+                upload.on('error' , self.uError , true , false);
             }
 
             // timeout
-            if (g.type(this._uTimeout) === 'Function') {
-                upload.on('timeout' , this._uTimeout , true , false);
+            if (g.type(this.uTimeout) === 'Function') {
+                upload.on('timeout' , this.uTimeout , true , false);
             }
 
             // loadstart
-            if (g.type(this._uLoadstart) === 'Function') {
+            if (g.type(this.uLoadstart) === 'Function') {
                 // console.log('load start');
-                upload.on('loadstart' , this._uLoadstart , true , false);
+                upload.on('loadstart' , this.uLoadstart , true , false);
             }
 
             // progress
-            if (g.type(this._uProgress) === 'Function') {
-                // console.log('你正在定义上传进度事件！' , this._uProgress);
-                upload.on('progress' , this._uProgress , true , false);
+            if (g.type(this.uProgress) === 'Function') {
+                // console.log('你正在定义上传进度事件！' , this.uProgress);
+                upload.on('progress' , this.uProgress , true , false);
             }
 
             // load
-            if (g.type(this._uLoad) === 'Function') {
+            if (g.type(this.uLoad) === 'Function') {
                 console.log('load start');
-                upload.on('load' , this._uLoad , true , false);
+                upload.on('load' , this.uLoad , true , false);
             }
 
 
             // loadend
-            if (g.type(this._uLoadend) === 'Function') {
-                upload.on('loadend' , this._uLoadend , true , false);
+            if (g.type(this.uLoadend) === 'Function') {
+                upload.on('loadend' , this.uLoadend , true , false);
             }
 
             // abort
-            if (g.type(this._uAbort) === 'Function') {
-                upload.on('abort' , this._uAbort , true , false);
+            if (g.type(this.uAbort) === 'Function') {
+                upload.on('abort' , this.uAbort , true , false);
             }
         } ,
 
-        _request: function(){
-            if (this._withCredentials) {
-                this._xhr.withCredentials = this._withCredentials;
+        // 发送请求
+        send: function(){
+            if (this.withCredentials) {
+                this.xhr.withCredentials = this.withCredentials;
             }
-
-            if (!this._direct && g.isFunction(Ajax.beforeSend)) {
-                if (Ajax.beforeSend.call(this) !== true) {
-                    return false;
-                }
-            }
-
-            if (this._method === 'GET') {
+            if (this.method === 'GET') {
                 // get 方法在 url 中发送数据
-                this._xhr.send(null);
+                this.xhr.send(null);
             } else {
                 // post 方法在 send 方法参数中发送数据
-                this._xhr.send(this._data);
+                this.xhr.send(this.data);
             }
         } ,
 
+        // 初始化前调用
         _before_: function() {
-            if (!this._direct && g.isFunction(Ajax.before)) {
+            if (!this.direct && g.isFunction(Ajax.before)) {
                 return Ajax.before.call(this);
             }
             return true;
         } ,
 
+        // 初始化后调用
         _after_: function(){
-            if (!this._direct && g.isFunction(Ajax.after)) {
+            if (!this.direct && g.isFunction(Ajax.after)) {
                 Ajax.after.call(this);
             }
         } ,
+
         // 重新执行
         restart: function(){
-            this._run();
+            this.run();
         } ,
-        _run: function(){
+
+        // 开始运行程序
+        run: function(){
             if (this._before_() != true) {
+                // 被用户手动拦截
                 return ;
             }
-            if (this._create() != true) {
+            if (this.create() != true) {
+                // 被用户手动拦截
                 return ;
             }
-            this._initialize();
-            if (this._open() != true) {
+            if (this.open() != true) {
+                // 被用户手动拦截
                 return ;
             }
-            // 请求头必须要在 xhr open 之后设置
-            this._setRequestHeader();
-            // 响应类型必须要在 xhr send 之前设置
-            this._setResponseType();
-            // 设置请求超时时间
-            this._setTimeout();
-            // 设置事件
-            this._setEvent();
-            if (this._request() != true) {
+            // 该方法必须在请求 open 之后调用
+            this.initialize();
+            if (this.send() != true) {
+                // 被用户手动拦截
                 return ;
             }
-            if (!this._direct) {
-                this._after_();
-            }
+            // 请求在调用之后
+            this._after_();
         }
     };
 
