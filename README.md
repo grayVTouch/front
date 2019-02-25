@@ -19,6 +19,7 @@
 - [UploadImage，图片上传](#UploadImage)
 - [Zoom，图片缩放，仅适用于移动端，存在尚未修复的 `bug`，请勿使用！](#Zoom)
 - [MultipleTab，多标签。](#MultipleTab)
+- [TouchFeedback](#TouchFeedback)
 
 
 # 插件列表
@@ -1174,3 +1175,7 @@ weight 加粗
     } , true , false);
 </script>
 ```
+
+## TouchFeedback
+
+动作反馈。
