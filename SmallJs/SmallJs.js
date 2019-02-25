@@ -7146,6 +7146,19 @@
         this._run();
     }
 
+    // 创建 xhr 之前
+    Ajax.before = null;
+    // 创建 xhr 之后
+    Ajax.created = null;
+    // 发送之前
+    Ajax.beforeSend = null;
+    // xhr open 之后
+    Ajax.opened = null;
+    // xhr 接收到响应之后
+    Ajax.responded = null;
+    // 发送请求之后
+    Ajax.after = null;
+
     Ajax.prototype = {
         version: '1.0' ,
 
@@ -7201,14 +7214,15 @@
 
         _create: function(){
             this._xhr = new XMLHttpRequest();
-
-            if (g.isFunction(Ajax.created)) {
-                Ajax.created.call(this);
+            if (!this._direct && g.isFunction(Ajax.created)) {
+                if (Ajax.created.call(this) !== true) {
+                    return false;
+                }
             }
-
             if (g.isFunction(this._before)) {
                 this._before.call(this);
             }
+            return true;
         } ,
 
         _initialize: function(){
@@ -7248,9 +7262,10 @@
              */
             this._xhr.open(this._method , this._url , this._async , this._username , this._password);
 
-            if (g.isFunction(Ajax.opened)) {
-                Ajax.opened.call(this);
+            if (!this._direct && g.isFunction(Ajax.opened)) {
+                return Ajax.opened.call(this);
             }
+            return true;
         } ,
 
         // 设置 AJAX 请求头
@@ -7318,8 +7333,8 @@
                     if (contentType == 'application/json') {
                         self._response = g.jsonDecode(this.response);
                     }
-                    if (!this._direct && g.isFunction(Ajax.response)) {
-                        var next = Ajax.response.call(self , self._response , self._status);
+                    if (!this._direct && g.isFunction(Ajax.responded)) {
+                        var next = Ajax.responded.call(self , self._response , self._status);
                         if (next === false) {
                             return ;
                         }
@@ -7420,8 +7435,10 @@
                 this._xhr.withCredentials = this._withCredentials;
             }
 
-            if (g.isFunction(Ajax.beforeSend)) {
-                Ajax.beforeSend.call(this);
+            if (!this._direct && g.isFunction(Ajax.beforeSend)) {
+                if (Ajax.beforeSend.call(this) !== true) {
+                    return false;
+                }
             }
 
             if (this._method === 'GET') {
@@ -7434,14 +7451,14 @@
         } ,
 
         _before_: function() {
-            if (g.isFunction(Ajax.before)) {
+            if (!this._direct && g.isFunction(Ajax.before)) {
                 return Ajax.before.call(this);
             }
             return true;
         } ,
 
         _after_: function(){
-            if (g.isFunction(Ajax.after)) {
+            if (!this._direct && g.isFunction(Ajax.after)) {
                 Ajax.after.call(this);
             }
         } ,
@@ -7450,16 +7467,16 @@
             this._run();
         } ,
         _run: function(){
-            var t = null;
-            if (!this._direct && (t = this._before_()) != true) {
-                console.log(this._direct , t);
+            if (this._before_() != true) {
                 return ;
             }
-            this._create();
-            // 初始化参数
+            if (this._create() != true) {
+                return ;
+            }
             this._initialize();
-            // 打开资源
-            this._open();
+            if (this._open() != true) {
+                return ;
+            }
             // 请求头必须要在 xhr open 之后设置
             this._setRequestHeader();
             // 响应类型必须要在 xhr send 之前设置
@@ -7468,8 +7485,9 @@
             this._setTimeout();
             // 设置事件
             this._setEvent();
-            // 发送数据
-            this._request();
+            if (this._request() != true) {
+                return ;
+            }
             if (!this._direct) {
                 this._after_();
             }
