@@ -7518,10 +7518,7 @@
             }
             // 该方法必须在请求 open 之后调用
             this.initialize();
-            if (this.send() != true) {
-                // 被用户手动拦截
-                return ;
-            }
+            this.send();
             // 请求在调用之后
             this._after_();
         }
