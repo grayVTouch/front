@@ -7364,18 +7364,18 @@
                     if (contentType == 'application/json' && self.responseType != 'json') {
                         response = g.jsonDecode(this.response);
                     }
-                    if (!this.direct && g.isFunction(Ajax.responded)) {
+                    if (!self.direct && g.isFunction(Ajax.responded)) {
                         var next = Ajax.responded.call(self , response , status);
                         if (next === false) {
                             return ;
                         }
                     }
-                    if (g.type(this.success) === 'Function') {
+                    if (g.type(self.success) === 'Function') {
                         if (this.isReturnXHR) {
-                            this.success(response , status , self.xhr);
+                            self.success(response , status , self.xhr);
                         } else {
                             // 可能是 responseText || responseXML
-                            this.success(response , status);
+                            self.success(response , status);
                         }
                     }
                 }
