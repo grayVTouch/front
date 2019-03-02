@@ -159,10 +159,10 @@
             var close = G('.close' , tab.get(0));
 
             // 标签会有多个事件
-            close.on('click' , this._closeEvent.bind(this) , true , false);
-            tab.on('dblclick' , this._tabDoubleClickEvent.bind(this) , true , false);
-            tab.on('click' , this._tabClickEvent.bind(this) , true , false);
-            tab.on('mousedown' , this._tabMousedownEvent.bind(this) , true , false);
+            close.on('click'    , this._closeEvent.bind(this) , true , false);
+            tab.on('dblclick'   , this._tabDoubleClickEvent.bind(this) , true , false);
+            tab.on('click'      , this._tabClickEvent.bind(this) , true , false);
+            tab.on('mousedown'  , this._tabMousedownEvent.bind(this) , true , false);
         } ,
 
         /**
@@ -226,7 +226,7 @@
                 self._initDynamic();
 
                 if (G.type(self._deleted) === 'Function') {
-                    self._deleted.call(self , tab.get(0) , id);
+                    self._deleted.call(self , id);
                 }
             } , this._time);
         } ,
@@ -281,26 +281,20 @@
                 ico: this._ico ,
                 attr: {}
             };
-
             if (G.type(opt) === 'Undefined') {
                 opt = _default;
             }
-
             opt['text']   = G.type(opt['text']) !== 'String' ? _default['text'] : opt['text'];
             opt['ico']    = G.type(opt['ico']) !== 'String' ? _default['ico'] : opt['ico'];
             opt['attr']   = !G.isObj(opt['attr']) ? _default['attr'] : opt['attr'];
-
             var id  = this.genID();
             var div = document.createElement('div');
                 div = G(div);
-
             div.addClass('tab');
             div.data('id' , id);
-
             var k = null;
             var p = 'data-';
             var _k = null;
-
             // 设置数据集属性
             for (k in opt['attr'])
             {
@@ -308,7 +302,6 @@
                 _k = p + k;
                 div.attr(_k , opt['attr'][k]);
             }
-
             var html = [];
             html.push();
             html.push('         <div class="ico"><img src="' + opt.ico + '" class="image"></div>');
@@ -317,26 +310,20 @@
             html.push('             <div class="positive"></div>');
             html.push('             <div class="negative"></div>');
             html.push('         </div>');
-
             div.html(html.join(''));
-
             // 添加标签
             this._tabs.append(div.get(0));
-
             // 参数重新初始化
             this._initDynamicHTML();
             this._initDynamicArgs();
             this._initDynamic();
-
             // 初始化样式
             div.css({
                 width: 0 ,
                 opacity: 0
             });
-
             // 高亮显示当前项
             this.highlightTab(div.get(0));
-
             var endW = this._tabW + 'px';
             var endOpacity = 1;
 
@@ -348,7 +335,7 @@
                 self._loginEvent(div.get(0));
 
                 if (G.isFunction(self._created)) {
-                    self._created.call(self , div.get(0) , id);
+                    self._created.call(self , id);
                 }
             } , this._time);
         } ,
@@ -364,7 +351,7 @@
             var id = tab.data('id');
 
             if (G.type(this._click) === 'Function') {
-                this._click.call(this , tab.get(0) , id);
+                this._click.call(this , id);
             }
         } ,
 
@@ -702,6 +689,13 @@
             win.on('mousemove'  , this._tabMouseMoveEvent.bind(this) , true , false);
             win.on('mouseup'    , this._tabMouseupEvent.bind(this) , true , false);
             win.on('resize'     , this.resize.bind(this) , true , false);
+        } ,
+
+        // 获取 tab 上新增的额外属性
+        attr: function(id , key){
+            var tab = G(this.tab(id));
+            var value = tab.data(key);
+            return value;
         } ,
 
         _run: function(){
