@@ -7209,7 +7209,7 @@
             async: true ,                          // 是否异步
             data: null ,                         // 发送的数据
             direct: false ,                      // 直接发出请求，这将绕过生命周期钩子的拦截
-            responseType: 'text' ,                       // 相应类型
+            responseType: '' ,                       // 相应类型
             additionalTimestamp: true , 			 // 是否在 url 末尾追加时间戳
             wait: 0 ,                         // 请求：设置超时时间，单位：ms，默认值：0
             withCredentials: false ,					 // 跨域请求是否允许携带 cookie
@@ -7460,7 +7460,9 @@
              * 初始化响应
              * ************************
              */
-            this.attr('responseType' , this.responseType);
+            if (g.isValid(this.responseType)) {
+                this.attr('responseType' , this.responseType);
+            }
             /**
              * ******************
              * 初始化事件
@@ -7520,7 +7522,12 @@
                     var status   = this.status;
                     var contentType = self.native('getResponseHeader' , 'Content-Type');
                     contentType = g.type(contentType) == 'String' ? contentType.toLowerCase() : '';
-                    if (contentType == 'application/json' && self.responseType != 'json') {
+                    if (
+                        contentType == 'application/json' &&
+                        (
+                            !g.isValid(self.responseType) ||
+                            (g.isValid(self.responseType) && self.responseType != 'json'))
+                    ) {
                         response = g.jsonDecode(this.response);
                     }
                     if (!self.direct && g.isFunction(Ajax.responded)) {
