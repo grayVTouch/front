@@ -7523,7 +7523,7 @@
                     var contentType = self.native('getResponseHeader' , 'Content-Type');
                     contentType = g.type(contentType) == 'String' ? contentType.toLowerCase() : '';
                     if (
-                        contentType == 'application/json' &&
+                        contentType.search('application/json') != -1 &&
                         (
                             !g.isValid(self.responseType) ||
                             (g.isValid(self.responseType) && self.responseType != 'json'))
