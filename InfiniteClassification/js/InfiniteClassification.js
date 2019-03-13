@@ -268,10 +268,11 @@
                     var id = item.data('id');
 
                     self.spread(id , function(){
-                        spread();
+                        if (res.length > 0) {
+                            spread();
+                        }
                     });
-
-                    if (res.length === 0) {
+                    if (res.length == 0) {
                         if (self._topFocus) {
                             self.topFocus(id);
                         }
