@@ -266,6 +266,7 @@
                 var spread = function(){
                     var item = G(res.shift());
                     var id = item.data('id');
+                    var isEmpty = item.data('isEmpty');
 
                     self.spread(id , function(){
                         if (res.length > 0) {
@@ -276,13 +277,18 @@
                         if (self._topFocus) {
                             self.topFocus(id);
                         }
-
                         if (self._focus) {
                             self.focus(id);
 
                             if (G.isFunction(self._click)) {
                                 self._click.call(this , id);
                             }
+                        }
+                        if (isEmpty == 'y' && G.isFunction(self._child)) {
+                            self._child.call(this , id);
+                        }
+                        if (isEmpty == 'n' && G.isFunction(self._parent)) {
+                            self._parent.call(this , id);
                         }
                     }
                 };

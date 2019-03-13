@@ -57,7 +57,11 @@
         } ,
 
         _initStaticArgs: function(){
-            this._loading	= G('.Loading' , this._con.get(0)).first();
+            // this._loading	= G('.Loading' , this._con.get(0)).first();
+            this._loading   = this._con.children({
+                tagName: 'div' ,
+                className: 'Loading'
+            } , false , true).first();
             this._bg		= G('.bg' , this._loading.get(0));
             this._cons		= G('.cons' , this._loading.get(0));
             this._text_		= G('.text' , this._cons.get(0));
