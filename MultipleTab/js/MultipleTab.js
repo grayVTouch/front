@@ -653,11 +653,9 @@
             this._determinePosition();
         } ,
 
-        title: function(tab , title){
-            tab = G.isDom(tab) ? G(tab) : G(this.tab(tab));
-
+        title: function(id , title){
+            var tab = G(this.tab(id));
             var text = G('.text' , tab.get(0));
-
             // 设置标签
             text.text(title === '' ? this._default.title : title);
         } ,
