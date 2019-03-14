@@ -669,7 +669,6 @@
             for (; i < this._tabs_.length; ++i)
             {
                 cur = this._tabs_.jump(i , true);
-                console.log(cur.data('id') , id);
                 if (cur.data('id') === id) {
                     return cur.get(0);
                 }
