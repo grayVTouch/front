@@ -2346,6 +2346,16 @@
      以下是以 SmallJs 作为命名空间的 基础函数库
      * ******************************************
      */
+    g.regexpCheck = function(reg , str){
+        var regexp = new RegExp(reg);
+        return regexp.test(str);
+    };
+
+    // 字符串检查
+    g.strSearch = function(needle , str){
+        return str.search(needle) != -1;
+    };
+
     // 事件定时器轮询
     g.loop = {
         timer: null ,
