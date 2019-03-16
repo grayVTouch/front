@@ -1065,9 +1065,7 @@
                 var pTotal		= null;
                 var pCur		= null;
                 var index		= i;
-
                 var formData = G.formData(self._field	, imageFile);
-
                 imageItem		= self.findImageItem(self._previewImages.get(0) , identifier);
                 progress	= G('.progress' , imageItem);
                 pTotal		= G('.p-total'	, progress.get(0));
@@ -1104,6 +1102,9 @@
                     // 全部上传成功时调用的回调函数
                     self.callback('success' , '图片序号 ' + self._uploadedList.length + '上传成功!');
                 };
+
+                //
+                console.log(formData);
 
                 G.ajax({
                     url: self._url ,

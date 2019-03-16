@@ -7278,7 +7278,7 @@
         this.url				 = !g.isValid(option['url'])									? this.default['url']			: option['url'];
         this.async			        = g.type(option['async']) !== 'Boolean'					? this.default['async']		: option['async'];
         this.additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this.default['additionalTimestamp']		: option['additionalTimestamp'];
-        this.data                  = g.isObject(option.data) ? g.buildQuery(option.data) : option.data;
+        this.data                  = g.isObject(option.data) ? (g.type(option.data) != 'FormData' ? g.buildQuery(option.data) : option.data) : option.data;
         this.data			        = !g.contain(g.type(this.data) , this.dataType) ? this.default['data']		: this.data;
         this.responseType	 	    = !g.contain(option['responseType'] , this.responseTypeRange)  ? this.default['responseType']	: option['responseType'];
         this.wait		            = g.type(option['wait']) !== 'Number'				? this.default['wait']	: option['wait'];
