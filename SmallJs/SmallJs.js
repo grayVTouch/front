@@ -7267,7 +7267,7 @@
         }
 
         // this.methodRange		 = ['GET' , 'POST' , 'PUT' , 'DISPATCH' , 'DELETE'];
-        this.dataType		     = ['String' , 'FormData' , 'Blob'];
+        this.dataType		     = ['Object' , 'FormData' , 'Blob'];
         // 会根据不同的 responseType 将响应数据做一些转换后在返回给用户
         this.responseTypeRange	 = ['' , 'text' , 'document' , 'json' , 'blob'];
         this.enctypeRange		 = ['text/plain' , 'application/x-www-form-urlencoded' , 'multipart/form-data'];
@@ -7278,8 +7278,7 @@
         this.url				 = !g.isValid(option['url'])									? this.default['url']			: option['url'];
         this.async			        = g.type(option['async']) !== 'Boolean'					? this.default['async']		: option['async'];
         this.additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this.default['additionalTimestamp']		: option['additionalTimestamp'];
-        this.data                  = g.isObject(option.data) ? (g.type(option.data) != 'FormData' ? g.buildQuery(option.data) : option.data) : option.data;
-        this.data			        = !g.contain(g.type(this.data) , this.dataType) ? this.default['data']		: this.data;
+        this.data                  = g.type(option.data) != 'FormData' ? (g.isObject(option.data) ? g.formData(option.data) : g.formData(this.default.data)) : option.data;
         this.responseType	 	    = !g.contain(option['responseType'] , this.responseTypeRange)  ? this.default['responseType']	: option['responseType'];
         this.wait		            = g.type(option['wait']) !== 'Number'				? this.default['wait']	: option['wait'];
         this.withCredentials		= g.type(option['withCredentials']) !== 'Boolean'				? this.default['withCredentials']	: option['withCredentials'];
