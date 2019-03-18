@@ -80,6 +80,10 @@
 	width:300px;
 }
 
+.line-tb thead tr .th-weight {
+	width:80px;
+}
+
 .line-tb thead tr .th-preview {
 	width:200px;
 }
