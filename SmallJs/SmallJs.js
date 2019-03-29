@@ -7505,6 +7505,8 @@
             }
         } ,
 
+        // 响应
+
         // 定义 xhr 事件
         defineEvent: function(){
             var self    = this;

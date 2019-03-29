@@ -52,6 +52,11 @@
         cTime: '2016/12/12 17:53:00' ,
         constructor: Loading ,
 
+        // close 回调函数接收的参数
+        args: null ,
+        // close 上下文环境
+        context: null ,
+
         _initStaticHTML: function(){
 
         } ,
@@ -180,6 +185,16 @@
             });
         } ,
 
+        // 设置点击关闭按钮时，传递给 close 回调函数的参数
+        setArgs: function(){
+            this.args = arguments;
+        } ,
+
+        // 设置环境变量
+        setContext: function(context){
+            this.context = context;
+        } ,
+
         // 缩放事件
         _resizeEvent: function(){
             this._initDynamicHTML();
@@ -196,7 +211,7 @@
             this.hide();
 
             if (G.isFunction(this._close)) {
-                this._close();
+                this._close.apply(this.context , this.args);
             }
         } ,
 
