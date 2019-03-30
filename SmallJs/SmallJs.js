@@ -2346,6 +2346,16 @@
      以下是以 SmallJs 作为命名空间的 基础函数库
      * ******************************************
      */
+    // 获取对象的首个属性
+    g.firstKey = function(obj){
+        return Object.keys(obj)[0];
+    };
+
+    // 获取对象首个单元值
+    g.firstValue = function(obj){
+        return Object.values(obj)[0];
+    };
+
     g.regexpCheck = function(reg , str){
         var regexp = new RegExp(reg);
         return regexp.test(str);
@@ -2524,9 +2534,8 @@
     };
 
     // 创建标签
-    g.create = function(tagName , attr){
+    g.createDom = function(tagName , attr){
         var dom = this(document.createElement(tagName));
-
         if (this.isObject(attr)) {
             var k = null;
             for (k in attr)
@@ -2534,7 +2543,6 @@
                 dom.attr(k , attr[k]);
             }
         }
-
         return dom;
     };
 
@@ -4177,7 +4185,7 @@
     // 复制对象
     g.copy = g.copyObj;
 
-    // 合成对象
+    // 合成对象（该版本）
     g.assign = function(){
         var args = this.array(arguments);
         var check = args.every(function(v){
@@ -4201,6 +4209,13 @@
             }
         });
         return res;
+    };
+
+    // 创建新的 object
+    g.createObject = function(){
+        var arr = g.array(arguments);
+        arr.unshift({});
+        return Object.assign.apply(Object , arr);
     };
 
     /*
