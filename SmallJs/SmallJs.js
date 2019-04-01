@@ -3129,6 +3129,7 @@
         for (k in obj)
         {
             v = obj[k];
+            v = encodeURIComponent(v);
             str += k + '=' + v + '&';
         }
         return str.slice(0 , -1);
@@ -7293,7 +7294,7 @@
         this.url				 = !g.isValid(option['url'])									? this.default['url']			: option['url'];
         this.async			        = g.type(option['async']) !== 'Boolean'					? this.default['async']		: option['async'];
         this.additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this.default['additionalTimestamp']		: option['additionalTimestamp'];
-        this.data                  = g.type(option.data) != 'FormData' ? (g.isObject(option.data) ? g.formData(option.data) : g.formData(this.default.data)) : option.data;
+        this.data                  = g.type(option.data) != 'FormData' ? (g.isObject(option.data) ? g.buildQuery(option.data) : g.buildQuery(this.default.data)) : option.data;
         this.responseType	 	    = !g.contain(option['responseType'] , this.responseTypeRange)  ? this.default['responseType']	: option['responseType'];
         this.wait		            = g.type(option['wait']) !== 'Number'				? this.default['wait']	: option['wait'];
         this.withCredentials		= g.type(option['withCredentials']) !== 'Boolean'				? this.default['withCredentials']	: option['withCredentials'];
