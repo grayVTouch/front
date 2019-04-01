@@ -154,3 +154,7 @@
 	width: auto;
 	max-height:80px;
 }
+
+td.text-left {
+	text-align: left !important;
+}

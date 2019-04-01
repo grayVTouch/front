@@ -117,20 +117,23 @@
 
 /* 错误处理 */
 .input-tb tbody .error {
-
+	border: 2px solid red;
 }
 
 .input-tb tbody .error td {
-	border: 1px solid red;
+
 }
 
 .input-tb tbody .error .form-text {
-	border: 1px solid rgb(255, 137, 137);
+	/*border: 1px solid rgb(255, 137, 137);*/
 }
 
 .input-tb tbody .error .form-text:focus {
-	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgb(255, 137, 137);
-	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgb(255, 137, 137);
+	/*box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgb(255, 137, 137);*/
+	/*-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgb(255, 137, 137);*/
+	/*box-shadow: none;*/
+	/*-webkit-box-shadow: none;*/
+
 }
 
 .input-tb tbody .error .tip {

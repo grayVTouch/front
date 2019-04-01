@@ -1150,7 +1150,7 @@
                     erorr: failedHandle ,
                     netError: failedHandle ,
                     uError: failedHandle ,
-                    timeout: failedHandle
+                    timeout: failedHandle ,
                 });
 
                 i--;
@@ -1250,7 +1250,7 @@
                 };
 
                 // succHandle
-                var succHandle = function(json){
+                var succHandle = function(){
                     // 记录上传日志
                     self.log(imageFile , 'success');
 
@@ -1262,7 +1262,7 @@
 
                     // 调用
                     if (G.type(self._success) === 'Function') {
-                        self._success(json);
+                        self._success.apply(this , arguments);
                     }
 
                     // 全部上传成功时调用的回调函数
