@@ -7447,6 +7447,8 @@
              * ***********************
              */
             if (this.additionalTimestamp) {
+                // 先将原有的时间戳清除掉
+                this.url = this.url.replace(/(\?|&)?__timestamp__.*/g , '');
                 // 是否追加时间戳，防止请求被缓存
                 var time = new Date().getTime();
                 if (this.url.lastIndexOf('?') === -1) {
@@ -7454,8 +7456,6 @@
                 } else {
                     this.url += '&';
                 }
-                // 先将原有的时间戳清除掉
-                this.url = this.url.replace(/(\?|&)?__timestamp__.*/g , '');
                 // 附加新的时间戳
                 this.url += '__timestamp__=' + time;
             }
