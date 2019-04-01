@@ -7454,6 +7454,9 @@
                 } else {
                     this.url += '&';
                 }
+                // 先将原有的时间戳清除掉
+                this.url = this.url.replace(/(\?|&)?__timestamp__.*/g , '');
+                // 附加新的时间戳
                 this.url += '__timestamp__=' + time;
             }
             // 初始化要设置的请求头
