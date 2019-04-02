@@ -1096,7 +1096,7 @@
 
                     // 调用
                     if (G.type(self._success) === 'Function') {
-                        self._success(json);
+                        self._success.apply(this , arguments);
                     }
 
                     // 全部上传成功时调用的回调函数
