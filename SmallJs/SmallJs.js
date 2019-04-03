@@ -7439,8 +7439,34 @@
             return true;
         } ,
 
+        // 获取要附加的链接符号
+        sign: function(){
+            if (this.url.lastIndexOf('?') === -1) {
+                return '?';
+            }
+            return '&';
+        } ,
+
         // 初始化 ajax
         initialize: function(){
+            /*
+             * *************************************************************
+             * 数据测试：
+             * 特殊：如果 method = get 情况下，data 必须是字符串
+             * 特殊：如果 method = post 情况下，data 允许 字符串 或 FormData
+             * 特殊：如果 method = other 情况下，data 必须是一个字符串
+             * **************************************************************
+             */
+            if (this.method == 'GET') {
+                if (g.isValid(this.data)) {
+                    if (!g.isString(this.data)) {
+                        throw new Error('Ajax data 字段类型错误');
+                    }
+                    // 附加查询字符串到 url
+                    this.url += this.sign() + this.data;
+                }
+            }
+
             /**
              * ***********************
              * 初始化请求
@@ -7451,13 +7477,9 @@
                 this.url = this.url.replace(/(\?|&)?__timestamp__.*/g , '');
                 // 是否追加时间戳，防止请求被缓存
                 var time = new Date().getTime();
-                if (this.url.lastIndexOf('?') === -1) {
-                    this.url += '?';
-                } else {
-                    this.url += '&';
-                }
+
                 // 附加新的时间戳
-                this.url += '__timestamp__=' + time;
+                this.url += this.sign() + '__timestamp__=' + time;
             }
             // 初始化要设置的请求头
             if (g.type(this.data) !== 'FormData') {
