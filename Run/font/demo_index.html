@@ -31,9 +31,39 @@
           <ul class="icon_lists dib-box">
           
             <li class="dib">
-              <span class="icon iconfont">&#xe630;</span>
+              <span class="icon run-iconfont">&#xe630;</span>
                 <div class="name">箭头</div>
                 <div class="code-name">&amp;#xe630;</div>
+              </li>
+          
+            <li class="dib">
+              <span class="icon run-iconfont">&#xe64f;</span>
+                <div class="name">编辑</div>
+                <div class="code-name">&amp;#xe64f;</div>
+              </li>
+          
+            <li class="dib">
+              <span class="icon run-iconfont">&#xe615;</span>
+                <div class="name">搜索</div>
+                <div class="code-name">&amp;#xe615;</div>
+              </li>
+          
+            <li class="dib">
+              <span class="icon run-iconfont">&#xe607;</span>
+                <div class="name">重置</div>
+                <div class="code-name">&amp;#xe607;</div>
+              </li>
+          
+            <li class="dib">
+              <span class="icon run-iconfont">&#xe610;</span>
+                <div class="name">新增</div>
+                <div class="code-name">&amp;#xe610;</div>
+              </li>
+          
+            <li class="dib">
+              <span class="icon run-iconfont">&#xe612;</span>
+                <div class="name">删 除 </div>
+                <div class="code-name">&amp;#xe612;</div>
               </li>
           
           </ul>
@@ -54,19 +84,19 @@
           <h3 id="-font-face">第一步：拷贝项目下面生成的 <code>@font-face</code></h3>
 <pre><code class="language-css"
 >@font-face {
-  font-family: 'iconfont';
+  font-family: 'run-iconfont';
   src: url('iconfont.eot');
   src: url('iconfont.eot?#iefix') format('embedded-opentype'),
       url('iconfont.woff2') format('woff2'),
       url('iconfont.woff') format('woff'),
       url('iconfont.ttf') format('truetype'),
-      url('iconfont.svg#iconfont') format('svg');
+      url('iconfont.svg#run-iconfont') format('svg');
 }
 </code></pre>
           <h3 id="-iconfont-">第二步：定义使用 iconfont 的样式</h3>
 <pre><code class="language-css"
->.iconfont {
-  font-family: "iconfont" !important;
+>.run-iconfont {
+  font-family: "run-iconfont" !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
@@ -76,10 +106,10 @@
           <h3 id="-">第三步：挑选相应图标并获取字体编码，应用于页面</h3>
 <pre>
 <code class="language-html"
->&lt;span class="iconfont"&gt;&amp;#x33;&lt;/span&gt;
+>&lt;span class="run-iconfont"&gt;&amp;#x33;&lt;/span&gt;
 </code></pre>
           <blockquote>
-            <p>"iconfont" 是你项目下的 font-family。可以通过编辑项目查看，默认是 "iconfont"。</p>
+            <p>"run-iconfont" 是你项目下的 font-family。可以通过编辑项目查看，默认是 "iconfont"。</p>
           </blockquote>
           </div>
       </div>
@@ -87,11 +117,56 @@
         <ul class="icon_lists dib-box">
           
           <li class="dib">
-            <span class="icon iconfont icon-jiantou"></span>
+            <span class="icon run-iconfont run-jiantou"></span>
             <div class="name">
               箭头
             </div>
-            <div class="code-name">.icon-jiantou
+            <div class="code-name">.run-jiantou
+            </div>
+          </li>
+          
+          <li class="dib">
+            <span class="icon run-iconfont run-75bianji"></span>
+            <div class="name">
+              编辑
+            </div>
+            <div class="code-name">.run-75bianji
+            </div>
+          </li>
+          
+          <li class="dib">
+            <span class="icon run-iconfont run-sousuo"></span>
+            <div class="name">
+              搜索
+            </div>
+            <div class="code-name">.run-sousuo
+            </div>
+          </li>
+          
+          <li class="dib">
+            <span class="icon run-iconfont run-zhongzhi"></span>
+            <div class="name">
+              重置
+            </div>
+            <div class="code-name">.run-zhongzhi
+            </div>
+          </li>
+          
+          <li class="dib">
+            <span class="icon run-iconfont run-xinzeng"></span>
+            <div class="name">
+              新增
+            </div>
+            <div class="code-name">.run-xinzeng
+            </div>
+          </li>
+          
+          <li class="dib">
+            <span class="icon run-iconfont run-shanchu"></span>
+            <div class="name">
+              删 除 
+            </div>
+            <div class="code-name">.run-shanchu
             </div>
           </li>
           
@@ -113,11 +188,11 @@
 <pre><code class="language-html">&lt;link rel="stylesheet" href="./iconfont.css"&gt;
 </code></pre>
         <h3 id="-">第二步：挑选相应图标并获取类名，应用于页面：</h3>
-<pre><code class="language-html">&lt;span class="iconfont icon-xxx"&gt;&lt;/span&gt;
+<pre><code class="language-html">&lt;span class="run-iconfont run-xxx"&gt;&lt;/span&gt;
 </code></pre>
         <blockquote>
           <p>"
-            iconfont" 是你项目下的 font-family。可以通过编辑项目查看，默认是 "iconfont"。</p>
+            run-iconfont" 是你项目下的 font-family。可以通过编辑项目查看，默认是 "iconfont"。</p>
         </blockquote>
       </div>
       </div>
@@ -126,10 +201,50 @@
           
             <li class="dib">
                 <svg class="icon svg-icon" aria-hidden="true">
-                  <use xlink:href="#icon-jiantou"></use>
+                  <use xlink:href="#run-jiantou"></use>
                 </svg>
                 <div class="name">箭头</div>
-                <div class="code-name">#icon-jiantou</div>
+                <div class="code-name">#run-jiantou</div>
+            </li>
+          
+            <li class="dib">
+                <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#run-75bianji"></use>
+                </svg>
+                <div class="name">编辑</div>
+                <div class="code-name">#run-75bianji</div>
+            </li>
+          
+            <li class="dib">
+                <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#run-sousuo"></use>
+                </svg>
+                <div class="name">搜索</div>
+                <div class="code-name">#run-sousuo</div>
+            </li>
+          
+            <li class="dib">
+                <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#run-zhongzhi"></use>
+                </svg>
+                <div class="name">重置</div>
+                <div class="code-name">#run-zhongzhi</div>
+            </li>
+          
+            <li class="dib">
+                <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#run-xinzeng"></use>
+                </svg>
+                <div class="name">新增</div>
+                <div class="code-name">#run-xinzeng</div>
+            </li>
+          
+            <li class="dib">
+                <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#run-shanchu"></use>
+                </svg>
+                <div class="name">删 除 </div>
+                <div class="code-name">#run-shanchu</div>
             </li>
           
           </ul>
