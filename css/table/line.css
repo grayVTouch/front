@@ -20,11 +20,13 @@
 
 .line-tb thead tr th , .line-tb tbody tr td {
 	height:40px;
-	white-space: nowrap;
-	overflow: hidden;
 	text-align:center;
-	text-overflow: ellipsis;
-	padding: 0px 8px;
+	/*white-space: nowrap;*/
+	/*overflow: hidden;*/
+	/*text-overflow: ellipsis;*/
+	word-wrap: break-word;
+	word-break: break-all;
+	padding: 0 8px;
 	border:1px solid #ccc;
 }
 
@@ -81,7 +83,7 @@
 }
 
 .line-tb thead tr .th-weight {
-	width:80px;
+	width:50px;
 }
 
 .line-tb thead tr .th-preview {
@@ -124,13 +126,13 @@
  */
 .line-tb tbody tr .multiple-rows {
 	text-align:left;
-	padding:0px;
-	margin:0px 8px;
+	padding:0;
+	margin:0 8px;
 }
 
 .line-tb tbody tr .multiple-rows .row {
-	padding:3px 0px;
-	margin:0px 5px;
+	padding:3px 0;
+	margin:0 5px;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -157,4 +159,126 @@
 
 td.text-left {
 	text-align: left !important;
+}
+
+/**
+ * *************************
+ * 新增规则
+ * *************************
+ */
+.line-tb .w-20 {
+	width: 20px;
+}
+
+.line-tb .w-30 {
+	width: 30px;
+}
+
+.line-tb .w-40 {
+	width: 40px;
+}
+
+.line-tb .w-50 {
+	width: 50px;
+}
+
+.line-tb .w-60 {
+	width: 60px;
+}
+
+.line-tb .w-70 {
+	width: 70px;
+}
+
+.line-tb .w-80 {
+	width: 80px;
+}
+
+.line-tb .w-90 {
+	width: 90px;
+}
+
+.line-tb .w-100 {
+	width: 100px;
+}
+
+.line-tb .w-110 {
+	width: 110px;
+}
+
+.line-tb .w-120 {
+	width: 120px;
+}
+
+.line-tb .w-130 {
+	width: 130px;
+}
+
+.line-tb .w-140 {
+	width: 140px;
+}
+
+.line-tb .w-150 {
+	width: 150px;
+}
+
+.line-tb .w-160 {
+	width: 160px;
+}
+
+.line-tb .w-170 {
+	width: 170px;
+}
+
+.line-tb .w-180 {
+	width: 180px;
+}
+
+.line-tb .w-190 {
+	width: 190px;
+}
+
+.line-tb .w-200 {
+	width: 200px;
+}
+
+.line-tb .w-210 {
+	width: 210px;
+}
+
+.line-tb .w-220 {
+	width: 220px;
+}
+
+.line-tb .w-230 {
+	width: 230px;
+}
+
+.line-tb .w-240 {
+	width: 240px;
+}
+
+.line-tb .w-250 {
+	width: 250px;
+}
+
+.line-tb .w-260 {
+	width: 260px;
+}
+
+.line-tb .w-270 {
+	width: 270px;
+}
+
+.line-tb .w-280 {
+	width: 280px;
+}
+
+.line-tb .w-290 {
+	width: 290px;
+}
+
+.line-tb .w-300
+{
+	width: 300px;
 }

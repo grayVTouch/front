@@ -183,7 +183,6 @@
 
         } ,
 
-
         // 通过文件ID找到图片列表中对应的项 index
         findSelectedImageItemIndexByIdentifier: function(identifier){
             var i = 0;
