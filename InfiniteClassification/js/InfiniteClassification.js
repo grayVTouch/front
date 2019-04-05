@@ -556,6 +556,11 @@
             return item.data('isEmpty') === 'y';
         } ,
 
+        // 展示图标切换
+        switch (type) {
+
+        } ,
+
         // 注册项相关事件
         _on: function(item){
             item = G(item);

@@ -5843,15 +5843,6 @@
         this._run();
     }
 
-    // 动画时间
-    Animate.prevTime = 0;
-    Animate.count = 0;
-    Animate.curTime = {};
-    // 间隔范围：由于 cpu 性能不足导致的！必须存在容差范围！
-    // 否则无法达到预期效果
-    Animate.startRange      = g.browser() === 'mobile' ? 120 : 30;
-    Animate.runtimeRange    = g.browser() === 'mobile' ? 120 : 30;
-
     Animate.prototype = {
         version: '7.0' ,
         cTime: '2016/09/16 10:20:00' ,
@@ -5859,27 +5850,6 @@
         _initStaticArgs: function(){
             // 用户设置
             this._styles = {};
-
-            var timestamp = new Date().getTime();
-            this._extraDuration = 0;
-
-            // 时间相关
-            if (Animate.prevTime > 0) {
-                var duration = 0;
-                if ((duration = Math.abs(timestamp - Animate.prevTime)) <= Animate.startRange) {
-                    this._extraDuration = duration;
-                    timestamp = Animate.prevTime;
-                }
-            }
-            Animate.prevTime = timestamp;
-            this._sTime = timestamp + this._delay;
-            this._eTime = this._sTime + this._time;
-            this._count = ++Animate.count;
-            this._ratio = 0.8;
-            // 60 / 1000，按照性能 80% 性能计算
-            this._freq = 60 / 1000;
-            this._chgCount = Math.ceil(this._freq * this._time);
-
             this._css3Range = [
                 'translateX' ,
                 'translateY' ,
@@ -5894,15 +5864,12 @@
                 'skewY' ,
                 'skewZ'
             ];
-
             var k;
             var v;
             var unit;
             var amount;
             var sVal;
             var eVal;
-            var speed = 0;
-            var count = 0;
             var reg = /\-?[0-9\.]+/;
 
             for (k in this._json)
@@ -5915,46 +5882,20 @@
                 eVal    = parseFloat(eVal);
                 sVal    = this._css3Range.indexOf(k) >= 0 ? this._g.transform(true)[k] : parseFloat(this._g.css(k));
                 amount  = eVal - sVal;
-                count   = 0;
-                speed   = amount / this._chgCount;
-                sVal    = sVal + Math.ceil(this._extraDuration * this._freq * this._ratio) * speed;
 
                 this._styles[k] = {
                     unit: unit ,
                     amount: amount ,
-                    // 采用速度的方式能够保证 amount 和 time 相同的情况下
-                    // 速度一直！如果采用时间比率的方式则无法做到！！
-                    speed: speed ,
-                    count: count ,
                     sVal: sVal ,
                     eVal: eVal ,
                     // 是否完成
                     completed: false
                 };
             }
-            this._once = true;
         } ,
 
         _initStatic: function(){
-            if (this._once && this._extraRatio > 0) {
-                var k   = 0;
-                var cur = null;
-                var res = null;
-                var transEnd = {};
-                var cssEnd = {};
-                for (k in this._styles)
-                {
-                    cur = this._styles[k];
-                    res = cur.sVal + cur.unit;
-                    if (this._css3Range.indexOf(k) >= 0) {
-                        transEnd[k] = res;
-                    } else {
-                        cssEnd = res;
-                    }
-                }
-                this._g.transform(transEnd);
-                this._g.css(cssEnd);
-            }
+
         } ,
 
         _initDynamicArgs: function(){
@@ -6008,23 +5949,24 @@
         _animate: function(){
             var self		= this;
             this._dom.__smalljs_animating__ = true;
+            var timestamp = new Date().getTime();
+            var startTime = timestamp + this._delay;
+            var endTime = timestamp + this._time;
             // 初始化
             var animate = function(){
                 g.CAF(self._dom.__smalljs_animate_timer__);
-
                 var curTime     = new Date().getTime();
+                var ratio       = (curTime - startTime) / self._time;
+                    ratio       = Math.min(ratio , 1);
                 var k;
                 var v;
-                var unit = null;
                 var cssEnd = {};
                 var transformEnd = {};
                 var res = '';
                 for (k in self._styles)
                 {
                     v   = self._styles[k];
-                    // res = v.sVal + ratio * v['amount'];
-                    self._styles[k].count = ++v.count;
-                    res  = v.sVal + v.count * v.speed;
+                    res = v.sVal + ratio * v.amount;
                     if (v.sVal >= v.eVal) {
                         // 缩小
                         res = Math.max(v.eVal , Math.min(v.sVal , res));
@@ -6037,24 +5979,10 @@
                     } else {
                         cssEnd[k] = res + v['unit'];
                     }
-
-                    if (self._once) {
-                        continue ;
-                    }
-
-                    if (v.eVal === res) {
-                        self._styles[k].completed = true;
-                    }
                 }
-                if (self._once) {
-                    self._once = false;
-                } else {
-                    // css3 动画特殊
-                    self._g.transform(transformEnd);
-                    self._g.css(cssEnd);
-                }
-                // if (curTime <= self._eTime) {
-                if (!self._isCompleted()) {
+                self._g.css(transformEnd);
+                self._g.css(cssEnd);
+                if (curTime <= endTime) {
                     return self._dom.__smalljs_animate_timer__ = g.RAF(animate);
                 }
                 self._dom.__smalljs_animating__ = false;
