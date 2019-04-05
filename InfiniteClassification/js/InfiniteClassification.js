@@ -143,13 +143,14 @@
                     var k = 'infinite_classification_count_' + floor + '_' + count + '_' + _count;
                     var v = 0;
                     dom.data('countKey' , k);
+                    dom.data('floor' , floor);
 
                     if (!G.s.exists(k) || G.s.get(k) == 0) {
                         G.s.set(k , v);
                     }
 
                     // 设置图标
-                    self.icon(id);
+                    self.flag(id);
                     flag.removeClass('hide');
 
                     // 注册事件
@@ -334,7 +335,7 @@
             // 记录点击次数
             this.inc(countKey);
             // 切换图标
-            this.icon(id);
+            this.flag(id);
 
             if (isEmpty === 'y') {
                 return ;
@@ -396,7 +397,7 @@
             // 记录点击次数
             this.inc(countKey);
             // 切换图标
-            this.icon(id);
+            this.flag(id);
 
             if (isEmpty === 'y') {
                 return ;
@@ -487,7 +488,7 @@
             G.s.set(k , count);
         } ,
 
-        icon: function(id){
+        flag: function(id){
             var item    = G(this.item(id));
             var isEmpty = item.data('isEmpty');
             var flag    = G('.function .flag' , item.get(0)).first();
@@ -496,7 +497,6 @@
             var _number = G('.number' , flag.get(0));
             var _switch = G('.switch' , flag.get(0));
             var countKey = item.data('countKey');
-
             if (!G.s.exists(countKey) || G.s.get(countKey) == 0) {
                 _new.highlight('hide' , children.get() , true);
             } else {
@@ -506,6 +506,7 @@
                     if (isEmpty !== 'y') {
                         _switch.highlight('hide' , children.get() , true);
                     } else {
+                        // console.log('为空');
                         children.addClass('hide');
                     }
                 }
@@ -557,8 +558,33 @@
         } ,
 
         // 展示图标切换
-        switch (type) {
-
+        icon (type) {
+            var typeRange = ['text' , 'icon' , 'none'];
+            if (!G.contain(type , typeRange)) {
+                throw new Error('参数 1 不支持的类型，受支持的类型有：' + typeRange.join(' , '));
+            }
+            var i = 0;
+            var cur = null;
+            var icon = null;
+            var image = null;
+            var text = null;
+            for (; i < this._items.length; ++i)
+            {
+                cur     = this._items.jump(i , true);
+                icon    = G('.function > .icon' , cur.get(0)).first();
+                image   = G('.image' , icon.get(0));
+                text    = G('.text' , icon.get(0));
+                if (type != 'none') {
+                    icon.removeClass('hide');
+                    if (type == 'text') {
+                        text.highlight('hide' , icon.children().get() , true);
+                        continue ;
+                    }
+                    text.highlight('hide' , icon.children().get() , true);
+                    continue ;
+                }
+                icon.addClass('hide');
+            }
         } ,
 
         // 注册项相关事件

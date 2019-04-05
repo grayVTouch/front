@@ -3,7 +3,7 @@
  * author 陈学龙 2017-09-10 14:00:00
  */
 .infinite-classification {
-    margin:0px;
+    margin:0;
     background-color:#373d41;
 }
 
@@ -37,9 +37,12 @@
 
 .infinite-classification .list .item .function .icon {
     position:absolute;
-    left:0px;
-    top:0px;
+    left:0;
+    top:0;
     width:50px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
     text-align:center;
 }
 
@@ -49,11 +52,11 @@
     position:absolute;
     left:50%;
     top:50%;
-    transform:translate3d(-50% , -50% , 0px);
-    -webkit-transform:translate3d(-50% , -50% , 0px);
-    -moz-transform:translate3d(-50% , -50% , 0px);
-    -ms-transform:translate3d(-50% , -50% , 0px);
-    -o-transform:translate3d(-50% , -50% , 0px);
+    transform:translate3d(-50% , -50% , 0);
+    -webkit-transform:translate3d(-50% , -50% , 0);
+    -moz-transform:translate3d(-50% , -50% , 0);
+    -ms-transform:translate3d(-50% , -50% , 0);
+    -o-transform:translate3d(-50% , -50% , 0);
 }
 
 .infinite-classification .list .item .function .explain {
@@ -71,8 +74,8 @@
 
 .infinite-classification .list .item .function .explain .in .ico {
     position:absolute;
-    left:0px;
-    top:0px;
+    left:0;
+    top:0;
     width:20px;
     height:40px;
 }
@@ -81,13 +84,13 @@
     width:12px;
     height:12px;
     position:absolute;
-    left:0px;
+    left:0;
     top:50%;
-    transform:translate3d(0px , -50% , 0px);
-    -webkit-transform:translate3d(0px , -50% , 0px);
-    -moz-transform:translate3d(0px , -50% , 0px);
-    -ms-transform:translate3d(0px , -50% , 0px);
-    -o-transform:translate3d(0px , -50% , 0px);
+    transform:translate3d(0 , -50% , 0);
+    -webkit-transform:translate3d(0 , -50% , 0);
+    -moz-transform:translate3d(0 , -50% , 0);
+    -ms-transform:translate3d(0 , -50% , 0);
+    -o-transform:translate3d(0 , -50% , 0);
 }
 
 .infinite-classification .list .item .function .explain .in .text {
@@ -102,8 +105,8 @@
 .infinite-classification .list .item .function .flag {
     width:50px;
     position:absolute;
-    right:0px;
-    top:0px;
+    right:0;
+    top:0;
     text-align:center;
     transition:all 0.12s linear;
     -webkit-transition:all 0.12s linear;
@@ -126,7 +129,7 @@
 .infinite-classification .list .item .function .flag .new , .infinite-classification .list .item .function .flag .number {
     height: 20px;
     line-height: 20px;
-    padding: 0px 8px;
+    padding: 0 8px;
     position:absolute;
     top:50%;
     right:8px;
@@ -134,11 +137,11 @@
     color:white;
     white-space:nowrap;
     border-radius:2px;
-    transform:translate3d(0px , -50% , 0px);
-    -webkit-transform:translate3d(0px , -50% , 0px);
-    -moz-transform:translate3d(0px , -50% , 0px);
-    -ms-transform:translate3d(0px , -50% , 0px);
-    -o-transform:translate3d(0px , -50% , 0px);
+    transform:translate3d(0 , -50% , 0);
+    -webkit-transform:translate3d(0 , -50% , 0);
+    -moz-transform:translate3d(0 , -50% , 0);
+    -ms-transform:translate3d(0 , -50% , 0);
+    -o-transform:translate3d(0 , -50% , 0);
 }
 
 .infinite-classification .list .item .function .flag .new {
@@ -153,11 +156,11 @@
     position:absolute;
     left:50%;
     top:50%;
-    transform:translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 0deg);
-    -webkit-transform:translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 0deg);
-    -moz-transform:translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 0deg);
-    -ms-transform:translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 0deg);
-    -o-transform:translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 0deg);
+    transform:translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 0deg);
+    -webkit-transform:translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 0deg);
+    -moz-transform:translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 0deg);
+    -ms-transform:translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 0deg);
+    -o-transform:translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 0deg);
 }
 
 .infinite-classification .list .item .function .flag .switch .image {
@@ -184,19 +187,19 @@
  * 设置右边 flag 样式
  */
 .infinite-classification .list .item .spread .flag .switch {
-    transform: translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 180deg);
-    -webkit-transform: translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 180deg);
-    -moz-transform: translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 180deg);
-    -ms-transform: translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 180deg);
-    -o-transform: translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 180deg);
+    transform: translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 180deg);
+    -webkit-transform: translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 180deg);
+    -moz-transform: translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 180deg);
+    -ms-transform: translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 180deg);
+    -o-transform: translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 180deg);
 }
 
 .infinite-classification .list .item .shrink .flag .swtich {
-    transform: translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 0deg);
-    -webkit-transform: translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 0deg);
-    -moz-transform: translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 0deg);
-    -ms-transform: translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 0deg);
-    -o-transform: translate3d(-50% , -50% , 0px) rotate3d(0 , 0 , 1 , 0deg);
+    transform: translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 0deg);
+    -webkit-transform: translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 0deg);
+    -moz-transform: translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 0deg);
+    -ms-transform: translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 0deg);
+    -o-transform: translate3d(-50% , -50% , 0) rotate3d(0 , 0 , 1 , 0deg);
 }
 
 /**
