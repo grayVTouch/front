@@ -131,6 +131,9 @@
                     }
 
                     if (floor > 1) {
+                        var textForIcon = G('.text' , icon.get(0));
+                        var textContent = G('.text' , explain.get(0)).text()[0];
+                        textForIcon.text(textContent);
                         icon.addClass('hide');
                         explain.css({
                             paddingLeft: _amount + 'px'
@@ -558,7 +561,7 @@
         } ,
 
         // 展示图标切换
-        icon (type) {
+        icon: function(type) {
             var typeRange = ['text' , 'icon' , 'none'];
             if (!G.contain(type , typeRange)) {
                 throw new Error('参数 1 不支持的类型，受支持的类型有：' + typeRange.join(' , '));
@@ -571,6 +574,9 @@
             for (; i < this._items.length; ++i)
             {
                 cur     = this._items.jump(i , true);
+                if (cur.data('floor') == 1) {
+                    continue ;
+                }
                 icon    = G('.function > .icon' , cur.get(0)).first();
                 image   = G('.image' , icon.get(0));
                 text    = G('.text' , icon.get(0));
