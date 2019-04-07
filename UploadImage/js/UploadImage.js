@@ -1079,14 +1079,14 @@
                     self.showStatus(msg.get(0) , 'failed');
 
                     if (G.type(self._error) === 'Function') {
-                        self._error();
+                        self._error.apply(this , arguments);
                     }
 
                     // 全部上传成功时调用的回调函数
                     self.callback('error' , '图片序号 ' + index + '上传发生错误!');
                 };
 
-                var succHandle = function(json){
+                var succHandle = function(){
                     // 记录上传日志
                     self.log(imageFile , 'success');
 
@@ -1103,7 +1103,7 @@
                 };
 
                 //
-                console.log(formData);
+                // console.log(formData);
 
                 G.ajax({
                     url: self._url ,
@@ -1238,7 +1238,7 @@
                     self.showStatus(msg.get(0) , 'failed');
 
                     if (G.type(self._error) === 'Function') {
-                        self._error();
+                        self._error.apply(this , arguments);
                     }
 
                     // 全部上传成功时调用的回调函数
