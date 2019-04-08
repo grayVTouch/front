@@ -120,6 +120,11 @@
 
 .brand-container .left > .brand .item .logo {
     z-index: 2;
+    background-color: white;
+}
+
+.brand-container .left > .brand .item .logo .image {
+    width: 40px;
 }
 
 .brand-container .left > .brand .item .name {
