@@ -33,7 +33,7 @@
             opt = this._default;
         }
 
-        var typeRange = [1 , 2 , 3 , 4];
+        this._typeRange = [1 , 2 , 3 , 4];
 
         this._con = G(selector);
 
