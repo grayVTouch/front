@@ -185,7 +185,7 @@
                     return cur.get(0);
                 }
             }
-            throw new Error('未找到 id 对应项');
+            return null;
         } ,
 
         // 获取选中项
@@ -220,7 +220,12 @@
 
         // 选中品牌
         checked: function(id){
-            var brand   = G(this.findById(id));
+            var brand   = this.findById(id);
+            if (G.isNull(brand)) {
+                console.log('未找到 id = ' + id + '对应品牌，忽略');
+                return ;
+            }
+            brand = G(brand);
             var status  = G('.status' , brand.get(0)).first();
             if (this.value.mode == 'single') {
                 this.uncheckedAll();
@@ -237,7 +242,12 @@
 
         // 取消选中品牌
         unchecked: function(id){
-            var brand   = G(this.findById(id));
+            var brand   = this.findById(id);
+            if (G.isNull(brand)) {
+                console.log('未找到 id = ' + id + '对应品牌，忽略');
+                return ;
+            }
+            brand = G(brand);
             var status  = G('.status' , brand.get(0)).first();
             brand.data('checked' , 'n');
             status.addClass('hide');

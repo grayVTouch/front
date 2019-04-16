@@ -1452,8 +1452,8 @@
             html += '		<div class="item div-speed">' + assign['speed'] + '</div>	';
             html += '		<div class="item div-status">' + assign['statusExplain'] + '</div>	';
             html += '	    <div class="item div-opr multiple-rows">	';
-            html += '	    	<div class="row"><button type="button" class="btn-1 cancel hide">取消</button></div>	';
-            html += '	    	<div class="row"><button type="button" class="btn-1 delete">删除</button></div>	';
+            html += '	    	<div class="row"><button type="button" class="run-button run-button-orange hide">取消</button></div>	';
+            html += '	    	<div class="row"><button type="button" class="run-button run-button-orange delete">删除</button></div>	';
             html += '	    </div>	';
             html += '	</div>';
 

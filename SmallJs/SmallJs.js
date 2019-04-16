@@ -1366,7 +1366,7 @@
          * @param Boolean isCopy    是否生成副本
          */
         children: function(json , isStrict , isCopy){
-            json        = g.isObj(json) ? json : {};
+            json        = g.isObj(json) && !g.isNull(json) ? json : {};
             isStrict    = g.isBoolean(isStrict) ? isStrict : false;
             isCopy      = g.isBoolean(isCopy) ? isCopy : true;
 
