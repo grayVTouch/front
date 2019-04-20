@@ -73,8 +73,12 @@ input[type=text] , input[type=password] , input[type=search] , input[type=number
 	-ms-transition:all 0.3s ease-in-out;
 }
 
-input[type=text] , input[type=password] , input[type=search] , input[type=number] , input[type=email] , textarea {
+input[type=text] , input[type=password] , input[type=search] , input[type=number] , input[type=email] {
 	text-indent:12px;
+}
+
+textarea {
+	padding: 5px;
 }
 
 input[type=radio] , input[type=checkbox] {
