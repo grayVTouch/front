@@ -289,10 +289,10 @@
                             }
                         }
                         if (isEmpty == 'y' && G.isFunction(self._child)) {
-                            self._child.call(this , id);
+                            self._child.call(self , id);
                         }
                         if (isEmpty == 'n' && G.isFunction(self._parent)) {
-                            self._parent.call(this , id);
+                            self._parent.call(self , id);
                         }
                     }
                 };
@@ -552,6 +552,11 @@
             }
 
             return data;
+        } ,
+
+        attr: function(id , attr){
+            var item = G(this.item(id));
+            return item.data(attr);
         } ,
 
         // 是否不存在子级
