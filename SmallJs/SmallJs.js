@@ -3799,6 +3799,13 @@
     };
 
     /**
+     * 检查是否是数字（字符串数字）
+     */
+    g.isNumeric = function(data){
+        return G.isNumber(data) || /^[0-9]+(\.[0-9]{1,})?$/.test(data);
+    };
+
+    /**
      * 检查是否是整形
      */
     g.isInt = function(data){

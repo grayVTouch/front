@@ -1,5 +1,6 @@
 .run-page {
     font-size: 12px;
+    display: inline-block;
 }
 
 .run-page:after {
@@ -15,6 +16,12 @@
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
+}
+
+.run-page .info {
+    height: 30px;
+    line-height: 30px;
+    padding-right: 8px;
 }
 
 .run-page .links {
@@ -92,7 +99,7 @@
     color: #999;
 }
 
-.run-page .go-to .step {
+.run-page .go-to .page {
     width: 40px;
     height: 30px;
     line-height: 30px;
@@ -102,7 +109,7 @@
     font-size: 12px;
 }
 
-.run-page .go-to .step:focus {
+.run-page .go-to .page:focus {
     border-color: #009688;
 }
 
