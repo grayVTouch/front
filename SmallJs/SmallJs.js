@@ -3678,8 +3678,8 @@
      * @return Mixed
      */
     g.random = function(min , max , isInt , fixedNum){
-        var isInt	 = g.type(isInt)    !== 'Boolean' ? true : isInt;
-        var fixedNum = g.type(fixedNum) !== 'Number'  ? 3    : fixedNum;
+        isInt	 = g.type(isInt)    !== 'Boolean' ? true : isInt;
+        fixedNum = g.type(fixedNum) !== 'Number'  ? 3    : fixedNum;
         var range	 = max - min;
         var rel		 = Math.max(min , Math.min(max , range * Math.random()));
 
@@ -4707,7 +4707,7 @@
     };
 
     // 弧度转换为角度
-    g.getDeg = function(rad){
+    g.getAng = function(rad){
         return rad * 180 / Math.PI;
     };
 
@@ -4741,21 +4741,22 @@
     /*
      * 随机获取颜色
      */
-    g.generateRandomColor = function(option){
+    g.randomColor = function(option){
+        var _default = {
+            minR: 0 ,
+            maxR: 255 ,
+            minG: 0 ,
+            maxG: 255 ,
+            minB: 0 ,
+            maxB: 255 ,
+            minA: 0 ,
+            maxA: 1000 ,
+            endA: undefined ,
+            alpha: undefined ,
+            len: 1000
+        };
         if (g.type(option) === 'Undefined') {
-            var option = {
-                minR: 0 ,
-                maxR: 255 ,
-                minG: 0 ,
-                maxG: 255 ,
-                minB: 0 ,
-                maxB: 255 ,
-                minA: 0 ,
-                maxA: 1000 ,
-                endA: undefined ,
-                alpha: undefined ,
-                len: 1000
-            };
+            option = _default;
         }
 
         var R = null;
@@ -4800,15 +4801,15 @@
 
         for (var i = 0; i < option['len']; ++i)
         {
-            R = random(option['minR'] , option['maxR']);
-            G = random(option['minG'] , option['maxG']);
-            B = random(option['minB'] , option['maxB']);
-            A = g.type(option['alpha']) === 'Undefined' ? random(option['minA'] , option['maxA']) / alphaRatio : option['alpha'];
+            R = this.random(option['minR'] , option['maxR'] , true);
+            G = this.random(option['minG'] , option['maxG'] , true);
+            B = this.random(option['minB'] , option['maxB'] , true);
+            A = g.type(option['alpha']) === 'Undefined' ? this.random(option['minA'] , option['maxA'] , true) / alphaRatio : option['alpha'];
 
             colorList.push('RGBA(' + R + ' , ' + G + ' , ' + B + ' , ' + A + ')');
         }
 
-        return colorList;
+        return colorList.join('');
     };
 
 
@@ -5013,6 +5014,7 @@
 
         // 当前项
         current: function(id , data , field){
+            data = g.copyObj(data , true);
             field = this.field(field);
             var i = 0;
             var v = null;
@@ -5028,6 +5030,7 @@
 
         // 单个：直系父级
         parent: function(id , data , field){
+            data = g.copyObj(data , true);
             field = this.field(field);
             var cur    = this.current(id , data , field);
             var i = 0;
@@ -5044,6 +5047,7 @@
 
         // 全部：父级
         parents: function(id , data , field , self , struct){
+            data = g.copyObj(data , true);
             field   = this.field(field);
             self    = g.isBoolean(self) ? self : true;
             struct  = g.isBoolean(struct) ? struct : true;
@@ -5082,6 +5086,7 @@
 
         // 直系全部：子级
         children: function(id , data , field){
+            data = g.copyObj(data , true);
             field  = this.field(field);
             var res    = [];
             var i = 0;
@@ -5096,15 +5101,15 @@
             return res;
         } ,
 
-        // 所有子级
         childrens: function(id , data , field , self , struct){
+            data = g.copyObj(data , true);
             field   = this.field(field);
             self    = g.isBoolean(self) ? self : true;
             struct  = g.isBoolean(struct) ? struct : true;
             var cur = this.current(id , data , field);
             var _self_ = this;
 
-            var get = function(id){
+            var get = function(id , floor){
                 var res    = _self_.children(id , data , field);
                 var v           = null;
                 var i           = 0;
@@ -5113,38 +5118,97 @@
                 for (; i < len; ++i)
                 {
                     v = res[i];
-                    other = get(v[field['id']]);
+                    v.floor = floor;
+                    other = get(v[field['id']] , floor + 1);
                     other.unshift(0);
                     other.unshift(res.length);
                     res.splice.apply(res , other);
                 }
                 return res;
             };
-            var res = get(id);
-            if (self && cur !== false) {
+            var saveSelf = self && cur !== false;
+            var res = get(id , saveSelf ? 2 : 1);
+            if (saveSelf) {
                 // 保存自身
+                cur.floor = 1;
                 res.unshift(cur);
             }
             if (struct) {
                 // 保存结构
-                var get_struct = function(id){
+                var get_struct = function(id , floor){
                     var children = _self_.children(id , res , field);
                     var i = 0;
                     var v = null;
                     for (; i < children.length; ++i)
                     {
                         v = children[i];
-                        v.children = get_struct(v[field['id']]);
+                        v.floor = floor;
+                        v.children = get_struct(v[field['id']] , floor + 1);
                     }
                     return children;
                 };
-                res = get_struct(id);
-                if (self && cur !== false) {
+                res = get_struct(id , saveSelf ? 2 : 1);
+                if (saveSelf) {
+                    cur.floor = 1;
                     cur.children = res;
                     res = cur;
                 }
             }
             return res;
+        } ,
+
+        floor: function(id , data , field , self){
+            data    = g.copyObj(data , true);
+            field   = this.field(field);
+            self    = g.isBoolean(self) ? self : true;
+            var cur = this.current(id , data , field);
+            var _self_ = this;
+            var saveSelf = self && cur !== false;
+            var initFloor = saveSelf ? 2 : 1;
+            var floorLog = [];
+            var get_struct = function(id , floor){
+                var children = _self_.children(id , data , field);
+                if (children.length < 1) {
+                    return ;
+                }
+                var i = 0;
+                var v = null;
+                for (; i < children.length; ++i)
+                {
+                    v = children[i];
+                    get_struct(v[field['id']] , floor + 1);
+                }
+                floorLog.push(floor);
+            };
+            get_struct(id , initFloor);
+            return floorLog.length > 1 ? Math.max.apply(null , floorLog) : 0;
+        } ,
+
+        floorCount: function(id , data , field , self){
+            data    = g.copyObj(data , true);
+            field   = this.field(field);
+            self    = g.isBoolean(self) ? self : true;
+            var cur = this.current(id , data , field);
+            var _self_ = this;
+            var saveSelf = self && cur !== false;
+            var initFloor = saveSelf ? 2 : 1;
+            var count = {};
+            if (saveSelf) {
+                count[1] = 1;
+            }
+            var get_struct = function(id , floor){
+                var children = _self_.children(id , data , field);
+                var i = 0;
+                var v = null;
+                for (; i < children.length; ++i)
+                {
+                    v = children[i];
+                    count[floor] = g.isUndefined(count[floor]) ? 1 : ++count[floor];
+                    get_struct(v[field['id']] , floor + 1);
+                }
+            };
+            get_struct(id , initFloor);
+            return count;
         } ,
     };
 

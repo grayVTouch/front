@@ -6,6 +6,18 @@
         if (!G.isDom(container)) {
             throw new Error('参数 1 类型错误');
         }
+        // 默认参数
+        this.default = {
+            // 插件地址
+            pluginUrl: '' ,
+                // 是否允许单选/多选切换
+                multiple: true ,
+                // 选中时回调
+                checked: null ,
+                // 取消选中时回调函数
+                unchecked: null ,
+                confirm: null ,
+        };
         if (G.isUndefined(option)) {
             option = this.default;
         }
@@ -16,27 +28,13 @@
     }
 
     Brand.prototype = {
-        option: null ,
-        // 容器元素
-        container: null ,
-        // 默认参数
-        default: {
-            // 插件地址
-            pluginUrl: '' ,
-            // 是否允许单选/多选切换
-            multiple: true ,
-            // 选中时回调
-            checked: null ,
-            // 取消选中时回调函数
-            unchecked: null ,
-            confirm: null ,
-        } ,
-        // 页面上要用到的 dom 元素
-        dom: {} ,
-        // 需要用到的值
-        value: {} ,
         // 静态数据初始化
         initStatic: function(){
+            // 页面上要用到的 dom 元素
+            this.dom = {};
+            // 需要用到的值
+            this.value = {};
+
             /**
              * ***********************************
              * 值
