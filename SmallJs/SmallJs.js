@@ -138,9 +138,6 @@
         }
         // 使用时注意
         this._cur = this._get(selector , context);
-
-        this.length = this._cur.length;
-
         this._run();
     }
 
@@ -162,15 +159,10 @@
         // 构造函数
         constructor: SmallJs ,
 
-        length: 0 ,
-
-        // 当前引用的DOM对象
-        _cur: null ,
-
-        // 队列
-        _queue: null ,
-
         _initialize: function(){
+            // 长度
+            this.length = this._cur.length;
+            // 队列
             this.loop(function(dom){
                 if (g.isUndefined(dom.__smalljs_queue__)) {
                     // 为每一个 dom 元素设置一个队列
@@ -476,7 +468,7 @@
             type = g.contain(type , range) ? type : 'inner';
 
             if (g.isNull(html) || g.isUndefined(html)) {
-                return type === 'inner' ? this._cur.innerHTML : this._cur.outerHTML;
+                return type === 'inner' ? this.get(0).innerHTML : this.get(0).outerHTML;
             }
 
             this.loop(function (dom) {
@@ -2621,18 +2613,17 @@
     // 获取可编辑元素的光标位置
     g.getCursorPointForContentEditableElement = function(dom){
         var selection = window.getSelection();
-
         if (selection.rangeCount === 0) {
             return false;
         }
-
         var range = selection.getRangeAt(0);
         var cRange = range.cloneRange();
-
         cRange.selectNodeContents(dom);
         cRange.setEnd(range.endContainer , range.endOffset);
-
-        return cRange.toString().length;
+        return {
+            node: cRange.endContainer ,
+            position: cRange.endOffset
+        };
     };
 
     // 获取 textarea/input 等带有输入域的文本框的光标位置
@@ -2640,40 +2631,43 @@
         return dom.selectionEnd;
     };
 
-    // 获取光标当前位置
-    g.getCursorPoint = function(dom){
-        if (dom.contentEditable !== 'true') {
-            return this.getCursorPointForInput(dom);
-        }
-
-        return this.getCursorPointForContentEditableElement(dom);
-    };
-
     // 可编辑 html: 设置光标位置
-    g.setCursorPointForContentEditableElement = function(dom , pos){
-        dom.focus();
-
-        // 快捷方式
+    g.setCursorPointForContentEditableElement = function(node , pos){
         var posRange = ['first' , 'last'];
-
-        if (this.contain(pos , posRange)) {
-            if (pos === 'first') {
-                pos = 0;
+        var range = document.createRange();
+        if (node.nodeType == 1) {
+            // 元素节点
+            node.focus();
+            if (this.contain(pos , posRange)) {
+                if (pos === 'first') {
+                    pos = 0;
+                } else {
+                    pos = node.childNodes.length;
+                }
+                range.selectNodeContents(node);
+                range.setStart(node , pos);
             } else {
-                pos = dom.childNodes.length;
+                range.selectNodeContents(node);
+                range.setStart(node , pos);
+            }
+        } else {
+            // 文本节点等
+            node.parentNode.focus();
+            if (this.contain(pos , posRange)) {
+                if (pos === 'first') {
+                    pos = 0;
+                } else {
+                    pos = node.parentNode.childNodes.length;
+                }
+                range.selectNodeContents(node.parentNode);
+                range.setStart(node.parentNode , pos);
+            } else {
+                range.selectNodeContents(node);
+                range.setStart(node , pos);
             }
         }
-
-        var range = document.createRange();
-
-        range.selectNodeContents(dom);
-
-        range.setStart(dom , pos);
-
         range.collapse(true);
-
         var selection = window.getSelection();
-
         selection.removeAllRanges();
         selection.addRange(range);
     };
@@ -2681,18 +2675,7 @@
     // 文本域：设置光标位置
     g.setCursorPointForInput = function(dom , pos){
         dom.focus();
-
         dom.setSelectionRange(pos , pos , 'none');
-    };
-
-    // 设置光标位置
-    g.setCursorPoint = function(dom , pos){
-        if (dom.contentEditable !== 'true') {
-            this.setCursorPointForInput(dom , pos);
-            return ;
-        }
-
-        this.setCursorPointForContentEditableElement(dom , pos);
     };
 
     // 获取某个元素距离给定父元素的位置
@@ -7289,41 +7272,6 @@
         author: '陈学龙' ,
         constructor: Ajax ,
 
-        // 当前创建的 XMLHttpRequest
-        xhr: null ,
-        // 请求头
-        url: null ,
-        method: null ,
-        async: null ,
-        header: null ,
-        additionalTimestamp: null ,
-        data: null ,
-        responseType: null ,
-        wait: null ,
-        withCredentials: null ,
-        before: null ,
-        success: null ,
-        netError: null ,
-        error: null ,
-        progress: null ,
-        loadstart: null ,
-        load: null ,
-        loadend: null ,
-        timeout: null ,
-        abort: null ,
-        uError: null ,
-        uProgress: null ,
-        uLoadstart: null ,
-        uLoad: null ,
-        uLoadend: null ,
-        uTimeout: null ,
-        uAbort: null ,
-        isReturnXHR: null ,
-        username: null ,
-        password: null ,
-        isAllowAjaxHeader: null ,
-        direct: null ,
-
         // 调用原生方法
         native: function(event){
             var args = arguments;
@@ -7695,6 +7643,7 @@
         }
 
         this._queue = [];
+        this.isConsuming = false;
         this.length = this._queue.length;
     }
 
@@ -7706,11 +7655,6 @@
         author: '陈学龙' ,
 
         cTime: '2016/10/27 00:46:00' ,
-
-        length: 0 ,
-
-        // 是否正在消费队列
-        isConsuming: false ,
 
         get: function(index){
             return !g.isInt(index) ? this._queue : this._queue[index];
