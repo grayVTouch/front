@@ -119,21 +119,20 @@
                     div.addClass(['prompt' , 'hide']);
                 var html = '';
                     html += '   <!-- 背景颜色 -->';
-                    html += '    <div class="bg"></div>';
+                    html += '    <div class="background"></div>';
                     html += '    <!-- 内容 -->';
                     html += '    <div class="con">';
                     html += '       <div class="header">';
                     html += '           <div class="left title">信息</div>';
                     html += '           <div class="right btns">';
-                    html += '                <button class="btn close">X</button>';
+                    html += '                <div class="btn close">';
+                    html += '                   <div class="positive"></div>';
+                    html += '                   <div class="negative"></div>';
+                    html += '                </div>';
                     html += '            </div>';
                     html += '        </div>';
-                    html += '       <div class="msg">提示内容+++++++</div>';
-                    html += '       <div class="btns">';
-                    // html += '           <button class="btn btn-1">确认</button>';
-                    // html += '           <button class="btn btn-1">你好</button>';
-                    // html += '           <button class="btn btn-1">取消</button>';
-                    html += '        </div>';
+                    html += '       <div class="msg"></div>';
+                    html += '       <div class="btns"></div>';
                     html += '    </div>';
 
                 div.html(html);
@@ -154,12 +153,12 @@
             } ,
 
             _initStaticArgs: function(){
-                this._bg        = G('.bg' , this._prompt.get(0));
-                this._header    = G('.header' , this._con_.get(0));
-                this._title_     = G('.title' , this._header.get(0));
+                this._background    = G('.background' , this._prompt.get(0));
+                this._header        = G('.header' , this._con_.get(0));
+                this._title_        = G('.title' , this._header.get(0));
                 this._btnsForHeader = G('.btns' , this._header.get(0));
-                this._close_     = G('.close' , this._btnsForHeader.get(0));
-                this._msg       = G('.msg' , this._con_.get(0));
+                this._close_        = G('.close' , this._btnsForHeader.get(0));
+                this._msg           = G('.msg' , this._con_.get(0));
 
                 // 参数
                 this._startOpacity      = 0;
@@ -227,7 +226,7 @@
                 var self = this;
                 this._prompt.removeClass('hide');
 
-                this._bg.animate({
+                this._background.animate({
                     opacity: this._endOpacity
                 } , null , this._time);
 
@@ -251,7 +250,7 @@
             hide: function(fn){
                 var self = this;
 
-                this._bg.animate({
+                this._background.animate({
                     opacity: this._startOpacity
                 } , null , this._time);
 

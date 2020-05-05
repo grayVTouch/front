@@ -405,19 +405,19 @@
         } ,
 
         // 检查元素内滚动条是否在顶部
-        isTop: function(){
-            return this.scrollTop() === 0;
+        isTop: function(extraH){
+            return Math.max(this.scrollTop() - extraH , 0) === 0;
         } ,
 
         // 检查元素滚动条是否在底部
-        isBottom: function(){
+        isBottom: function(extraH){
+            extraH = extraH ? extraH : 0;
             var clientH = this.clientHeight();
             var maxH    = this.scrollHeight();
             var maxT    = Math.floor(maxH - clientH);
             var curT    = this.scrollTop();
             curT    = Math.ceil(curT);
-
-            return curT >= maxT;
+            return curT + extraH >= maxT;
         } ,
 
         // 检查元素是否在最左边
@@ -2338,6 +2338,52 @@
      以下是以 SmallJs 作为命名空间的 基础函数库
      * ******************************************
      */
+    // 表单验证
+    g.validate = {
+        // 检查错误信息
+        check: function(obj , message){
+            var k;
+            var v;
+            var m;
+            var res = {};
+            message = g.isObj(message) ? message: {};
+            for (k in obj)
+            {
+                v = obj[k];
+                if (v === '') {
+                    m = message[k];
+                    if (g.isValid(m)) {
+                        res[k] = m;
+                        continue ;
+                    }
+                    res[k] = k + ' is required';
+
+                }
+            }
+            return res;
+        } ,
+
+        // 检查是否包含错误信息
+        hasError: function(obj) {
+            var k;
+            var v;
+            for (k in obj)
+            {
+                v = obj[k];
+                if (g.isValid(v)) {
+                    return true;
+                }
+            }
+            return false;
+        } ,
+
+        // 返回错误信息受个 key
+        firstKey: function(obj){
+            return g.firstKey(obj);
+        } ,
+
+
+    };
     // 获取对象的首个属性
     g.firstKey = function(obj){
         return Object.keys(obj)[0];
@@ -2754,11 +2800,9 @@
 
         var start = function(){
             self.CAF(dom.get(0).__smalljs_scroll_timer__);
-
             eTime   = new Date().getTime();
             ratio   = (eTime - sTime) / time;
             ratio   = Math.max(minRatio , Math.min(maxRatio , ratio));
-
             endX = startX + xRange * ratio;
             endY = startY + yRange * ratio;
 
@@ -3862,19 +3906,12 @@
         if (val === '') {
             return false;
         }
-
-        if (g.type(val) === 'Undefined') {
+        if (this.isUndefined(val)) {
             return false;
         }
-
-        if (val === null) {
+        if (this.isNull(val)) {
             return false;
         }
-
-        if (val === false) {
-            return false;
-        }
-
         return true;
     };
 
@@ -4942,52 +4979,103 @@
 
     // localStorage 操作
     g.storage = {
-        get: function(k){
-            return window.localStorage.getItem(k);
-        } ,
+        local: {
+            get: function(k){
+                return window.localStorage.getItem(k);
+            } ,
 
-        set: function(k , v){
-            if (g.isUndefined(v) && g.isObject(k)) {
-                var k1 = null;
-                var v1 = null;
-                for (k1 in k)
-                {
-                    v1 = k1[k1];
-                    window.localStorage.setItem(k1 , v1);
+            set: function(k , v){
+                if (g.isUndefined(v) && g.isObject(k)) {
+                    var k1 = null;
+                    var v1 = null;
+                    for (k1 in k)
+                    {
+                        v1 = k1[k1];
+                        window.localStorage.setItem(k1 , v1);
+                    }
+                    return ;
                 }
-                return ;
+
+                window.localStorage.setItem(k , v);
+            } ,
+
+            exists: function(k){
+                return !g.isNull(this.get(k));
+            } ,
+
+            del: function(k){
+                if (g.isArray(k)) {
+                    k.forEach(function(v){
+                        window.localStorage.removeItem(v);
+                    });
+                    return ;
+                }
+
+                window.localStorage.removeItem(k);
+            } ,
+
+            clear: function(){
+                return window.localStorage.clear();
+            } ,
+
+            // json 操作
+            json: function(k , v){
+                if (g.isUndefined(v)) {
+                    return g.jsonDecode(this.get(k));
+                }
+
+                this.set(k , g.jsonEncode(v));
             }
-
-            window.localStorage.setItem(k , v);
         } ,
 
-        exists: function(k){
-            return !g.isNull(this.get(k));
-        } ,
+        session: {
+            get: function(k){
+                return window.sessionStorage.getItem(k);
+            } ,
 
-        del: function(k){
-            if (g.isArray(k)) {
-                k.forEach(function(v){
-                    window.localStorage.removeItem(v);
-                });
-                return ;
+            set: function(k , v){
+                if (g.isUndefined(v) && g.isObject(k)) {
+                    var k1 = null;
+                    var v1 = null;
+                    for (k1 in k)
+                    {
+                        v1 = k1[k1];
+                        window.sessionStorage.setItem(k1 , v1);
+                    }
+                    return ;
+                }
+
+                window.sessionStorage.setItem(k , v);
+            } ,
+
+            exists: function(k){
+                return !g.isNull(this.get(k));
+            } ,
+
+            del: function(k){
+                if (g.isArray(k)) {
+                    k.forEach(function(v){
+                        window.sessionStorage.removeItem(v);
+                    });
+                    return ;
+                }
+
+                window.sessionStorage.removeItem(k);
+            } ,
+
+            clear: function(){
+                return window.sessionStorage.clear();
+            } ,
+
+            // json 操作
+            json: function(k , v){
+                if (g.isUndefined(v)) {
+                    return g.jsonDecode(this.get(k));
+                }
+
+                this.set(k , g.jsonEncode(v));
             }
-
-            window.localStorage.removeItem(k);
         } ,
-
-        clear: function(){
-            return window.localStorage.clear();
-        } ,
-
-        // json 操作
-        json: function(k , v){
-            if (g.isUndefined(v)) {
-                return g.jsonDecode(this.get(k));
-            }
-
-            this.set(k , g.jsonEncode(v));
-        }
     };
 
     // 树遍历
@@ -5336,6 +5424,134 @@
 
             return h + '时' + i + '分' + s + '秒';
         }
+    };
+
+    /**
+     * 根据给定的时间，计算出距当前时间的间隔
+     * 小于 1 min 的，单位 s
+     * 小于 1 h 的，单位 min
+     * 小于 1 d 的，单位 h
+     * 小于 1 month 的，单位 d
+     * 小于 1 year 的，单位 month
+     * 大于 1 year 的，单位 year
+     * @param Mixed   $time 时间点
+     * @param String  $type 类型，支持的类型有：date、datetime、timestamp
+     * date         2017-05-17
+     * datetime     2017-05-17 18:00:04
+     * timestamp    141444415454
+     * @return  1 秒前 or 1 分钟前 or 1 小时前 ...
+     *          1 秒后 or 1 分钟后 or 1 小时后 ...
+     * 注意了：这边的月，30天算一月；这边的年，12个月算一年（360天）
+     */
+    g.timestampDiffWithNow = function(timestamp){
+        if (this.isUndefined(timestamp)) {
+            return false;
+        }
+        if (!this.isValid(timestamp)) {
+            return '无';
+        }
+        if (!this.isNumeric(timestamp)) {
+            timestamp = this.unixTimestamp(timestamp , 'datetime');
+            // console.log('timestamp: ' , timestamp , this.fromUnixtime(timestamp , 'datetime' , true , true));
+            // console.log('now: ' , Date.now() , this.fromUnixtime(Date.now() , 'datetime' , true , true));
+        }
+        // 单位 s
+        var timestamp_for_now = Date.now();
+        var distance = (timestamp_for_now - timestamp) / 1000;
+
+        // 秒
+        var second = 1;
+        // 分
+        var minute = second * 60;
+        // 时
+        var hour = minute * 60;
+        // 天
+        var date = hour * 24;
+        // 月（30天算1月）
+        var month = date * 30;
+        // 年（12个月算1年）
+        var year = month * 12;
+
+
+        if (distance > 0) {
+            if (distance < minute) {
+                return distance + ' 秒前';
+            }
+
+            if (distance >= minute && distance <hour) {
+                return Math.floor(distance / minute) + ' 分钟前';
+            }
+
+            if (distance >= hour && distance < date) {
+                return Math.floor(distance / hour) + ' 小时前';
+            }
+
+            if (distance >= date && distance < month) {
+                date = Math.floor(distance / date);
+
+                if (date == 1) {
+                    return '昨天';
+                }
+
+                if (date == 2) {
+                    return '前天';
+                }
+
+                return date + ' 天前';
+            }
+
+            if (distance >= month && distance < year) {
+                return Math.floor(distance / month) + ' 月前';
+            }
+
+            if (distance >= year) {
+                return Math.floor(distance / year) + ' 年前';
+            }
+
+            throw new Error('> 0 不在可控范围内的数值！');
+        }
+
+        if (distance < 0) {
+            distance = abs(distance);
+
+            if (distance < minute) {
+                return distance + ' 秒后';
+            }
+
+            if (distance >= minute && distance < hour) {
+                return Math.floor(distance / minute) + ' 分钟后';
+            }
+
+            if (distance >= hour && distance < date) {
+                return Math.floor(distance / hour) + ' 小时后';
+            }
+
+            if (distance >= date && distance < month) {
+                date = Math.floor(distance / date);
+
+                if (date == 1) {
+                    return '明天';
+                }
+
+                if (date == 2) {
+                    return '后天';
+                }
+
+                return date + ' 天后';
+            }
+
+            if (distance >= month && distance < year) {
+                return Math.floor(distance / month) + ' 月后';
+            }
+
+            if (distance >= year) {
+                return Math.floor(distance / year) + ' 年后';
+            }
+
+            throw new Error('< 0 不在可控范围内的数值！');
+        }
+
+        return '刚刚';
     };
 
     /*
@@ -7838,8 +8054,10 @@
     g.$s		= new Set();
     g.$q        = new Queue();
     g.c         = g.cookie;
-    g.s         = g.storage;
+    g.s         = g.storage.local;
+    g.session   = g.storage.session;
     g.t         = g.tree;
+    g.v         = g.validate;
     g.click		= g.browser() === 'mobile' ? 'touchstart' : 'click';
     g.mousedown	= g.browser() === 'mobile' ? 'touchstart' : 'mousedown';
     g.mousemove	= g.browser() === 'mobile' ? 'touchmove'  : 'mousemove';

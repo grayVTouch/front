@@ -79,6 +79,9 @@
             this.args = null;
             // close 上下文环境
             this.context = null;
+            this.event = {
+                close: this._close
+            };
         } ,
 
         _initStatic: function(){
@@ -209,9 +212,13 @@
         _closeEvent: function(){
             this.hide();
 
-            if (G.isFunction(this._close)) {
-                this._close.apply(this.context , this.args);
+            if (G.isFunction(this.event.close)) {
+                this.event.close();
             }
+        } ,
+
+        listen: function(event , callback){
+            this.event[event] = callback;
         } ,
 
         // 定义事件
@@ -236,6 +243,5 @@
     if (!noGlobal) {
         window.Loading = Loading;
     }
-
     return Loading;
 });
