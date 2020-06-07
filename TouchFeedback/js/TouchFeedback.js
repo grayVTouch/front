@@ -23,7 +23,7 @@
         }
 
         this.default = {
-            time: 700 ,
+            time: 500 ,
             backgroundColor: '#626a77' ,
         };
 
