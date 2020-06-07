@@ -46,14 +46,7 @@
         } ,
 
         initStaticArgs: function(){
-            var touchFeedback = document.createElement('div');
-                touchFeedback.className = 'touch-feedback';
-            this.con.append(touchFeedback);
-            this.touchFeedback = G(touchFeedback);
-
-            this.conW = this.touchFeedback.width('border-box');
-            this.conH = this.touchFeedback.height('border-box');
-
+            this.once = true;
             this.sW = 0;
             this.sH = 0;
             this.maxOpacity = 1;
@@ -61,7 +54,7 @@
         } ,
 
         initStatic: function(){
-            this.touchFeedback.addClass('hide');
+
         } ,
 
         initDynamicHTML: function(){
@@ -77,7 +70,17 @@
         } ,
 
         start: function(){
+            var touchFeedback = document.createElement('div');
+            touchFeedback.className = 'touch-feedback';
+            this.con.append(touchFeedback);
+            this.touchFeedback = G(touchFeedback);
+            this.conW = this.touchFeedback.width('border-box');
+            this.conH = this.touchFeedback.height('border-box');
+        } ,
 
+        end: function(){
+            this.domLen = 0;
+            this.con.remove(this.touchFeedback.get(0));
         } ,
 
         create: function(){
@@ -90,31 +93,33 @@
                 opacity: this.maxOpacity ,
                 backgroundColor: this.backgroundColor ,
             });
-            // this.domLen
             return div.get(0);
         } ,
 
         clickEvent: function(e){
-            this.touchFeedback.removeClass('hide');
-            var dom = this.create();
             var x = e.clientX;
             var y = e.clientY;
+            this.animate(x , y);
+        } ,
+
+        animate: function(clientX , clientY){
+            if (this.domLen < 1) {
+                this.start();
+            }
             var bX = this.con.getWindowOffsetVal('left');
             var bY = this.con.getWindowOffsetVal('top');
-            var left = Math.abs(x - bX);
-            var top = Math.abs(y - bY);
+            var left = Math.abs(clientX - bX);
+            var top = Math.abs(clientY - bY);
             var leftTop = Math.ceil(Math.sqrt(Math.pow(left , 2) + Math.pow(top , 2)));
             var leftBtm = Math.ceil(Math.sqrt(Math.pow(left , 2) + Math.pow(this.conH - top , 2)));
             var rightTop = Math.ceil(Math.sqrt(Math.pow(this.conW - left , 2) + Math.pow(top , 2)));
             var rightBtm = Math.ceil(Math.sqrt(Math.pow(this.conW - left , 2) + Math.pow(this.conH - top , 2)));
             var radius = Math.max(leftTop , leftBtm , rightTop , rightBtm);
-            var endW = radius * 2;
-            var endH = endW;
-            this.animate(dom , left , top , endW , endH);
-        } ,
+            var w = radius * 2;
+            var h = w;
 
-        animate: function(dom , left , top , w , h){
-            dom = G(dom);
+            var dom = this.create();
+                dom = G(dom);
             G.CAF(dom.get(0).__touch_feedback_timer__);
             window.clearTimeout(dom.get(0).__touch_feedback_timer_1__);
             var wAmount = w - this.sW;
@@ -163,7 +168,7 @@
                     dom.parent().remove(dom.get(0));
                     self.domLen--;
                     if (self.domLen == 0) {
-                        self.touchFeedback.addClass('hide');
+                        self.end();
                     }
                 } , 100);
             };
