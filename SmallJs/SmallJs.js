@@ -7640,7 +7640,7 @@
              * 初始化必要属性
              * **************************
              */
-            this.attr('timeout' , this.timeout);
+            this.attr('timeout' , this.wait);
             /**
              * ************************
              * 初始化响应
@@ -7735,7 +7735,7 @@
                  * 可能是 0 （canceld），500 服务器内部错误等.....
                  *
                  */
-                if (this.readyState === 4) {
+                if (this.readyState === 4 && this.status === 200) {
                     var response = this.response;
                     var status   = this.status;
                     var contentType = self.native('getResponseHeader' , 'Content-Type');

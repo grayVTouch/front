@@ -16,8 +16,14 @@
 	-o-transition:all 0.3s linear;
 }
 
+.run-button-small {
+	height: 24px;
+	line-height: 24px;
+	font-size: 12px;
+}
+
 .run-button i {
-	padding-right: 5px;
+	padding-left: 5px;
 }
 
 /*

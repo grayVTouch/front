@@ -135,7 +135,7 @@
 使用：
 
 ```
-<table class='input-tb'>
+<table class='input-table'>
     <tbody>
         <tr>
             <td>字段1</td>

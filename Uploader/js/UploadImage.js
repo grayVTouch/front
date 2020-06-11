@@ -53,7 +53,7 @@
             // 图片上传链接
             url: '' ,
             // 待上传图片的表单字段名称：默认是 images
-            field: 'images' ,
+            field: 'file' ,
             pluginUrl: '' ,
             // 默认模式是追加 append | override
             mode: 'append' ,

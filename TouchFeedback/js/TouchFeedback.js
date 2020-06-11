@@ -7,7 +7,7 @@
 (function(global , factory){
     "use strict";
 
-    if (typeof module !== 'undefined' && typeof module.exports === 'object') {
+    if (typeof module === "object" && typeof module.exports === "object" ) {
         module.exports = factory(global , true);
     } else {
         factory(global);
@@ -96,9 +96,12 @@
             return div.get(0);
         } ,
 
-        clickEvent: function(e){
+        mousedownEvent: function(e){
             var x = e.clientX;
             var y = e.clientY;
+            if (e.which !== 1) {
+                return ;
+            }
             this.animate(x , y);
         } ,
 
@@ -176,7 +179,7 @@
         } ,
 
         defineEvent: function(){
-            this.con.on('click' , this.clickEvent.bind(this) , true , false);
+            this.con.on('mousedown' , this.mousedownEvent.bind(this) , true , false);
         } ,
         run: function(){
             this.initStaticHTML();

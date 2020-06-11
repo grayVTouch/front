@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片上传</title>
+
+    <link rel="stylesheet" href="../Run/base.css">
+    <link rel="stylesheet" href="../Run/button.css">
+    <link rel="stylesheet" href="../Run/color.css">
+    <link rel="stylesheet" href="../Run/font.css">
+
+    <link rel="stylesheet" href="css/Uploader.css" />
+
+</head>
+<body>
+
+<div class="container" id="file">
+
+    <!--
+        上传图片组件，仅预览图片的 html 结构用户可以随意使用
+        其他 preview 下面的仅用于开发，当使用的时候请删除
+    -->
+    <div class='upload-file'>
+        <div class="upload">
+            <div class="handler">
+
+                <div class="line input hide">
+                    <input type="file" class="file-input">
+                </div>
+
+                <div class="line icon">
+                    <div class="ico">
+                        <div class="feedback run-action-feedback"><i title="上传文件" class="iconfont run-iconfont run-shangchuan"></i></div>
+                        <div class="clear run-action-feedback" title="清空"><i class="iconfont run-iconfont run-qingkong"></i></div>
+                    </div>
+                    <div class="text">请选择要上传的文件</div>
+                </div>
+
+            </div>
+
+            <div class="msg">提示内容</div>
+        </div>
+        <div class="preview">
+
+            <!-- 预览：文件 -->
+            <div class="item file">
+                <div class="inner">
+                    <div class="line ico"><i class="iconfont run-iconfont run-wenjian"></i></div>
+                    <div class="line text">文件名称.zip</div>
+                </div>
+                <div class="mask">
+                    <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>
+                </div>
+            </div>
+
+            <!-- 预览：图片 -->
+            <div class="item image">
+                <div class="inner">
+                    <img src="http://sousi88.cc/uploads/allimg/200223/1-20022311351X62.jpg" class="image">
+                </div>
+                <div class="mask">
+                    <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>
+                </div>
+            </div>
+
+            <!-- 文件：正常状态 -->
+            <div class="item file">
+                <div class="inner">
+                    <div class="line ico"><i class="iconfont run-iconfont run-wenjian"></i></div>
+                    <div class="line text">文件名称.zip</div>
+                </div>
+                <div class="mask">
+                    <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>
+                    <div class="line delete run-action-feedback"><i class="iconfont run-iconfont run-shanchu"></i></div>
+                </div>
+                <div class="progress hide">
+                    <div class="total">
+                        <div class="current"></div>
+                    </div>
+                </div>
+
+                <div class="status hide">
+                    <i class="success iconfont run-iconfont run-chenggong hide"></i>
+                    <i class="error iconfont run-iconfont run-shibai hide"></i>
+                </div>
+            </div>
+
+            <!-- 图片：正常状态 -->
+            <div class="item image">
+                <div class="inner">
+                    <img src="http://sousi88.cc/uploads/allimg/200223/1-20022311351X62.jpg" class="image">
+                </div>
+                <div class="mask">
+                    <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>
+                    <div class="line delete run-action-feedback"><i class="iconfont run-iconfont run-shanchu"></i></div>
+                </div>
+                <div class="progress hide">
+                    <div class="total">
+                        <div class="current"></div>
+                    </div>
+                </div>
+                <div class="status hide">
+                    <i class="success iconfont run-iconfont run-chenggong hide"></i>
+                    <i class="error iconfont run-iconfont run-shibai hide"></i>
+                </div>
+            </div>
+
+            <!-- 文件：上传失败 -->
+            <div class="item file">
+                <div class="inner">
+                    <div class="line ico"><i class="iconfont run-iconfont run-wenjian"></i></div>
+                    <div class="line text">文件名称.zip</div>
+                </div>
+                <div class="mask">
+                    <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>
+                    <div class="line delete run-action-feedback"><i class="iconfont run-iconfont run-shanchu"></i></div>
+                </div>
+                <div class="progress hide">
+                    <div class="total">
+                        <div class="current"></div>
+                    </div>
+                </div>
+
+                <div class="status">
+                    <i class="success iconfont run-iconfont run-chenggong hide"></i>
+                    <i class="error iconfont run-iconfont run-shibai"></i>
+                </div>
+            </div>
+
+            <!-- 图片：上传成功 -->
+            <div class="item image">
+                <div class="inner">
+                    <img src="http://sousi88.cc/uploads/allimg/200223/1-20022311351X62.jpg" class="image">
+                </div>
+                <div class="mask">
+                    <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>
+                    <div class="line delete run-action-feedback"><i class="iconfont run-iconfont run-shanchu"></i></div>
+                </div>
+                <div class="progress hide">
+                    <div class="total hide">
+                        <div class="current"></div>
+                    </div>
+                </div>
+                <div class="status">
+                    <i class="success iconfont run-iconfont run-chenggong"></i>
+                    <i class="error iconfont run-iconfont run-shibai hide"></i>
+                </div>
+            </div>
+
+            <!-- 图片：进度条 -->
+            <div class="item image">
+                <div class="inner">
+                    <img src="http://sousi88.cc/uploads/allimg/200223/1-20022311351X62.jpg" class="image">
+                </div>
+                <div class="mask">
+                    <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>
+                    <div class="line delete run-action-feedback"><i class="iconfont run-iconfont run-shanchu"></i></div>
+                </div>
+                <div class="progress">
+                    <div class="total">
+                        <div class="current" style="width: 30%"></div>
+                    </div>
+                </div>
+                <div class="status hide">
+                    <i class="success iconfont run-iconfont run-chenggong hide"></i>
+                    <i class="error iconfont run-iconfont run-shibai hide"></i>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<br />
+<br />
+<br />
+
+<button id="upload" class="run-button run-button-submit">上传</button>
+
+<script src="../SmallJs/SmallJs.js"></script>
+<script src="js/Uploader.js"></script>
+<script>
+    'use strict';
+
+    var file = G('#file');
+    var uploader = new Uploader(file.get(0) , {
+        // 上传地址
+        api: 'http://xq.test/api/v1/upload' ,
+        // 上传字段
+        field: 'file' ,
+        // 模式：append-追加 override-覆盖
+        mode: 'append' ,
+        // 单文件上传
+        multiple: true ,
+        // 单个文件上传完成调用
+        uploaded: function(data , code){
+            // console.log('文件上传完成');
+        } ,
+
+        // 全部上传完成回调函数
+        completed: function (total , uploaded , failed) {
+            console.log('文件综述：' , total , uploaded , failed);
+        } ,
+        // 文件上传超时时间，默认：0-不限制
+        // 单位： ms
+        timeout: 0 ,
+    });
+
+    var uploadBtn = G('#upload');
+    uploadBtn.on('click' , function(){
+        uploader.upload();
+    } , true , false);
+</script>
+
+</body>
+</html>

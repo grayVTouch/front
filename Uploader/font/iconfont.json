@@ -1,0 +1,65 @@
+{
+  "id": "1877225",
+  "name": "图片上传插件【UploadFile】",
+  "font_family": "run-iconfont",
+  "css_prefix_text": "run-",
+  "description": "图片上传插件",
+  "glyphs": [
+    {
+      "icon_id": "5365342",
+      "name": "文件",
+      "font_class": "wenjian",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "2237671",
+      "name": "上传",
+      "font_class": "shangchuan",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "6204754",
+      "name": "成功",
+      "font_class": "chenggong",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
+      "icon_id": "6204756",
+      "name": "失败",
+      "font_class": "shibai",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    },
+    {
+      "icon_id": "6488979",
+      "name": "清空",
+      "font_class": "qingkong",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "10292039",
+      "name": "删 除",
+      "font_class": "shanchu",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "11749433",
+      "name": "查看",
+      "font_class": "chakan",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "14151852",
+      "name": "上传",
+      "font_class": "shangchuan1",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    }
+  ]
+}
