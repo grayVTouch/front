@@ -23,6 +23,8 @@
             // 文件上传超时时间，默认：0-不限制
             // 单位： s
             timeout: 0 ,
+            // 是否启用清空所有的功能
+            clear: true ,
         };
         if (G.isUndefined(option)) {
             option = _default;
@@ -36,6 +38,7 @@
         option.failed = G.isFunction(option.failed) ? option.failed : _default.failed;
         option.completed = G.isFunction(option.completed) ? option.completed : _default.completed;
         option.timeout = G.isNumber(option.timeout) ? option.timeout : _default.timeout;
+        option.clear = G.isBoolean(option.clear) ? option.clear : _default.clear;
 
         this.option = option;
         this.dom = {
@@ -51,11 +54,11 @@
         version: '1.0.0' ,
 
         initStatic: function(){
-            this.dom.uploadFile         = G('.upload-file' , this.dom.root.get(0));
-            this.dom.fileInput          = G('.file-input' , this.dom.uploadFile.get(0));
-            this.dom.handler            = G('.handler' , this.dom.uploadFile.get(0));
-            this.dom.clear              = G('.clear' , this.dom.uploadFile.get(0));
-            this.dom.preview            = G('.preview' , this.dom.uploadFile.get(0));
+            this.dom.uploader         = G('.uploader' , this.dom.root.get(0));
+            this.dom.fileInput          = G('.file-input' , this.dom.uploader.get(0));
+            this.dom.handler            = G('.handler' , this.dom.uploader.get(0));
+            this.dom.clear              = G('.clear' , this.dom.uploader.get(0));
+            this.dom.preview            = G('.preview' , this.dom.uploader.get(0));
 
             // 文件列表
             this.file = [];
@@ -71,6 +74,10 @@
             };
 
             this.option.timeout *= 1000;
+
+            if (!this.option.clear) {
+                this.dom.clear.addClass('hide');
+            }
         } ,
 
         initDynamic: function(){

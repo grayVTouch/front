@@ -1,14 +1,13 @@
-@import url('../font/iconfont.css');
-
-.upload-file {
+.uploader {
 
 }
 
-.upload-file .upload {
+.uploader .upload {
 	border-bottom: 1px solid #ccc;
+	position:relative;
 }
 
-.upload-file .upload .handler {
+.uploader .upload .handler {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -16,35 +15,35 @@
 	cursor: pointer;
 }
 
-.upload-file .upload .handler:hover .icon .ico .clear {
+.uploader .upload .handler:hover .icon .ico .clear {
 	transform: translate(-20px , -50%);
 }
 
-.upload-file .upload .handler .icon {
+.uploader .upload .handler .icon {
 	text-align: center;
 }
 
-.upload-file .upload .handler .icon > * {
+.uploader .upload .handler .icon > * {
 
 }
 
-.upload-file .upload .handler .icon .ico {
+.uploader .upload .handler .icon .ico {
 	height: 50px;
 	line-height: 50px;
 	overflow: hidden;
 	position: relative;
 }
 
-.upload-file .upload .handler .icon .ico .iconfont {
+.uploader .upload .handler .icon .ico .iconfont {
 	font-size: 40px;
 }
 
-.upload-file .upload .handler .icon .ico .feedback {
+.uploader .upload .handler .icon .ico .feedback {
 	width: 50px;
 	height: 50px;
 }
 
-.upload-file .upload .handler .icon .ico .clear {
+.uploader .upload .handler .icon .ico .clear {
 	position: absolute;
 	right: 0;
 	top: 50%;
@@ -56,18 +55,18 @@
 
 }
 
-.upload-file .upload .handler .icon .ico .clear .iconfont {
+.uploader .upload .handler .icon .ico .clear .iconfont {
 	font-size: 24px;
 }
 
 
-.upload-file .upload .handler .icon .text {
+.uploader .upload .handler .icon .text {
 	font-size: 14px;
 	height: 30px;
 	line-height: 30px;
 }
 
-.upload-file .upload .msg {
+.uploader .upload .msg {
 	line-height: 80px;
 	margin-left: 200px;
 	font-size: 12px;
@@ -80,21 +79,21 @@
  * *********************
  */
 
-.upload-file .preview {
+.uploader .preview {
 	padding: 20px;
 }
 
-.upload-file .preview:after {
+.uploader .preview:after {
 	display: block;
 	clear: both;
 	content: '';
 }
 
-.upload-file .preview .iconfont {
+.uploader .preview .iconfont {
 	font-size: 30px;
 }
 
-.upload-file .preview .item {
+.uploader .preview .item {
 	float: left;
 	cursor: pointer;
 	margin: 0 20px 20px 0;
@@ -110,7 +109,7 @@
 	position: relative;
 }
 
-.upload-file .preview .item:hover .mask {
+.uploader .preview .item:hover .mask {
 	z-index: 1;
 	opacity: 1;
 }
@@ -120,11 +119,11 @@
  * 上传进度
  * ************************
  */
-.upload-file .preview .item .progress {
+.uploader .preview .item .progress {
 	position: absolute;
 	left: 0;
 	top: 0;
-	z-index: 10;
+	z-index: 2;
 	background: rgba(0,0,0,0.6);
 	width: 100%;
 	height: 100%;
@@ -133,7 +132,7 @@
 	justify-content: center;
 }
 
-.upload-file .preview .item .progress .total {
+.uploader .preview .item .progress .total {
 	width: 80%;
 	height: 12px;
 	border-radius: 10px;
@@ -141,7 +140,7 @@
 	overflow: hidden;
 }
 
-.upload-file .preview .item .progress .total .current {
+.uploader .preview .item .progress .total .current {
 	width: 0;
 	height: 100%;
 	background-color: #ffffff;
@@ -154,10 +153,11 @@
  * *************************
  */
 
-.upload-file .preview .item .status {
+.uploader .preview .item .status {
 	position: absolute;
 	left: 0;
 	top: 0;
+	z-index: 3;
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -167,7 +167,7 @@
 	background: rgba(0,0,0,0.4);
 }
 
-.upload-file .preview .item .status .iconfont {
+.uploader .preview .item .status .iconfont {
 	font-size: 40px
 }
 
@@ -176,7 +176,7 @@
  * 文件功能遮罩
  * *******************
  */
-.upload-file .preview .item .mask {
+.uploader .preview .item .mask {
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0 , 0 , 0 , 0.5);
@@ -188,11 +188,11 @@
 	justify-content: center;
 	align-items: center;
 	opacity: 0;
-	z-index: -1;
+	z-index: 1;
 	transition: all 0.12s linear;
 }
 
-.upload-file .preview .item .mask .line {
+.uploader .preview .item .mask .line {
 	width: 50px;
 	height: 50px;
 	position: relative;
@@ -202,33 +202,32 @@
 	overflow: hidden;
 }
 
-.upload-file .preview .item .mask .line .iconfont {
+.uploader .preview .item .mask .line .iconfont {
 	color: #fff;
-	z-index: 1;
 }
 
 
-.upload-file .preview .file {
+.uploader .preview .file {
 	width: 80px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-.upload-file .preview  .file > .inner {
+.uploader .preview  .file > .inner {
 	width: 100%;
 	text-align: center;
 }
 
-.upload-file .preview  .file > .inner .line {
+.uploader .preview  .file > .inner .line {
 	margin-bottom: 5px;
 }
 
-.upload-file .preview  .file > .inner .line:nth-last-of-type(1) {
+.uploader .preview  .file > .inner .line:nth-last-of-type(1) {
 	margin-bottom: 0;
 }
 
-.upload-file .preview  .file > .inner .text {
+.uploader .preview  .file > .inner .text {
 	font-size: 12px;
 	color: #555;
 	width: 80%;
@@ -238,15 +237,15 @@
 }
 
 /*** 图片 ***/
-.upload-file .preview  > .image {
+.uploader .preview  > .image {
 
 }
 
-.upload-file .preview  > .image > .inner {
+.uploader .preview  > .image > .inner {
 	height: 100%;
 }
 
-.upload-file .preview  > .image > .inner .image {
+.uploader .preview  > .image > .inner .image {
 	width: 100%;
 	min-height: 100%;
 }
@@ -256,6 +255,6 @@
  * 公用属性
  * *********************
  */
-.upload-file .hide {
+.uploader .hide {
 	display: none !important;
 }

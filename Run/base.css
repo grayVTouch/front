@@ -185,6 +185,11 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	position: relative;
 }
 
+.run-action-feedback .run-iconfont {
+	position: relative;
+	z-index: 1;
+}
+
 .run-action-feedback:hover::before {
 	opacity: 1;
 }
@@ -205,5 +210,5 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	left: 0;
 	top: 0;
 	transition: all 0.12s linear;
-	z-index: -1;
+	z-index: 0;
 }
