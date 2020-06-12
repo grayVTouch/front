@@ -2206,6 +2206,30 @@
         }
     };
 
+    // 函数调用
+    g.invoke = function() {
+        var args = G.toArray(arguments);
+        if (args.length < 1) {
+            throw new Error('参数 1 错误');
+        }
+        var callback = args[0];
+        var context = args[1];
+        var invokeArgs = args.slice(2);
+        if (G.isFunction(callback)) {
+            callback.apply(context , invokeArgs);
+        }
+    };
+
+    g.toArray = function(similarArray){
+        var res = [];
+        var i = 0;
+        for (; i < similarArray.length; ++i)
+        {
+            res.push(similarArray[i]);
+        }
+        return res;
+    };
+
     /**
      * 静态属性
      */
@@ -7735,7 +7759,7 @@
                  * 可能是 0 （canceld），500 服务器内部错误等.....
                  *
                  */
-                if (this.readyState === 4 && this.status === 200) {
+                if (this.readyState === 4 && this.status > 0) {
                     var response = this.response;
                     var status   = this.status;
                     var contentType = self.native('getResponseHeader' , 'Content-Type');

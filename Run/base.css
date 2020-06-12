@@ -47,7 +47,6 @@ table {
 
 /* 设置表格边框（默认无边框） */
 table , table thead tr th , table tbody tr td {
-	border:1px solid #ccc;
 	text-align:left;
 }
 

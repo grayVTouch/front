@@ -43,11 +43,15 @@
 }
 
 .line-table thead tr .th-id {
-	width:100px;
+	width:80px;
 }
 
 .line-table thead tr .th-name {
 	width:160px;
+}
+
+.line-table thead tr .th-image {
+	width:120px;
 }
 
 .line-table thead tr .th-time {
@@ -123,7 +127,9 @@
 
 .line-table tbody tr td .image {
 	max-width: 100%;
-	max-height:80px;
+	height:40px;
+	padding: 5px 0;
+	cursor: pointer;
 }
 
 /*

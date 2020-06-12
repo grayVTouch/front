@@ -1,3 +1,4 @@
+
 /**
  * InfiniteClassification 无限极分类
  * author 陈学龙 2017-09-10 14:00:00
@@ -177,6 +178,8 @@
 
             if (this._id.length > 0) {
                 this.spreadSpecified(this._id);
+            } else {
+                this.spreadFirst();
             }
         } ,
 
@@ -254,6 +257,43 @@
         // 收缩所有项
         shrinkAll: function(){
             this.all('shrink');
+        } ,
+
+        spreadFirst: function(){
+            if (this._items.length < 1) {
+                return ;
+            }
+            var self = this;
+            var first = this._items.jump(0 , true);
+            var search = function(dom){
+                dom = G(dom);
+                var children;
+                var id;
+                var i;
+                var cur;
+                if (dom.data('isEmpty') === 'n') {
+                    children = dom.children({
+                        className: 'child' ,
+                    }).children({className: 'list'})
+                        .children({className: 'item'});
+                    for (i = 0; i < children.length; ++i)
+                    {
+                        cur = children.jump(i , true);
+                        if (cur.data('isEmpty') === 'n') {
+                            search(cur.get(0));
+                            break;
+                        }
+                        // 展开
+                        id = cur.data('id');
+                        self.spreadSpecified([id]);
+                        break;
+                    }
+                    return ;
+                }
+                id = first.data('id');
+                self.spreadSpecified([id]);
+            };
+            search(first.get(0));
         } ,
 
         // 展开指定项

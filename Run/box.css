@@ -80,7 +80,7 @@
 }
 
 .run-input:hover .field {
-	font-size:12px;
+	icon-size:12px;
 	color:#999;
 	transform:translate3d(0px , -24px , 0px);
 }

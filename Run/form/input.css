@@ -9,6 +9,7 @@
 
 .input-table tbody tr td {
 	padding:8px 10px;
+	border: 1px solid #ccc;
 }
 
 .input-table tbody tr .td-thumb .pic {

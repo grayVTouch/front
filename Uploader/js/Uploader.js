@@ -25,6 +25,8 @@
             timeout: 0 ,
             // 是否启用清空所有的功能
             clear: true ,
+            // 直接上传
+            direct: false ,
         };
         if (G.isUndefined(option)) {
             option = _default;
@@ -39,6 +41,7 @@
         option.completed = G.isFunction(option.completed) ? option.completed : _default.completed;
         option.timeout = G.isNumber(option.timeout) ? option.timeout : _default.timeout;
         option.clear = G.isBoolean(option.clear) ? option.clear : _default.clear;
+        option.direct = G.isBoolean(option.direct) ? option.direct : _default.direct;
 
         this.option = option;
         this.dom = {
@@ -54,6 +57,8 @@
         version: '1.0.0' ,
 
         initStatic: function(){
+            var self = this;
+
             this.dom.uploader         = G('.uploader' , this.dom.root.get(0));
             this.dom.fileInput          = G('.file-input' , this.dom.uploader.get(0));
             this.dom.handler            = G('.handler' , this.dom.uploader.get(0));
@@ -78,6 +83,10 @@
             if (!this.option.clear) {
                 this.dom.clear.addClass('hide');
             }
+
+            this.dom.preview.children().each(function (dom) {
+                self.initPreviewFileDomEvent(dom);
+            });
         } ,
 
         initDynamic: function(){
@@ -100,30 +109,43 @@
             this.dom.preview.html('');
         } ,
 
-        fileListToArray: function(fileList){
+        toArray: function(similarArray){
             var res = [];
             var i = 0;
-            var file;
-            for (i = 0; i < fileList.length; ++i)
+            var cur;
+            for (i = 0; i < similarArray.length; ++i)
             {
-                file = fileList[i];
-                file.id = G.randomArr(16 , 'mixed' , true);
-                res.push(file);
+                cur = similarArray[i];
+                res.push(cur);
             }
             return res;
         } ,
 
+        handleFile (files) {
+            files.forEach((file) => {
+                file.id = G.randomArr(32 , 'mixed' , true);
+            });
+        } ,
+
         fileEvent: function(){
             var files = this.dom.fileInput.native('files');
-                files = this.fileListToArray(files);
-                console.log(files);
+                files = this.toArray(files);
+            this.handleFile(files);
             switch (this.option.mode)
             {
                 case 'append':
-                    this.append(files);
+                    this.append(files , function () {
+                        if (this.option.direct) {
+                            this.upload();
+                        }
+                    });
                     break;
                 case 'override':
-                    this.override(files);
+                    this.override(files , function () {
+                        if (this.option.direct) {
+                            this.upload();
+                        }
+                    });
                     break;
             }
         } ,
@@ -133,15 +155,15 @@
         } ,
 
         // 追加模式
-        append: function(files){
+        append: function(files , callback){
             this.file.push.apply(this.file , files);
-            this.renderForAppend(files);
+            this.renderForAppend(files , callback);
         } ,
 
         // 重写模式
-        override: function(files){
+        override: function(files , callback){
             this.file = files;
-            this.renderForOverride(files);
+            this.renderForOverride(files , callback);
         } ,
 
         items: function(){
@@ -204,7 +226,7 @@
 
             var self = this;
             var view = G('.view' , dom.get(0));
-            var del = G('.delete' , dom.get(0));
+            var del  = G('.delete' , dom.get(0));
 
             view.on('click' , function () {
                 var url = dom.data('url');
@@ -217,6 +239,18 @@
                 self.file.splice(index , 1);
                 dom.parent().remove(dom.get(0));
             });
+        } ,
+
+        initPreviewFileDomEvent: function(dom){
+            dom = G(dom);
+
+            var self = this;
+            var view = G('.view' , dom.get(0));
+
+            view.on('click' , function () {
+                var url = dom.data('url');
+                window.open(url , '_blank');
+            } , true , false);
         } ,
 
         findFileById: function(id){
@@ -245,7 +279,7 @@
             throw new Error('未找到 id 对应的项：' + id);
         } ,
 
-        render: function(file){
+        _render: function(file , callback){
             var self = this;
             G.getBlobUrl(file , function(blobUrl){
                 var dom;
@@ -257,14 +291,25 @@
                 }
                 self.initFileDomEvent(dom);
                 self.dom.preview.append(dom);
+                if (G.isFunction(callback)) {
+                    callback.call(self);
+                }
             });
         } ,
 
         // 追加模式：渲染内容
-        renderForAppend: function(files){
+        renderForAppend: function(files , callback){
             var self = this;
+            var count = 0;
             files.forEach(function (file) {
-                self.render(file);
+                self._render(file , function () {
+                    count++;
+                    if (count === files.length) {
+                        if (G.isFunction(callback)) {
+                            callback.call(self);
+                        }
+                    }
+                });
             });
         } ,
 
@@ -274,9 +319,12 @@
         } ,
 
         // 文件上传
-        upload: function(){
+        upload: function(callback){
             if (this.empty()) {
                 console.log('待上传文件列表为空');
+                if (G.isFunction(callback)) {
+                    callback();
+                }
                 return ;
             }
             if (this.pending.upload) {
@@ -297,6 +345,9 @@
                     this.pending.upload = false;
                     if (G.isFunction(this.option.completed)) {
                         this.option.completed.call(this , total , uploaded , failed);
+                    }
+                    if (G.isFunction(callback)) {
+                        callback();
                     }
                     return ;
                 }
@@ -324,7 +375,9 @@
                         self.progress(file.id , 100);
                         uploaded++;
                         if (G.isFunction(self.option.uploaded)) {
-                            self.option.uploaded.call(self , arguments);
+                            var args = self.toArray(arguments);
+                                args.unshift(file);
+                            self.option.uploaded.apply(self , args);
                         }
                         upload.call(self);
                     } ,
@@ -354,15 +407,40 @@
         } ,
 
         // 追加模式：渲染内容
-        renderForOverride: function(files){
+        renderForOverride: function(files , callback){
             var self = this;
+            var count = 0;
             this.dom.preview.html('');
             files.forEach(function (file) {
-                self.render(file);
+                self._render(file , function () {
+                    count++;
+                    if (count === files.length) {
+                        if (G.isFunction(callback)) {
+                            callback.call(self);
+                        }
+                    }
+                });
             });
         } ,
 
-        createFile (id , name , url) {
+        render: function(val){
+            if (!G.isValid(val)) {
+                return ;
+            }
+            var dom;
+            var filename;
+            var ext = G.getFileSuffix(val);
+            if (G.contain(ext , this.imageExtRange)) {
+                dom = this.createPreviewImage(val);
+            } else {
+                filename = G.getFilename(val);
+                dom = this.createPreviewFile(filename , val);
+            }
+            this.initFileDomEvent(dom);
+            this.dom.preview.append(dom);
+        } ,
+
+        createFile: function(id , name , url) {
             var div = document.createElement('div');
                 div = G(div);
                 div.addClass(['item' , 'file']);
@@ -392,7 +470,7 @@
             return div.get(0);
         } ,
 
-        createImage (id , src) {
+        createImage: function(id , src) {
             var div = document.createElement('div');
                 div = G(div);
                 div.addClass(['item' , 'image']);
@@ -405,6 +483,59 @@
             html += '   <div class="mask">';
             html += '       <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>';
             html += '       <div class="line delete run-action-feedback"><i class="iconfont run-iconfont run-shanchu"></i></div>';
+            html += '   </div>';
+            html += '   <div class="progress hide">';
+            html += '       <div class="total">';
+            html += '           <div class="current"></div>';
+            html += '       </div>';
+            html += '    </div>';
+            html += '   <div class="status hide">';
+            html += '       <i class="success iconfont run-iconfont run-chenggong hide"></i>';
+            html += '       <i class="error iconfont run-iconfont run-shibai hide"></i>';
+            html += '    </div>';
+            div.html(html);
+            return div.get(0);
+        } ,
+
+        createPreviewFile: function(name , url) {
+            var div = document.createElement('div');
+            div = G(div);
+            div.addClass(['item' , 'file']);
+            div.data('url' , url);
+            var html = '';
+            html += '    <div class="inner">';
+            html += '       <div class="line ico"><i class="iconfont run-iconfont run-wenjian"></i></div>';
+            html += '       <div class="line text">' + name + '</div>';
+            html += '    </div>';
+            html += '   <div class="mask">';
+            html += '       <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>';
+            html += '   </div>';
+            html += '   <div class="progress hide">';
+            html += '       <div class="total">';
+            html += '           <div class="current"></div>';
+            html += '       </div>';
+            html += '    </div>';
+            html += '   <div class="status hide">';
+            html += '       <i class="success iconfont run-iconfont run-chenggong hide"></i>';
+            html += '       <i class="error iconfont run-iconfont run-shibai hide"></i>';
+            html += '    </div>';
+
+
+            div.html(html);
+            return div.get(0);
+        } ,
+
+        createPreviewImage: function(src) {
+            var div = document.createElement('div');
+            div = G(div);
+            div.addClass(['item' , 'image']);
+            div.data('url' , src);
+            var html = '';
+            html += '    <div class="inner">';
+            html += '       <img src="' + src + '" class="image">';
+            html += '    </div>';
+            html += '   <div class="mask">';
+            html += '       <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>';
             html += '   </div>';
             html += '   <div class="progress hide">';
             html += '       <div class="total">';

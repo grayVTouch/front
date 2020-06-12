@@ -5,6 +5,8 @@
 .uploader .upload {
 	border-bottom: 1px solid #ccc;
 	position:relative;
+	height: 80px;
+	line-height: 80px;
 }
 
 .uploader .upload .handler {
@@ -13,6 +15,7 @@
 	top: 0;
 	width: 200px;
 	cursor: pointer;
+	line-height: normal;
 }
 
 .uploader .upload .handler:hover .icon .ico .clear {
@@ -67,7 +70,6 @@
 }
 
 .uploader .upload .msg {
-	line-height: 80px;
 	margin-left: 200px;
 	font-size: 12px;
 	color: #999;
@@ -98,8 +100,7 @@
 	cursor: pointer;
 	margin: 0 20px 20px 0;
 	height: 120px;
-	min-width: 120px;
-	max-width: 200px;
+	min-width: 40px;
 	border: 3px solid #ccc;
 	border-radius: 5px;
 	box-sizing: border-box;
@@ -246,8 +247,8 @@
 }
 
 .uploader .preview  > .image > .inner .image {
-	width: 100%;
-	min-height: 100%;
+	min-width: 100%;
+	height: 100%;
 }
 
 /**

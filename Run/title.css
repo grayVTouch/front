@@ -215,3 +215,27 @@
 .run-title-3 .right {
     float:right;
 }
+
+/**
+ * *************'
+ * 执行动作
+ * *************'
+ */
+.run-action {
+    height: 40px;
+    line-height: 40px;
+}
+
+.run-action:after {
+    display: block;
+    content: '';
+    clear: both;
+}
+
+.run-action .left {
+    float: left;
+}
+
+.run-action .right {
+    float: right;
+}
