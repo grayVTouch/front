@@ -122,9 +122,9 @@
         } ,
 
         _initialize: function(){
-            this._loading.css({
-                opacity: 1
-            });
+            // this._loading.css({
+            //     opacity: 1
+            // });
 
             // 初始化状态设置
             if (this._status === 'hide') {
@@ -142,17 +142,22 @@
             this._loading.removeClass('hide');
             this.status = 'show';
 
-            this._loading.animate({
-                opacity: this._endOpacity
-            });
+            // this._loading.animate({
+            //     opacity: this._endOpacity
+            // });
+
+            this._loading.start('show');
         } ,
 
         hide: function(){
             var self = this;
             this.status = 'hide';
-            this._loading.animate({
-                opacity: this._startOpacity
-            } , function(){
+            // this._loading.animate({
+            //     opacity: this._startOpacity
+            // } , function(){
+            //     self._loading.addClass('hide');
+            // });
+            this._loading.end('show' , function(){
                 self._loading.addClass('hide');
             });
         } ,
