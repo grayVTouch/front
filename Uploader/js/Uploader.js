@@ -15,18 +15,20 @@
             // 模式：append-追加 override-覆盖
             mode: 'append' ,
             // 单文件上传
-            multiple: true ,
+            multiple: false ,
             // 单个文件上传完成调用
             uploaded: null ,
             // 全部上传完成回调函数
             completed: null ,
+            // 清空后回调函数
+            cleared: null ,
             // 文件上传超时时间，默认：0-不限制
             // 单位： s
             timeout: 0 ,
             // 是否启用清空所有的功能
-            clear: true ,
+            clear: false ,
             // 直接上传
-            direct: false ,
+            direct: true ,
         };
         if (G.isUndefined(option)) {
             option = _default;
@@ -39,6 +41,7 @@
         option.uploaded = G.isFunction(option.uploaded) ? option.uploaded : _default.uploaded;
         option.failed = G.isFunction(option.failed) ? option.failed : _default.failed;
         option.completed = G.isFunction(option.completed) ? option.completed : _default.completed;
+        option.cleared = G.isFunction(option.cleared) ? option.cleared : _default.cleared;
         option.timeout = G.isNumber(option.timeout) ? option.timeout : _default.timeout;
         option.clear = G.isBoolean(option.clear) ? option.clear : _default.clear;
         option.direct = G.isBoolean(option.direct) ? option.direct : _default.direct;
@@ -102,6 +105,7 @@
         clearEvent: function(e){
             G.stop(e);
             this.clearAll();
+            G.invoke(this.option.cleared , this);
         } ,
 
         clearAll:function(){
@@ -452,8 +456,8 @@
                 html += '       <div class="line text">' + name + '</div>';
                 html += '    </div>';
                 html += '   <div class="mask">';
-                html += '       <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>';
-                html += '       <div class="line delete run-action-feedback"><i class="iconfont run-iconfont run-shanchu"></i></div>';
+                html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-chakan"></i></div>';
+                html += '       <div class="line delete run-action-feedback-round"><i class="iconfont run-iconfont run-shanchu"></i></div>';
                 html += '   </div>';
                 html += '   <div class="progress hide">';
                 html += '       <div class="total">';
@@ -481,8 +485,8 @@
             html += '       <img src="' + src + '" class="image">';
             html += '    </div>';
             html += '   <div class="mask">';
-            html += '       <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>';
-            html += '       <div class="line delete run-action-feedback"><i class="iconfont run-iconfont run-shanchu"></i></div>';
+            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-chakan"></i></div>';
+            html += '       <div class="line delete run-action-feedback-round"><i class="iconfont run-iconfont run-shanchu"></i></div>';
             html += '   </div>';
             html += '   <div class="progress hide">';
             html += '       <div class="total">';
@@ -508,7 +512,7 @@
             html += '       <div class="line text">' + name + '</div>';
             html += '    </div>';
             html += '   <div class="mask">';
-            html += '       <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>';
+            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-chakan"></i></div>';
             html += '   </div>';
             html += '   <div class="progress hide">';
             html += '       <div class="total">';
@@ -535,7 +539,7 @@
             html += '       <img src="' + src + '" class="image">';
             html += '    </div>';
             html += '   <div class="mask">';
-            html += '       <div class="line view run-action-feedback"><i class="iconfont run-iconfont run-chakan"></i></div>';
+            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-chakan"></i></div>';
             html += '   </div>';
             html += '   <div class="progress hide">';
             html += '       <div class="total">';

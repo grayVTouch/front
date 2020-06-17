@@ -6,6 +6,69 @@
   "description": "Run ui 框架必备的一些字体/图标",
   "glyphs": [
     {
+      "icon_id": "8554290",
+      "name": "提交",
+      "font_class": "tubiao_tijiao",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "14559311",
+      "name": "提交",
+      "font_class": "tijiao",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "8361771",
+      "name": "关闭",
+      "font_class": "guanbi",
+      "unicode": "e6bf",
+      "unicode_decimal": 59071
+    },
+    {
+      "icon_id": "617438",
+      "name": "分类",
+      "font_class": "fenlei",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "1172721",
+      "name": "图片",
+      "font_class": "tupian1",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "9278056",
+      "name": "事务",
+      "font_class": "icon_shiwu",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "10130987",
+      "name": "提交",
+      "font_class": "submit01",
+      "unicode": "e752",
+      "unicode_decimal": 59218
+    },
+    {
+      "icon_id": "10451684",
+      "name": "环形图",
+      "font_class": "huanxingtu",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "5147513",
+      "name": "top_展开_icon",
+      "font_class": "top_zhankai_icon",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
       "icon_id": "2237671",
       "name": "上传",
       "font_class": "shangchuan",

@@ -35,13 +35,16 @@
  * form-text 即 input[type=text] 之类的文本框
  * form-select 即 select 菜单框
  */
+
+.input-table tbody tr td .form-text , .input-table tbody tr td .form-select , .input-table tbody tr td .form-textarea {
+	min-width: 400px;
+}
+
 .input-table tbody tr td .form-text , .input-table tbody tr td .form-select {
-	min-width:300px;
 	height:30px;
 }
 
 .input-table tbody tr td .form-textarea {
-	width: 400px;
 	height: 120px;
 	vertical-align: middle;
 }
@@ -58,9 +61,9 @@
  * 提示
  */
 .input-table tbody tr td > .msg {
-	margin-left:10px;
 	color:#999;
 	font-size:12px;
+	padding-top: 5px;
 }
 
 /* 上传图片 start */
@@ -83,8 +86,6 @@
 	-webkit-transition:all 0.15s linear;
 	-moz-transition:all 0.15s linear;
 	-o-transition:all 0.15s linear;
-	-ms-transition:all 0.15s linear;
-
 }
 
 .input-table tbody tr .upload-file .preview-file .pic:hover {
@@ -93,7 +94,7 @@
 	-moz-transform:translate3d(0px , -3px , 0px);
 	-o-transform:translate3d(0px , -3px , 0px);
 	-ms-transform:translate3d(0px , -3px , 0px);
-	box-shadow: 0 0px 1px 0px black;
+	box-shadow: 0 0 1px 0 black;
 }
 
 /* 上传图片 end */
@@ -114,6 +115,8 @@
 
 .input-table tbody tr td > .e-msg {
 	display: none;
+	color: red;
+	padding-top: 5px;
 }
 
 /* 错误处理 */
@@ -142,8 +145,7 @@
 }
 
 .input-table tbody > .error td > .e-msg {
-	display: inline;
-	color: red;
+	display: block;
 }
 
 /**
@@ -159,6 +161,6 @@
 	margin-bottom: 5px;
 }
 
-.input-table tbody tr td .image {
-	max-width: 200px;
-}
+/*.input-table tbody tr td > .image {*/
+/*	max-width: 200px;*/
+/*}*/
