@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<!--    <link rel="stylesheet" href="../Run/base.css">-->
+    <script src="../SmallJs/SmallJs.js"></script>
+</head>
+<body>
+
+<style>
+    .box {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        box-shadow: 0 0 10px 0 red;
+        transition: all 4s ease-in-out;
+    }
+
+    .box span {
+        font-size: 12px;
+        text-shadow: 0 0 10px 0 green;
+        transition:all  4s ease-in-out;
+    }
+
+    .box.move {
+        transform: translate(100px , 200px);
+        background-color: blue;
+        box-shadow: 0 0 10px 0 blue;
+    }
+
+    .box.move span {
+        font-size: 20px;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .action {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="action">
+    <button type="button" id="start">操作</button>
+    <button type="button" id="origin">还原</button>
+</div>
+
+<div class="box hide" id="test">
+    <span>你好啊</span>
+</div>
+
+<script>
+    "use strict";
+
+    let start = G('#start');
+    let origin = G('#origin');
+    let test = G('#test');
+
+
+    let _fn;
+
+    const animation = {
+        callbacks: [] ,
+
+        addClass: function(dom , className , callback){
+            dom = G(dom);
+            this.callbacks.forEach((f) => {
+                dom.origin('removeEventListener' , 'transitionend' ,  f , false);
+            });
+            var end = function(){
+                dom.origin('removeEventListener' , 'transitionend' , end , false);
+                G.invoke(callback);
+            };
+            this.callbacks.push(end);
+            window.setTimeout(function(){
+                dom.origin('addEventListener' , 'transitionend' ,  end , false);
+                dom.addClass(className);
+            } , 0);
+        } ,
+
+        removeClass: function(dom , className , callback){
+            dom = G(dom);
+            this.callbacks.forEach((f) => {
+                dom.origin('removeEventListener' , 'transitionend' ,  f , false);
+            });
+            var end = function(){
+                dom.origin('removeEventListener' , 'transitionend' , end , false);
+                G.invoke(callback);
+            };
+            this.callbacks.push(end);
+            window.setTimeout(function(){
+                dom.origin('addEventListener' , 'transitionend' ,  end , false);
+                dom.removeClass(className);
+            } , 0);
+        }
+    };
+
+    G.a = G.animation = animation;
+
+    start.on('click' , () => {
+        test.removeClass('hide');
+        G.a.addClass(test.get(0) , 'move' , () => {
+            console.log('添加动画执行完毕');
+        });
+    });
+
+    origin.on('click' , () => {
+        G.a.removeClass(test.get(0) , 'move' , () => {
+            console.log('移除动画执行结束');
+            test.addClass('hide');
+
+        });
+    });
+</script>
+</body>
+</html>

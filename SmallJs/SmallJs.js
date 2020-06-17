@@ -138,6 +138,7 @@
         }
         // 使用时注意
         this._cur = this._get(selector , context);
+
         this._run();
     }
 
@@ -158,6 +159,9 @@
 
         // 构造函数
         constructor: SmallJs ,
+
+        // 专门用于 transition 动画的回调函数列表
+        callbacks: [] ,
 
         _initialize: function(){
             // 长度
@@ -1250,11 +1254,80 @@
          * @param Boolean     isCaptureCatch | option
          * @return undefined
          */
-        on: function(type , fn , isRepeat , mixed){
+        on: function(action , fn , isRepeat , mixed){
             this.loop(function(dom){
-                g.$e.bind(dom , type , fn , isRepeat , mixed);
+                g.$e.bind(dom , action , fn , isRepeat , mixed);
             });
             return this;
+        } ,
+
+        off: function(action , fn , mixed){
+            this.loop(function(dom){
+                g.$e.unbind(dom , action , fn , mixed);
+            });
+            return this;
+        } ,
+
+        // 开始 css 过渡动画
+        start: function(className , callback){
+            var self = this;
+            this.loop(function(dom){
+                dom = G(dom);
+                self.callbacks.forEach((v) => {
+                    if (!dom.equals(v.dom)) {
+                        return ;
+                    }
+                    if (v.action.toLowerCase() !== 'transitionend') {
+                        return ;
+                    }
+                    dom.off(v.action , v.callback , v.option);
+                });
+                var end = function(){
+                    dom.off('transitionend' , end , false);
+                    G.invoke(callback);
+                };
+                dom.on('transitionend' , end , true , false);
+                self.callbacks.push({
+                    dom: dom.get(0) ,
+                    action: 'transitionend' ,
+                    callback: end ,
+                    option: false ,
+                });
+                g.setTimeout(function(){
+                    dom.addClass(className);
+                } , 0);
+            });
+        } ,
+
+        // 移除 css 过渡动画
+        end: function(className , callback){
+            var self = this;
+            this.loop(function(dom){
+                dom = G(dom);
+                self.callbacks.forEach((v) => {
+                    if (!dom.equals(v.dom)) {
+                        return ;
+                    }
+                    if (v.action.toLowerCase() !== 'transitionend') {
+                        return ;
+                    }
+                    dom.off(v.action , v.callback , v.option);
+                });
+                var end = function(){
+                    dom.off('transitionend' , end , false);
+                    G.invoke(callback);
+                };
+                dom.on('transitionend' , end , true , false);
+                self.callbacks.push({
+                    dom: dom.get(0) ,
+                    action: 'transitionend' ,
+                    callback: end ,
+                    option: false ,
+                });
+                g.setTimeout(function(){
+                    dom.removeClass(className);
+                } , 0);
+            });
         } ,
 
         // 元素方式检查是否存在某父元素
@@ -7353,8 +7426,8 @@
         /**
          * 绑定事件
          */
-        bind: function(obj , type , fn , isRepeat , mixed , context){
-            if (!g.isString(type)) {
+        bind: function(obj , action , fn , isRepeat , mixed , context){
+            if (!g.isString(action)) {
                 throw new TypeError('参数 1 类型错误');
             }
 
@@ -7373,19 +7446,19 @@
             }
             context     = g.isObj(context) ? context : obj;
 
-            if (!isRepeat && this.isBind(obj , type)) {
-                console.warn('当前提供元素 ' + obj.toString() + ' 不允许重复绑定 ' + type + " 事件");
-                // throw new Error('当前提供元素 ' + obj.toString() + ' 不允许重复绑定 ' + type + " 事件");
+            if (!isRepeat && this.isBind(obj , action)) {
+                console.warn('当前提供元素 ' + obj.toString() + ' 不允许重复绑定 ' + action + " 事件");
+                // throw new Error('当前提供元素 ' + obj.toString() + ' 不允许重复绑定 ' + action + " 事件");
                 return ;
             }
 
-            obj.addEventListener(type , fn , mixed);
+            obj.addEventListener(action , fn , mixed);
 
             var _obj = this.obj(obj);
 
             if (g.isBoolean(_obj)) {
                 var res = {};
-                res[type] = true;
+                res[action] = true;
 
                 // 如果未注册过事件，直接添加
                 this._events.push({
@@ -7393,8 +7466,20 @@
                     event: res
                 });
             } else {
-                _obj['event'][type] = true;
+                _obj['event'][action] = true;
             }
+        } ,
+
+        unbind: function(obj , action , fn , mixed){
+            if (!g.isString(action)) {
+                throw new TypeError('参数 1 类型错误');
+            }
+
+            if (!g.isFunction(fn)) {
+                throw new TypeError('参数 2 类型错误');
+            }
+
+            obj.removeEventListener(action , fn , mixed);
         } ,
     };
 
