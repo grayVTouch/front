@@ -26,7 +26,7 @@
     -o-transition:all 0.12s linear;
 }
 
-.infinite-classification .list .item .top-cur {
+.infinite-classification .list .item .top {
     background-color: #566167;
 }
 
@@ -78,6 +78,12 @@
     top:0;
     width:20px;
     height:40px;
+    line-height: 40px;
+}
+
+.infinite-classification .list .item .function .explain .in .ico .run-iconfont {
+    font-size: 15px;
+    color: white;
 }
 
 .infinite-classification .list .item .function .explain .in .ico .image {
@@ -121,6 +127,11 @@
     -moz-transition:all 0.12s linear;
     -ms-transition:all 0.12s linear;
     -o-transition:all 0.12s linear;
+}
+
+.infinite-classification .list .item .function .flag .switch .run-iconfont {
+    color: white;
+    font-weight: bold;
 }
 
 /**
@@ -209,10 +220,23 @@
     background-color:#373d41;
 }
 
-.infinite-classification .function:hover {
-    background-color:#282d30;
+.infinite-classification .function.cur {
+    background-color: #282d30;
 }
 
-.infinite-classification .list .item .cur {
-    background-color:#282d30 !important;
+/**
+ * ******************
+ * 针对触摸反馈的改动
+ * ******************
+ */
+.infinite-classification .run-action-feedback::before {
+    background-color: #282d30;
+}
+
+.infinite-classification .run-action-feedback:hover::before {
+    background-color: #282d30;
+}
+
+.infinite-classification .run-action-feedback:active::before {
+    background-color: #3e4448;
 }

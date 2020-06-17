@@ -23,7 +23,7 @@ body , form , div , ul , ol , p , h1 , h2 , h3 , h4 , h5 , h6 , nav , section , 
 
 h1 , h2 , h3 , h4 , h5 ,h6 {
 	/* 默认字体加粗 */
-	font-weight:normal;
+	font-weight: normal;
 }
 
 ul , ol {
@@ -32,11 +32,15 @@ ul , ol {
 }
 
 b {
-	font-weight: normal;
+	/*font-weight: normal;*/
 }
 
 i {
-	font-style: normal;
+	/*font-style: normal;*/
+}
+
+span {
+	outline: none;
 }
 
 table {
@@ -177,11 +181,12 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
 /***
  * ********************
- * 动作反馈
+ * 动作反馈-矩形
  * ********************
  */
 .run-action-feedback {
 	position: relative;
+	overflow: hidden;
 }
 
 .run-action-feedback .run-iconfont {
@@ -201,13 +206,50 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	display: block;
 	content: '';
 	width: 100%;
-	opacity: 0;
 	height: 100%;
-	border-radius: 50%;
+	opacity: 0;
 	background-color: rgba(183, 183, 183, 0.6);
 	position: absolute;
 	left: 0;
 	top: 0;
+	transition: all 0.12s linear;
+	z-index: 0;
+}
+
+/***
+ * ********************
+ * 动作反馈-圆形
+ * ********************
+ */
+.run-action-feedback-round {
+	position: relative;
+	overflow: hidden;
+}
+
+.run-action-feedback-round .run-iconfont {
+	position: relative;
+	z-index: 1;
+}
+
+.run-action-feedback-round:hover::before {
+	opacity: 1;
+}
+
+.run-action-feedback-round:active::before {
+	background-color: rgba(183, 183, 183, 1);
+}
+
+.run-action-feedback-round:before {
+	display: block;
+	content: '';
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	background-color: rgba(183, 183, 183, 0.6);
+	position: absolute;
+	left: 0;
+	top: 0;
+	border-radius: 50%;
 	transition: all 0.12s linear;
 	z-index: 0;
 }

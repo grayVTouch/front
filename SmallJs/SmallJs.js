@@ -231,6 +231,10 @@
             });
         } ,
 
+        equals: function(dom){
+            return this.jump(0 , true).get(0) === dom;
+        } ,
+
         // 队列操作
         _consume: function(queue , context , operation , merge , before , callback , after){
             merge = g.isBoolean(merge) ? merge : false;
@@ -1848,7 +1852,7 @@
             if (g.isString(cn)) {
                 this.loop(function(dom){
                     var origin  = dom.className;
-                    var reg     = new RegExp(cn);
+                    var reg     = new RegExp(cn , 'ig');
                     var res     = origin.replace(reg , '');
                     res     = g.trim(res);
 
@@ -5112,13 +5116,13 @@
 
         // 字段修正
         field: function(field){
-            if (g.isUndefined(field)) {
+            if (!g.isValid(field)) {
                 return this._field;
             }
-            if (g.isUndefined(field.id)) {
+            if (!g.isValid(field.id)) {
                 throw new Error('提供的字段对象不包含 id 属性');
             }
-            if (g.isUndefined(field.p_id)) {
+            if (!g.isValid(field.p_id)) {
                 throw new Error('提供的字段对象不包含 p_id 属性');
             }
             return field;

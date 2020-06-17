@@ -234,6 +234,7 @@
 
 .run-action .left {
     float: left;
+    font-weight: bold;
 }
 
 .run-action .right {

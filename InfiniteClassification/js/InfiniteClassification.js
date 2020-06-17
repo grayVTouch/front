@@ -9,24 +9,11 @@
  * 具备子级的项，点击（父级项）
  * 不具备子级的项，点击（子级项）
  */
-(function(global , factory) {
+(function(){
     "use strict";
 
-    if (typeof module != 'undefined' && typeof module.exports == 'object') {
-        module.exports =  factory(global , true);
-    } else {
-        factory(window);
-    }
-})(typeof window !== 'undefined' ? window : this , function(global , noGlobal){
-	"use strict";
-
-    function InfiniteClassification(selector , opt){
-        var thisRange = [undefined , null , window];
-
-        if (G.contain(this , thisRange) || !G.contain(this , thisRange) && this.constructor !== InfiniteClassification) {
-            return new InfiniteClassification(selector , opt);
-        }
-
+    function InfiniteClassification(selector , option)
+    {
         // 默认设置
         this._default = {
             // 菜单展开动画过渡时间
@@ -59,8 +46,8 @@
             child: null
         };
 
-        if (G.isUndefined(opt)) {
-            opt = this._default;
+        if (G.isUndefined(option)) {
+            option = this._default;
         }
 
         // 元素容器
@@ -69,20 +56,20 @@
         this._iconRange  	= ['number' , 'switch'];
         this._statusRange    		= ['spread' , 'shrink'];
 
-        this._time 	 	= G.isNumber(opt.time) 	? opt.time : this._default.time;
-        this._id 		= G.isArray(opt.id) 		? opt.id : this._default.id;
-        this._status    = G.contain(opt.status , this._statusRange) ? opt.status : this._default.status;
-        this._amount    = G.isNumber(opt.amount) 	? opt.amount : this._default.amount;
-        this._icon      = G.contain(opt.icon , this._iconRange) 	? opt.icon : this._default.icon;
-        this._exclution  	= G.isBoolean(opt.exclution) ? opt.exclution : this._default.exclution;
-        this._spread   	= G.isFunction(opt.spread) 	? opt.spread : this._default.spread;
-        this._shrink   	= G.isFunction(opt.shrink) 	? opt.shrink : this._default.shrink;
-        this._click   	= G.isFunction(opt.click) 	? opt.click : this._default.click;
-        this._menuFocus  	= G.isBoolean(opt.menuFocus) ? opt.menuFocus : this._default.menuFocus;
-        this._focus  	= G.isBoolean(opt.focus) ? opt.focus : this._default.focus;
-        this._topFocus  	= G.isBoolean(opt.topFocus) ? opt.topFocus : this._default.topFocus;
-        this._parent   	= G.isFunction(opt.parent) 	? opt.parent : this._default.parent;
-        this._child   	= G.isFunction(opt.child) 	? opt.child : this._default.child;
+        this._time 	 	= G.isNumber(option.time) 	? option.time : this._default.time;
+        this._id 		= G.isArray(option.id) 		? option.id : this._default.id;
+        this._status    = G.contain(option.status , this._statusRange) ? option.status : this._default.status;
+        this._amount    = G.isNumber(option.amount) 	? option.amount : this._default.amount;
+        this._icon      = G.contain(option.icon , this._iconRange) 	? option.icon : this._default.icon;
+        this._exclution  	= G.isBoolean(option.exclution) ? option.exclution : this._default.exclution;
+        this._spread   	= G.isFunction(option.spread) 	? option.spread : this._default.spread;
+        this._shrink   	= G.isFunction(option.shrink) 	? option.shrink : this._default.shrink;
+        this._click   	= G.isFunction(option.click) 	? option.click : this._default.click;
+        this._menuFocus  	= G.isBoolean(option.menuFocus) ? option.menuFocus : this._default.menuFocus;
+        this._focus  	= G.isBoolean(option.focus) ? option.focus : this._default.focus;
+        this._topFocus  	= G.isBoolean(option.topFocus) ? option.topFocus : this._default.topFocus;
+        this._parent   	= G.isFunction(option.parent) 	? option.parent : this._default.parent;
+        this._child   	= G.isFunction(option.child) 	? option.child : this._default.child;
 
         this._run();
     }
@@ -98,6 +85,7 @@
 
         _initStaticArgs: function(){
             this._infiniteClassification = G('.infinite-classification' , this._con.get(0));
+            this._list = G('.list' , this._infiniteClassification.get(0)).first();
             this._items = G('.item' , this._infiniteClassification.get(0));
             this._functions = G('.function' , this._infiniteClassification.get(0));
         } ,
@@ -195,9 +183,9 @@
 
         } ,
 
-		_initialize: function(){
+        _initialize: function(){
 
-		} ,
+        } ,
 
         // 获取指定项
         item: function(id){
@@ -340,8 +328,57 @@
             });
         } ,
 
+        topFunction: function(){
+            var topItems = this._list.children({
+                tagName: 'div' ,
+                class: 'item' ,
+            });
+            var i = 0;
+            var cur;
+            var _function;
+            for (; i < topItems.length; ++i)
+            {
+                cur         = topItems.jump(i , true);
+                _function   = G('.function' , cur.get(0));
+                if (_function.hasClass('top')) {
+                    return _function.get(0);
+                }
+            }
+            return null;
+        } ,
+
         // 选中子项的顶级项
         topFocus: function(id){
+            var item = G(this.item(id));
+            var parents = item.parents({
+                tagName: 'div' ,
+                class: 'item'
+            } , this._infiniteClassification.get(0));
+            var list    = G('.list' , this._infiniteClassification.get(0)).first();
+            var items   = list.children();
+            var topFunction;
+            var _function;
+
+            // 说明当前项就是顶级项
+            if (parents.length === 0) {
+                _function = G('.function' , item.get(0)).first();
+                topFunction = this.topFunction();
+                if (_function.equals(topFunction)) {
+                    return ;
+                }
+                items.each(function(dom){
+                    dom = G(dom);
+                    var _function = G('.function' , dom.get(0)).first();
+                    _function.removeClass('top');
+                });
+                return ;
+            }
+            parents = parents.get().reverse();
+            _function = G('.function' , parents[0]).first();
+            _function.addClass('top');
+        } ,
+
+        topBlur: function(id){
             var item = G(this.item(id));
             var parents = item.parents({
                 tagName: 'div' ,
@@ -352,20 +389,9 @@
             if (parents.length === 0) {
                 return ;
             }
-
             parents = parents.get().reverse();
-            var list    = G('.list' , this._infiniteClassification.get(0)).first();
-            var items   = list.children();
-            var functions = [];
             var _function = G('.function' , parents[0]).first();
-
-            items.each(function(dom){
-                dom = G(dom);
-                var _function = G('.function' , dom.get(0)).first();
-                functions.push(_function.get(0));
-            });
-
-            _function.highlight('top-cur' , functions);
+            _function.removeClass('top');
         } ,
 
         // 展开指定项
@@ -520,8 +546,19 @@
                 return ;
             }
 
+            if (this._topFocus) {
+                this.topFocus(id);
+            }
+
             var _function = G('.function' , item.get(0)).first();
             _function.highlight('cur' , this._functions.get());
+        } ,
+
+        // 取消选中
+        blur: function(id){
+            var item = G(this.item(id));
+            var _function = G('.function' , item.get(0)).first();
+            _function.removeClass('cur');
         } ,
 
         // 增加项的点击次数
@@ -663,9 +700,5 @@
         }
     };
 
-    if (!noGlobal) {
-    	window.InfiniteClassification = InfiniteClassification;
-	}
-	
-    return InfiniteClassification;
-});
+    window.InfiniteClassification = InfiniteClassification;
+})();

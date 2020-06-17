@@ -17,27 +17,13 @@
  *          2.2.1 关闭当前拖拽的标签
  *          2.2.2 获取他的链接，打开新的页面
  */
-(function(global , factory){
-    'use strict';
-
-    if (typeof module !== 'undefined' && typeof module.exports === 'object') {
-        module.exports = factory(global , true);
-    } else {
-        factory(global);
-    }
-
-})(typeof window === 'undefined' ? this : window , function(window , noGlobal){
+(function(){
     "use strict";
 
-    function MultipleTab(selector , opt){
-        var thisRange = [undefined , null , window];
-
-        if (G.contain(this , thisRange) || !G.contain(this , thisRange) && this.constructor !== MultipleTab) {
-            return new MultipleTab(selector , opt);
-        }
+    function MultipleTab(selector , option){
 
         // 默认设置
-        this._default = {
+        this.default = {
             // 新建标签后回调
             created: null ,
             // 标签页删除后回调函数
@@ -49,24 +35,31 @@
             // 内容
             title: '新标签页' ,
             // 动画时间
-            time: 300
+            time: 300 ,
+            // 默认标签是否可拖拽
+            draggable: true ,
+            // 是否默认保留首个标签（仅在 draggable = true 的时候保证正确性）
+            saveFirst: false ,
         };
 
-        if (G.type(opt) === 'Undefined') {
-            opt = this._default;
+        if (G.type(option) === 'Undefined') {
+            option = this.default;
         }
 
         // 元素容器
-        this._con = G(selector);
+        this.con = G(selector);
+        
+        this.option = {};
+        this.option.created = G.type(option['created']) !== 'Function' ? this.default.created   : option['created'];
+        this.option.deleted = G.type(option['deleted']) !== 'Function' ? this.default.deleted   : option['deleted'];
+        this.option.click   = G.type(option['click'])   !== 'Function' ? this.default.click     : option['click'];
+        this.option.ico     = G.type(option['ico'])     !== 'String'   ? this.default.ico       : option['ico'];
+        this.option.title   = G.type(option['title'])     !== 'String'   ? this.default.title       : option['title'];
+        this.option.time    = G.type(option['time'])     !== 'Number'   ? this.default.time       : option['time'];
+        this.option.draggable    = G.type(option['draggable'])     !== 'Boolean'   ? this.default.draggable       : option['draggable'];
+        this.option.saveFirst    = G.type(option['saveFirst'])     !== 'Boolean'   ? this.default.saveFirst       : option['saveFirst'];
 
-        this._created = G.type(opt['created']) !== 'Function' ? this._default['created']   : opt['created'];
-        this._deleted = G.type(opt['deleted']) !== 'Function' ? this._default['deleted']   : opt['deleted'];
-        this._click   = G.type(opt['click'])   !== 'Function' ? this._default['click']     : opt['click'];
-        this._ico     = G.type(opt['ico'])     !== 'String'   ? this._default['ico']       : opt['ico'];
-        this._title   = G.type(opt['title'])     !== 'String'   ? this._default['title']       : opt['title'];
-        this._time   = G.type(opt['time'])     !== 'Number'   ? this._default['time']       : opt['time'];
-
-        this._run();
+        this.run();
     }
 
     MultipleTab.prototype = {
@@ -75,58 +68,43 @@
         c_time: '2017-09-12 15:18:00' ,
         constructor: MultipleTab ,
 
-        _initStaticHTML: function(){
-
-        } ,
-
-        _initStaticArgs: function(){
+        initStatic: function(){
             // 元素相关
-            this._multipleTab = G('.multiple-tab' , this._con.get(0));
-            this._tabs = G('.tabs' , this._multipleTab.get(0));
+            this.multipleTab = G('.multiple-tab' , this.con.get(0));
+            this.tabs = G('.tabs' , this.multipleTab.get(0));
 
             // 参数相关
-            this._tabMaxW = 250;
-            this._tabMinW = 0;
+            this.tabMaxW = 250;
+            this.tabMinW = 0;
 
             // 设置进入当前标签进入其他标签的长度占标签长度的比率
-            this._judgeRatio = 0.4;
+            this.judgeRatio = 0.4;
 
             // 当前显示的标签页类名
-            this._focus = 'cur';
+            this.focusClassName = 'cur';
 
             // 容器的最大宽度
-            this._scrollBarW    = 10;
+            this.scrollBarW    = 10;
         } ,
 
-        _initStatic: function(){
+        initDynamic: function(){
+            var self = this;
             
-        } ,
-
-        _initDynamicHTML: function(){
-
-        } ,
-
-        _initDynamicArgs: function(){
-
-            this._multipleTabW  = this._multipleTab.width('content-box');
-            this._tabsW         = this._multipleTabW - this._scrollBarW;
-            this._tabs_         = G('.tab' , this._tabs.get(0));
+            this.multipleTabW  = this.multipleTab.width('content-box');
+            this.tabsW         = this.multipleTabW - this.scrollBarW;
+            this.__tabs__      = G('.tab' , this.tabs.get(0));
 
             // 标签数量
-            this._count   = this._tabs_.length;
+            this.count   = this.__tabs__.length;
 
             // 当前标签数量 * singleTabMaxW 合计占据的长度
-            this._tabsMaxW = this._count * this._tabMaxW;
+            this.tabsMaxW = this.count * this.tabMaxW;
 
             // 计算出单标签的长度
-            this._tabW = Math.floor(this._tabsMaxW > this._tabsW ? this._tabsW / this._count : this._tabMaxW);
-        } ,
-
-        _initDynamic: function(){
-            var self = this;
+            this.tabW = Math.floor(this.tabsMaxW > this.tabsW ? this.tabsW / this.count : this.tabMaxW);
 
             // 初始化标签
-            this._tabs_.each(function(dom){
+            this.__tabs__.each(function(dom){
                 dom = G(dom);
 
                 var ico     = G('.ico'  , dom.get(0));
@@ -136,10 +114,10 @@
                 var closeW  = close.width('border-box');
                 var textML  = icoW + 10;
                 var textMR  = closeW + 15;
-                var textW   = self._tabW - textML - textMR;
+                var textW   = self.tabW - textML - textMR;
 
                 dom.css({
-                    width: self._tabW + 'px'
+                    width: self.tabW + 'px'
                 });
 
                 text.css({
@@ -148,32 +126,32 @@
             });
         } ,
 
-        _initialize: function(){
+        init: function(){
 
         } ,
 
         // 注册标签事件
-        _loginEvent: function(tab){
+        loginEvent: function(tab){
             tab = G(tab);
 
             var close = G('.close' , tab.get(0));
 
             // 标签会有多个事件
-            close.on('click'    , this._closeEvent.bind(this) , true , false);
-            tab.on('dblclick'   , this._tabDoubleClickEvent.bind(this) , true , false);
-            tab.on('click'      , this._tabClickEvent.bind(this) , true , false);
-            tab.on('mousedown'  , this._tabMousedownEvent.bind(this) , true , false);
+            close.on('click'    , this.closeEvent.bind(this) , true , false);
+            tab.on('dblclick'   , this.tabDoubleClickEvent.bind(this) , true , false);
+            tab.on('click'      , this.tabClickEvent.bind(this) , true , false);
+            tab.on('mousedown'  , this.tabMousedownEvent.bind(this) , true , false);
         } ,
 
         /**
          * 判断片段内是否有标签
          */
-        _hasTab: function(){
+        hasTab: function(){
             var index   = this.getIndex();
-            var tabSet =  G('.tab' , this._tabs.get(0));
-            var tabsTW  = tabSet.length * this._tabW;
+            var tabSet =  G('.tab' , this.tabs.get(0));
+            var tabsTW  = tabSet.length * this.tabW;
 
-            if (tabsTW <= (index - 1) * this._tabsW) {
+            if (tabsTW <= (index - 1) * this.tabsW) {
                 return false;
             }
 
@@ -181,7 +159,7 @@
         } ,
 
         // 当前项是否是选中项
-        _isFocus: function(tab){
+        isFocus: function(tab){
             tab = G(tab);
 
             if (tab.hasClass('cur')) {
@@ -193,7 +171,18 @@
 
         // 删除指定标签
         deleteTab: function(tab){
+            if (this.option.saveFirst) {
+                // 是否保留首个标签
+                if (this.__tabs__.jump(0 , true).get(0) === tab) {
+                    // 首个标签
+                    return ;
+                }
+            }
             tab = G(tab);
+            if (tab.data('closable') !== 'true') {
+                // 该标签不允许删除
+                return ;
+            }
 
             var self = this;
             var endW = '0px';
@@ -204,14 +193,13 @@
                 opacity: endOpacity
             } , function(){
                 // 切换标签
-                if (self._isFocus(tab.get(0))) {
+                if (self.isFocus(tab.get(0))) {
                     var nextTab = tab.nextSibling();
 
                     if (nextTab.isDom()) {
                         self.focus(nextTab.get(0));
                     } else {
                         var prevTab = tab.prevSibling();
-
                         if (prevTab.isDom()) {
                             self.focus(prevTab.get(0));
                         }
@@ -219,20 +207,16 @@
                 }
 
                 var id = tab.data('id');
-
                 tab.parent().remove(tab.get(0));
-
-                self._initDynamicArgs();
-                self._initDynamic();
-
-                if (G.type(self._deleted) === 'Function') {
-                    self._deleted.call(self , id);
+                self.initDynamic();
+                if (G.type(self.option.deleted) === 'Function') {
+                    self.option.deleted.call(self , id , tab.get(0));
                 }
-            } , this._time);
+            } , this.option.time);
         } ,
 
         // 关闭事件
-        _closeEvent: function(e){
+        closeEvent: function(e){
             G.stop(e);
 
             // close 元素
@@ -240,23 +224,33 @@
             var tab = tar.parents({
                 tagName: 'div' ,
                 class: 'tab'
-            } , this._tabs.get(0)).not({
+            } , this.tabs.get(0)).not({
                 class: 'tabs'
             });
 
             this.deleteTab(tab.get(0));
         } ,
 
-        _tabDoubleClickEvent: function(e){
+        tabDoubleClickEvent: function(e){
             G.stop(e);
             var tar = G(e.currentTarget);
             this.deleteTab(tar.get(0));
         } ,
 
         // 高亮显示给定项
-        highlightTab: function(tab){
+        switchByTab: function(tab){
             tab = G(tab);
-            tab.highlight(this._focus , this._tabs_.get());
+            tab.highlight(this.focusClassName , this.__tabs__.get());
+        } ,
+
+        switchById: function(id){
+            const tab = this.tab(id);
+            this.switchByTab(tab);
+        } ,
+
+        // 获取当前选中的项的相关属性
+        getCurTabId: function(){
+
         } ,
 
         /**
@@ -268,55 +262,57 @@
 
         /*
          * 创建标签
-         * opt = {
+         * option = {
          *      text: '描述文本' ,
          *      ico: '描述图片' ,
          *      id: '标识符'
          * }
          */
-        create: function(opt){
+        create: function(option , closable){
+            closable = G.isBoolean(closable) ? closable : true;
             var self       = this;
             var _default = {
-                text: this._title ,
-                ico: this._ico ,
+                text: this.option.title ,
+                ico: this.option.ico ,
                 attr: {}
             };
-            if (G.type(opt) === 'Undefined') {
-                opt = _default;
+            if (G.type(option) === 'Undefined') {
+                option = _default;
             }
-            opt['text']   = G.type(opt['text']) !== 'String' ? _default['text'] : opt['text'];
-            opt['ico']    = G.type(opt['ico']) !== 'String' ? _default['ico'] : opt['ico'];
-            opt['attr']   = !G.isObj(opt['attr']) ? _default['attr'] : opt['attr'];
+            option['text']   = G.type(option['text']) !== 'String' ? _default['text'] : option['text'];
+            option['ico']    = G.type(option['ico']) !== 'String' ? _default['ico'] : option['ico'];
+            option['attr']   = !G.isObj(option['attr']) ? _default['attr'] : option['attr'];
             var id  = this.genID();
             var div = document.createElement('div');
-                div = G(div);
-            div.addClass('tab');
+            div = G(div);
+            div.addClass(['tab' , 'run-action-feedback']);
             div.data('id' , id);
+            div.data('closable' , closable);
             var k;
             var p = 'data-';
             var _k = null;
             // 设置数据集属性
-            for (k in opt['attr'])
+            for (k in option['attr'])
             {
                 _k = k.replace(p , '');
                 _k = p + k;
-                div.attr(_k , opt['attr'][k]);
+                div.attr(_k , option['attr'][k]);
             }
             var html = [];
             html.push();
-            html.push('         <div class="ico"><img src="' + opt.ico + '" class="image"></div>');
-            html.push('         <div class="text">' + opt.text + '</div>');
-            html.push('         <div class="close">');
+            html.push(' <div class="inner">');
+            html.push('         <div class="ico"><img src="' + option.ico + '" class="image"></div>');
+            html.push('         <div class="text">' + option.text + '</div>');
+            html.push('         <div class="close ' + (this.option.saveFirst && this.__tabs__.length < 1 || !closable ? 'hide' : '') + '">');
             html.push('             <div class="positive"></div>');
             html.push('             <div class="negative"></div>');
             html.push('         </div>');
+            html.push(' </div>');
             div.html(html.join(''));
             // 添加标签
-            this._tabs.append(div.get(0));
+            this.tabs.append(div.get(0));
             // 参数重新初始化
-            this._initDynamicHTML();
-            this._initDynamicArgs();
-            this._initDynamic();
+            this.initDynamic();
 
             // 初始化样式
             div.css({
@@ -324,8 +320,8 @@
                 opacity: 0
             });
             // 高亮显示当前项
-            this.highlightTab(div.get(0));
-            var endW = this._tabW + 'px';
+            this.switchByTab(div.get(0));
+            var endW = this.tabW + 'px';
             var endOpacity = 1;
 
             // 动画展示
@@ -333,17 +329,18 @@
                 width: endW ,
                 opacity: endOpacity
             } , function(){
-                self._loginEvent(div.get(0));
+                self.loginEvent(div.get(0));
                 // 必须要重新执行一次初始化！
                 // 因为可能会出现新的标签页出现，但旧标签页动画尚未结束的情况
                 // 如果出现上述情况的时候，新标签页创建时的重新初始化的值针对
                 // 还在动画中的标签页无效，所以必须在动画完成之后再次进行
                 // 标签页重新初始化
-                self._initDynamic();
-                if (G.isFunction(self._created)) {
-                    self._created.call(self , id);
+                self.initDynamic();
+                if (G.isFunction(self.option.created)) {
+                    self.option.created.call(self , id);
                 }
-            } , this._time);
+            } , this.option.time);
+            return id;
         } ,
 
         /**
@@ -352,21 +349,20 @@
         focus: function(tab){
             tab = G(tab);
 
-            this.highlightTab(tab.get(0));
+            this.switchByTab(tab.get(0));
 
             var id = tab.data('id');
 
-            if (G.type(this._click) === 'Function') {
-                this._click.call(this , id);
+            if (G.type(this.option.click) === 'Function') {
+                this.option.click.call(this , id);
             }
         } ,
 
         /**
          * 项点击事件（切换当前标签）
          */
-        _tabClickEvent: function(e){
+        tabClickEvent: function(e){
             var tar = G(e.currentTarget);
-
             this.focus(tar.get(0));
         } ,
 
@@ -375,8 +371,8 @@
             tab = G(tab);
 
             var clientW = document.documentElement.clientWidth;
-            var extraL  = this._tabs.getDocOffsetVal('left');
-            var extraR  = clientW - extraL - this._tabsW;
+            var extraL  = this.tabs.getDocOffsetVal('left');
+            var extraR  = clientW - extraL - this.tabsW;
             var w       = tab.width('border-box');
             var l       = tab.getDocOffsetVal('left');
             var minL    = -(l - extraL);
@@ -389,17 +385,18 @@
         } ,
 
         // 鼠标点击后触发事件（拖动标签时）
-        _tabMousedownEvent: function(e){
+        tabMousedownEvent: function(e){
+            if (!this.option.draggable) {
+                return ;
+            }
             var tab = G(e.currentTarget);
-
-            this._canDrag = true;
-
-            this._tabSX = e.clientX;
-            this._tabSY = e.clientY;
-            this._tabSL = tab.getCoordVal('left');
-            this._tabST = tab.getCoordVal('top');
-            this._range   = this.getTabMoveRange(tab.get(0));
-            this._moveDOM = tab;
+            this.canDrag = true;
+            this.tabSX = e.clientX;
+            this.tabSY = e.clientY;
+            this.tabSL = tab.getCoordVal('left');
+            this.tabST = tab.getCoordVal('top');
+            this.range   = this.getTabMoveRange(tab.get(0));
+            this.moveDOM = tab;
 
             // 选中
             this.focus(tab.get(0));
@@ -411,55 +408,56 @@
         } ,
 
         // 鼠标移动后触发事件（拖动标签时）
-        _tabMouseMoveEvent: function(e){
-            if (this._canDrag) {
-                var tab = this._moveDOM;
-
-                // 拖动标签
-                this._tabEX = e.clientX;
-                this._tabEY = e.clientY;
-
-                var ox = this._tabEX - this._tabSX;
-                var oy = this._tabEY - this._tabSY;
-
-                var el = this._tabSL + ox;
-                var et = this._tabST + oy;
-
-                el = Math.max(this._range['minL'] , Math.min(this._range['maxL'] , el));
-
-                /**
-                 * 只进行左右移动，不允许上下移动
-                 */
-                tab.css({
-                    left: el + 'px' ,
-                    // top: et + 'px'
-                });
-
-                // 监听
-                this._prevListen(tab.get(0));
-                this._nextListen(tab.get(0));
+        tabMouseMoveEvent: function(e){
+            if (!this.canDrag) {
+                return ;
             }
+            var tab = this.moveDOM;
+
+            // 拖动标签
+            this.tabEX = e.clientX;
+            this.tabEY = e.clientY;
+
+            var ox = this.tabEX - this.tabSX;
+            var oy = this.tabEY - this.tabSY;
+
+            var el = this.tabSL + ox;
+            var et = this.tabST + oy;
+
+            el = Math.max(this.range['minL'] , Math.min(this.range['maxL'] , el));
+
+            /**
+             * 只进行左右移动，不允许上下移动
+             */
+            tab.css({
+                left: el + 'px' ,
+                // top: et + 'px'
+            });
+
+            // 监听
+            this.prevListen(tab.get(0));
+            this.nextListen(tab.get(0));
         } ,
 
         // 位置还原
-        _originPosition: function(tab){
+        originPosition: function(tab){
             tab = G(tab);
             var endLeft = '0px';
             var endTop  = '0px';
             tab.animate({
                 left: endLeft ,
                 top: endTop
-            } , null , this._time);
+            } , null , this.option.time);
         } ,
 
         // 位置判定
-        _judgePosition: function(tab , index){
+        judgePosition: function(tab , index){
             tab = G(tab);
             index = Math.max(0 , index - 1);
 
             var curLeft = tab.getCoordVal('left');
             // var tabW = tab.width('border-box');
-            var prev = -(index * this._tabW + this._tabW / 3);
+            var prev = -(index * this.tabW + this.tabW / 3);
             var next = -prev;
 
             if (curLeft <= prev) {
@@ -474,7 +472,7 @@
         } ,
 
         // 给定集合，设定 left = 0，top = 0
-        _originRelative: function(doms){
+        originRelative: function(doms){
             doms.forEach(function(dom){
                 dom = G(dom);
                 dom.css({
@@ -485,7 +483,7 @@
         } ,
 
         // 切换到上一个
-        _prevPosition: function(tab){
+        prevPosition: function(tab){
             tab = G(tab);
 
             var prevSiblings = tab.prevSiblings({
@@ -494,18 +492,18 @@
             });
 
             if (prevSiblings.length === 0) {
-                this._originPosition(tab.get(0));
+                this.originPosition(tab.get(0));
                 return ;
             }
 
-            var minLeft = -(prevSiblings.length * this._tabW);
+            var minLeft = -(prevSiblings.length * this.tabW);
             var curLeft = Math.max(minLeft , tab.getCoordVal('left'));
-            var count   = Math.ceil(Math.abs(curLeft / this._tabW));
-            var range   = -((count - 1) * this._tabW + this._tabW * 1 / 3);
+            var count   = Math.ceil(Math.abs(curLeft / this.tabW));
+            var range   = -((count - 1) * this.tabW + this.tabW * 1 / 3);
             var index   = curLeft < range ? count - 1 : count - 2;
 
             if (index < 0) {
-                this._originPosition(tab.get(0));
+                this.originPosition(tab.get(0));
                 return ;
             }
 
@@ -519,11 +517,11 @@
                 top: 0
             });
 
-            this._originRelative(prevSiblings.get());
+            this.originRelative(prevSiblings.get());
         } ,
 
         // 切换到下一个
-        _nextPosition: function(tab){
+        nextPosition: function(tab){
             tab = G(tab);
 
             var nextSiblings = tab.nextSiblings({
@@ -532,20 +530,20 @@
             });
 
             if (nextSiblings.length === 0) {
-                this._originPosition(tab.get(0));
+                this.originPosition(tab.get(0));
                 return ;
             }
 
-            var maxLeft = nextSiblings.length * this._tabW;
+            var maxLeft = nextSiblings.length * this.tabW;
             var curLeft = tab.getCoordVal('left');
-                curLeft = Math.min(maxLeft , curLeft);
-            var count   = Math.ceil(Math.abs(curLeft / this._tabW));
-            var range   = (count - 1) * this._tabW + this._tabW * 1 / 3;
+            curLeft = Math.min(maxLeft , curLeft);
+            var count   = Math.ceil(Math.abs(curLeft / this.tabW));
+            var range   = (count - 1) * this.tabW + this.tabW * 1 / 3;
             var index   = curLeft > range ? count - 1 : count - 2;
 
             // 这种情况是为了避免误操作导致调用该方法产生错误而设计的
             if (index < 0) {
-                this._originPosition(tab.get(0));
+                this.originPosition(tab.get(0));
                 return ;
             }
 
@@ -560,13 +558,13 @@
             });
 
             // 还原相关元素位置
-            this._originRelative(nextSiblings.get());
+            this.originRelative(nextSiblings.get());
         } ,
 
         /**
          * 前置元素移动监听
          */
-        _prevListen: function(tab) {
+        prevListen: function(tab) {
             tab = G(tab);
 
             var prevSiblings = tab.prevSiblings({
@@ -580,11 +578,11 @@
 
             prevSiblings.each(function(dom , k){
                 dom = G(dom);
-                var type = this._judgePosition(tab.get(0) , k + 1);
+                var type = this.judgePosition(tab.get(0) , k + 1);
                 var endVal = 0;
 
                 if (type === 'prev') {
-                    endVal = this._tabW;
+                    endVal = this.tabW;
                 }
 
                 dom.css({
@@ -596,7 +594,7 @@
         /**
          * 下一个元素移动
          */
-        _nextListen: function(tab){
+        nextListen: function(tab){
             tab = G(tab);
 
             var nextSiblings = tab.nextSiblings({
@@ -610,11 +608,11 @@
 
             nextSiblings.each(function(dom , k){
                 dom = G(dom);
-                var type = this._judgePosition(tab.get(0) , k + 1);
+                var type = this.judgePosition(tab.get(0) , k + 1);
                 var endVal = 0;
 
                 if (type === 'next') {
-                    endVal = -this._tabW;
+                    endVal = -this.tabW;
                 }
 
                 dom.css({
@@ -626,53 +624,53 @@
         /**
          * 确定位置
          */
-        _determinePosition: function(){
+        determinePosition: function(){
             // 最终确定位置
-            var type = this._judgePosition(this._moveDOM.get(0) , 1);
+            var type = this.judgePosition(this.moveDOM.get(0) , 1);
 
             if (type === 'next') {
-                this._nextPosition(this._moveDOM.get(0));
+                this.nextPosition(this.moveDOM.get(0));
             }
 
             if (type === 'prev') {
-                this._prevPosition(this._moveDOM.get(0));
+                this.prevPosition(this.moveDOM.get(0));
             }
 
             if (type === 'origin') {
-                this._originPosition(this._moveDOM.get(0));
+                this.originPosition(this.moveDOM.get(0));
             }
 
-            this._moveDOM.css({
+            this.moveDOM.css({
                 zIndex: 'auto'
             });
         } ,
 
         // 鼠标松开后触发事件（拖动标签时）
-        _tabMouseupEvent: function(e){
+        tabMouseupEvent: function(e){
             // 如果未发生拖拽行为，不做任何处理
-            if (!this._canDrag) {
+            if (!this.canDrag) {
                 return ;
             }
 
-            this._canDrag = false;
+            this.canDrag = false;
 
-            this._determinePosition();
+            this.determinePosition();
         } ,
 
         title: function(id , title){
             var tab = G(this.tab(id));
             var text = G('.text' , tab.get(0));
             // 设置标签
-            text.text(title === '' ? this._default.title : title);
+            text.text(title === '' ? this.default.title : title);
         } ,
 
         // 通过 id 查找 tab
         tab: function(id){
             var i   = 0;
             var cur = null;
-            for (; i < this._tabs_.length; ++i)
+            for (; i < this.__tabs__.length; ++i)
             {
-                cur = this._tabs_.jump(i , true);
+                cur = this.__tabs__.jump(i , true);
                 if (cur.data('id') === id) {
                     return cur.get(0);
                 }
@@ -682,15 +680,13 @@
 
         // 重新调整
         resize: function(){
-            this._initDynamicHTML();
-            this._initDynamicArgs();
-            this._initDynamic();
+            this.initDynamic();
         } ,
 
-        _defineEvent: function(){
+        initEvent: function(){
             var win = G(window);
-            win.on('mousemove'  , this._tabMouseMoveEvent.bind(this) , true , false);
-            win.on('mouseup'    , this._tabMouseupEvent.bind(this) , true , false);
+            win.on('mousemove'  , this.tabMouseMoveEvent.bind(this) , true , false);
+            win.on('mouseup'    , this.tabMouseupEvent.bind(this) , true , false);
             win.on('resize'     , this.resize.bind(this) , true , false);
         } ,
 
@@ -700,21 +696,13 @@
             return tab.data(key);
         } ,
 
-        _run: function(){
-            this._initStaticHTML();
-            this._initStaticArgs();
-            this._initStatic();
-            this._initDynamicHTML();
-            this._initDynamicArgs();
-            this._initDynamic();
-            this._initialize();
-            this._defineEvent();
+        run: function(){
+            this.initStatic();
+            this.initDynamic();
+            this.init();
+            this.initEvent();
         }
     };
 
-    if (!noGlobal) {
-        window.MultipleTab = MultipleTab;
-    }
-
-    return MultipleTab;
-});
+    window.MultipleTab = MultipleTab;
+})();
