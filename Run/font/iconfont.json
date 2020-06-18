@@ -2,7 +2,7 @@
   "id": "1125151",
   "name": "Run",
   "font_family": "run-iconfont",
-  "css_prefix_text": "run-",
+  "css_prefix_text": "run-iconfont-",
   "description": "Run ui 框架必备的一些字体/图标",
   "glyphs": [
     {
