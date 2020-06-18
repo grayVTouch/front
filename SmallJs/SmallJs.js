@@ -1268,8 +1268,7 @@
             return this;
         } ,
 
-        // 开始 css 过渡动画
-        start: function(className , callback){
+        startTransition: function(className , callback){
             var self = this;
             this.loop(function(dom){
                 dom = G(dom);
@@ -1282,7 +1281,10 @@
                     }
                     dom.off(v.action , v.callback , v.option);
                 });
-                var end = function(){
+                var end = function(e){
+                    if (e.target !== e.currentTarget) {
+                        return ;
+                    }
                     dom.off('transitionend' , end , false);
                     G.invoke(callback);
                 };
@@ -1300,7 +1302,7 @@
         } ,
 
         // 移除 css 过渡动画
-        end: function(className , callback){
+        endTransition: function(className , callback){
             var self = this;
             this.loop(function(dom){
                 dom = G(dom);
@@ -1313,7 +1315,10 @@
                     }
                     dom.off(v.action , v.callback , v.option);
                 });
-                var end = function(){
+                var end = function(e){
+                    if (e.target !== e.currentTarget) {
+                        return ;
+                    }
                     dom.off('transitionend' , end , false);
                     G.invoke(callback);
                 };
@@ -1329,6 +1334,40 @@
                 } , 0);
             });
         } ,
+
+        cssTransition: function(key , value , callback){
+            var self = this;
+            this.loop(function(dom){
+                dom = G(dom);
+                self.callbacks.forEach((v) => {
+                    if (!dom.equals(v.dom)) {
+                        return ;
+                    }
+                    if (v.action.toLowerCase() !== 'transitionend') {
+                        return ;
+                    }
+                    dom.off(v.action , v.callback , v.option);
+                });
+                var end = function(e){
+                    if (e.target !== e.currentTarget) {
+                        return ;
+                    }
+                    dom.off('transitionend' , end , false);
+                    g.isFunction(value) ? G.invoke(value) : G.invoke(callback);
+                };
+                dom.on('transitionend' ,  end , true , false);
+                self.callbacks.push({
+                    dom: dom.get(0) ,
+                    action: 'transitionend' ,
+                    callback: end ,
+                    option: false ,
+                });
+                g.setTimeout(function(){
+                    g.isFunction(value) ? self.css(key , value) : self.css(key);
+                } , 0);
+            });
+        } ,
+
 
         // 元素方式检查是否存在某父元素
         existsParent: function(parent){

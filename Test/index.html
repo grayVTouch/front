@@ -20,7 +20,7 @@
     .box span {
         font-size: 12px;
         text-shadow: 0 0 10px 0 green;
-        transition:all  4s ease-in-out;
+        transition:all  1s ease-in-out;
     }
 
     .box.move {
@@ -61,56 +61,82 @@
 
     let _fn;
 
-    const animation = {
-        callbacks: [] ,
+    // const animation = {
+    //     callbacks: [] ,
+    //
+    //     start: function(dom , className , callback){
+    //         dom = G(dom);
+    //         this.callbacks.forEach((f) => {
+    //             dom.origin('removeEventListener' , 'transitionend' ,  f , false);
+    //         });
+    //         var end = function(){
+    //             dom.origin('removeEventListener' , 'transitionend' , end , false);
+    //             G.invoke(callback);
+    //         };
+    //         this.callbacks.push(end);
+    //         window.setTimeout(function(){
+    //             dom.origin('addEventListener' , 'transitionend' ,  end , false);
+    //             dom.addClass(className);
+    //         } , 0);
+    //     } ,
+    //
+    //     end: function(dom , className , callback){
+    //         dom = G(dom);
+    //         this.callbacks.forEach((f) => {
+    //             dom.origin('removeEventListener' , 'transitionend' ,  f , false);
+    //         });
+    //         var end = function(){
+    //             dom.origin('removeEventListener' , 'transitionend' , end , false);
+    //             G.invoke(callback);
+    //         };
+    //         this.callbacks.push(end);
+    //         window.setTimeout(function(){
+    //             dom.origin('addEventListener' , 'transitionend' ,  end , false);
+    //             dom.removeClass(className);
+    //         } , 0);
+    //     } ,
+    //
+    //     // 注册事件
+    //     on: (dom , callback) => {
+    //         dom = G(dom);
+    //         this.callbacks.forEach((fn) => {
+    //             dom.off('removeEventListener' , 'transitionend' , callback , false);
+    //         });
+    //         var end = function(){
+    //             dom.origin('removeEventListener' , 'transitionend' , end , false);
+    //         };
+    //         dom.on('transitionend' ,  callback , false);
+    //     } ,
+    // };
 
-        addClass: function(dom , className , callback){
-            dom = G(dom);
-            this.callbacks.forEach((f) => {
-                dom.origin('removeEventListener' , 'transitionend' ,  f , false);
-            });
-            var end = function(){
-                dom.origin('removeEventListener' , 'transitionend' , end , false);
-                G.invoke(callback);
-            };
-            this.callbacks.push(end);
-            window.setTimeout(function(){
-                dom.origin('addEventListener' , 'transitionend' ,  end , false);
-                dom.addClass(className);
-            } , 0);
-        } ,
-
-        removeClass: function(dom , className , callback){
-            dom = G(dom);
-            this.callbacks.forEach((f) => {
-                dom.origin('removeEventListener' , 'transitionend' ,  f , false);
-            });
-            var end = function(){
-                dom.origin('removeEventListener' , 'transitionend' , end , false);
-                G.invoke(callback);
-            };
-            this.callbacks.push(end);
-            window.setTimeout(function(){
-                dom.origin('addEventListener' , 'transitionend' ,  end , false);
-                dom.removeClass(className);
-            } , 0);
-        }
-    };
-
-    G.a = G.animation = animation;
+    // G.a = G.animation = animation;
 
     start.on('click' , () => {
         test.removeClass('hide');
-        G.a.addClass(test.get(0) , 'move' , () => {
-            console.log('添加动画执行完毕');
+
+
+        // test.startTransition('move' , () => {
+        //     console.log('transition 添加类名后 动画过渡完成');
+        // });
+
+        test.cssTransition({
+            width: '300px' ,
+            height: '400px' ,
+        } , function(){
+            console.log('css transition 添加 动画过渡结束');
         });
     });
 
     origin.on('click' , () => {
-        G.a.removeClass(test.get(0) , 'move' , () => {
-            console.log('移除动画执行结束');
-            test.addClass('hide');
+        // test.endTransition('move' , () => {
+        //     console.log('transition 移除类名后 动画过渡完成');
+        // });
 
+        test.cssTransition({
+            width: '100px' ,
+            height: '100px' ,
+        } , function(){
+            console.log('css transition 还原 动画过渡结束');
         });
     });
 </script>
