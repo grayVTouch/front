@@ -1,0 +1,163 @@
+.__nav__ {
+
+}
+
+/***
+ * ***************
+ * 共享层级
+ * ***************
+ */
+.__nav__ .list {
+    transition: all 0.12s 0s ease-out;
+    -webkit-transition: all 0.12s 0s ease-out;
+    -moz-transition: all 0.12s 0s ease-out;
+    -o-transition: all 0.12s 0s ease-out;
+
+}
+
+.__nav__ .list {
+    background-color: #f3f3f3;
+    color: #2b2b2bde;
+}
+
+.__nav__ .list .item {
+    position: relative;
+    height: 40px;
+    line-height: 40px;
+}
+
+.__nav__ .list .item:hover > .action {
+    background-color: #d8d8d8;
+}
+
+.__nav__ .list .item:hover > .action > .ico {
+    transform: rotateZ(180deg);
+    -webkit-transform: rotateZ(180deg);
+    -moz-transform: rotateZ(180deg);
+    -ms-transform: rotateZ(180deg);
+    -o-transform: rotateZ(180deg);
+}
+
+.__nav__ .list .item .action {
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    padding-left: 30px;
+    padding-right: 30px;
+    transition: all 0.12s 0s linear;
+    -webkit-transition: all 0.12s 0s linear;
+    -moz-transition: all 0.12s 0s linear;
+    -o-transition: all 0.12s 0s linear;
+}
+
+.__nav__ .list .item .action .text {
+
+}
+
+.__nav__ .list .item .action .ico {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+    text-align: center;
+    height: 100%;
+    transform: rotateZ(0deg);
+    transition: all 0.12s 0s linear;
+    -webkit-transition: all 0.12s 0s linear;
+    -moz-transition: all 0.12s 0s linear;
+    -o-transition: all 0.12s 0s linear;
+}
+
+
+
+
+/*** 第一层级 ***/
+.__nav__ > .list {
+
+}
+
+.__nav__ > .list {
+
+}
+
+.__nav__ > .list:after {
+    display: block;
+    content: '';
+    clear: both;
+}
+
+.__nav__ > .list > .item {
+    float: left;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+/*.__nav__ > .list > .item > .action {*/
+/*    background-color: #d8d8d8;*/
+/*}*/
+
+/**
+ * ********************
+ * 第二层级
+ * ********************
+ */
+.__nav__ > .list > .item .list {
+
+}
+
+.__nav__ > .list > .item > .list {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transform: translateY(105%);
+    -webkit-transform: translateY(105%);
+    -ms-transform: translateY(105%);
+    -o-transform: translateY(105%);
+}
+
+
+/*** 其他层级 ***/
+.__nav__ > .list > .item > .list .list {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transform: translate(100% , 10%);
+    -webkit-transform: translate(100% , 10%);
+    -moz-transform: translate(100% , 10%);
+    -ms-transform: translate(100% , 10%);
+    -o-transform: translate(100% , 10%);
+}
+
+.__nav__ > .list .item .list .item {
+
+}
+
+/*** 第一层级悬浮效果 ***/
+.__nav__ > .list > .item:hover > .list {
+    height: auto;
+    overflow: visible;
+    opacity: 1;
+    transform: translateY(100%);
+    -webkit-transform: translateY(100%);
+    -moz-transform: translateY(100%);
+    -o-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+}
+
+/*** 其他层级级悬浮效果 ***/
+.__nav__ > .list > .item > .list .item:hover > .list {
+    height: auto;
+    opacity: 1;
+    overflow: visible;
+    -webkit-transform: translate(100% , 0);
+    -moz-transform: translate(100% , 0);
+    -o-transform: translate(100% , 0);
+    -ms-transform: translate(100% , 0);
+}
