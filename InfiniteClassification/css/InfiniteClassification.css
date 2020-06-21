@@ -46,6 +46,10 @@
     text-align:center;
 }
 
+.infinite-classification .list .item .function.no-icon .icon {
+    display: none;
+}
+
 .infinite-classification .list .item .function .icon .image {
     width:22px;
     height:22px;
@@ -66,6 +70,10 @@
     font-size:12px;
     overflow:hidden;
     text-overflow:ellipsis;
+}
+
+.infinite-classification .list .item .function.no-icon .explain {
+    margin-left: 0;
 }
 
 .infinite-classification .list .item .function .explain .in {

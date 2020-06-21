@@ -18,7 +18,7 @@
         this._default = {
             // 菜单展开动画过渡时间
             time: 300 ,
-            // 次要的图标类型：number || switch
+            // 次要的图标类型：number | switch | none
             icon: 'switch' ,
             // 标识符，展开的项；1. 在元素里面设置 data-focus='y' +
             id: [] ,
@@ -43,7 +43,7 @@
             // 父级项点击后回调 ,
             parent: null ,
             // 子级项点击后回调
-            child: null
+            child: null ,
         };
 
         if (G.isUndefined(option)) {
@@ -53,7 +53,7 @@
         // 元素容器
         this._con = G(selector);
 
-        this._iconRange  	= ['number' , 'switch'];
+        this._iconRange  	= ['number' , 'switch' , 'text' , 'none'];
         this._statusRange    		= ['spread' , 'shrink'];
 
         this._time 	 	= G.isNumber(option.time) 	? option.time : this._default.time;
@@ -79,19 +79,14 @@
         version: '1.0' ,
         author: '陈学龙' ,
 
-        _initStaticHTML: function(){
+        initStatic: function(){
+            var self = this;
 
-        } ,
-
-        _initStaticArgs: function(){
             this._infiniteClassification = G('.infinite-classification' , this._con.get(0));
             this._list = G('.list' , this._infiniteClassification.get(0)).first();
             this._items = G('.item' , this._infiniteClassification.get(0));
             this._functions = G('.function' , this._infiniteClassification.get(0));
-        } ,
-
-        _initStatic: function(){
-            var self = this;
+            
             var _count = 0;
             var initialize = function(container , floor){
                 var list = G('.list' , container).first();
@@ -144,6 +139,12 @@
                     // 设置图标
                     self.flag(id);
                     flag.removeClass('hide');
+                    if (self._icon === 'none') {
+                        _function.addClass('no-icon');
+                        icon.addClass('hide');
+                    } else {
+                        _function.removeClass('no-icon');
+                    }
 
                     // 注册事件
                     self._on(dom.get(0));
@@ -171,19 +172,11 @@
             }
         } ,
 
-        _initDynamicHTML: function(){
+        initDynamic: function(){
 
         } ,
 
-        _initDynamicArgs: function(){
-
-        } ,
-
-        _initDynamic: function(){
-
-        } ,
-
-        _initialize: function(){
+        init: function(){
 
         } ,
 
@@ -285,15 +278,17 @@
         } ,
 
         // 展开指定项
-        spreadSpecified: function(id){
+        spreadSpecified: function(ids){
             var self = this;
-            id.forEach(function(_id){
+            ids.forEach(function(_id){
                 var item = G(self.item(_id));
                 var parents = item.parents({
                     tagName: 'div' ,
                     class: 'item'
                 } , self._infiniteClassification.get(0));
+
                 var res = parents.unshift(item.get(0)).get().reverse();
+
                 // 展开
                 var spread = function(){
                     var item = G(res.shift());
@@ -303,9 +298,8 @@
                     self.spread(id , function(){
                         if (res.length > 0) {
                             spread();
+                            return ;
                         }
-                    });
-                    if (res.length == 0) {
                         if (self._topFocus) {
                             self.topFocus(id);
                         }
@@ -322,7 +316,7 @@
                         if (isEmpty == 'n' && G.isFunction(self._parent)) {
                             self._parent.call(self , id);
                         }
-                    }
+                    });
                 };
                 spread();
             });
@@ -403,6 +397,9 @@
 
             // 记录点击次数
             this.inc(countKey);
+
+            // console.log(countKey , '调用');
+
             // 切换图标
             this.flag(id);
 
@@ -644,12 +641,12 @@
 
         // 展示图标切换
         icon: function(type) {
-            var typeRange = ['text' , 'icon' , 'none'];
-            if (!G.contain(type , typeRange)) {
-                throw new Error('参数 1 不支持的类型，受支持的类型有：' + typeRange.join(' , '));
+            if (!G.contain(type , this._iconRange)) {
+                throw new Error('参数 1 不支持的类型，受支持的类型有：' + this._iconRange.join(' , '));
             }
             var i = 0;
             var cur = null;
+            var _function = null;
             var icon = null;
             var image = null;
             var text = null;
@@ -659,18 +656,21 @@
                 if (cur.data('floor') == 1) {
                     continue ;
                 }
-                icon    = G('.function > .icon' , cur.get(0)).first();
+                _function    = G('.function' , cur.get(0)).first();
+                icon    = G('.icon' , _function.get(0)).first();
                 image   = G('.image' , icon.get(0));
                 text    = G('.text' , icon.get(0));
-                if (type != 'none') {
+                if (type !== 'none') {
+                    _function.removeClass('no-icon');
                     icon.removeClass('hide');
-                    if (type == 'text') {
+                    if (type === 'text') {
                         text.highlight('hide' , icon.children().get() , true);
                         continue ;
                     }
                     text.highlight('hide' , icon.children().get() , true);
                     continue ;
                 }
+                _function.addClass('no-icon');
                 icon.addClass('hide');
             }
         } ,
@@ -684,19 +684,15 @@
             _function.on('click' , this._clickEvent.bind(this) , true , false);
         } ,
 
-        _defineEvent: function(){
+        defineEvent: function(){
 
         } ,
 
         _run: function(){
-            this._initStaticHTML();
-            this._initStaticArgs();
-            this._initStatic();
-            this._initDynamicHTML();
-            this._initDynamicArgs();
-            this._initDynamic();
-            this._initialize();
-            this._defineEvent();
+            this.initStatic();
+            this.initDynamic();
+            this.init();
+            this.defineEvent();
         }
     };
 
