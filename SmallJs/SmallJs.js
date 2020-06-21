@@ -1297,7 +1297,7 @@
                 });
                 g.setTimeout(function(){
                     dom.addClass(className);
-                } , 0);
+                } , 1000 / 60 * 1.3);
             });
         } ,
 
@@ -1331,7 +1331,7 @@
                 });
                 g.setTimeout(function(){
                     dom.removeClass(className);
-                } , 0);
+                } , 1000 / 60 * 1.3);
             });
         } ,
 
@@ -1364,7 +1364,7 @@
                 });
                 g.setTimeout(function(){
                     g.isFunction(value) ? self.css(key , value) : self.css(key);
-                } , 0);
+                } , 1000 / 60 * 1.3);
             });
         } ,
 

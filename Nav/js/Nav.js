@@ -24,8 +24,20 @@
     Nav.prototype = {
 
         initStatic: function(){
+            var self = this;
+
             this.dom.nav    = G('.__nav__' , this.dom.root.get(0));
+            this.dom.lists  = G('.list' , this.dom.nav.get(0));
+            this.dom.firstList   = G('.list' , this.dom.nav.get(0)).first();
             this.dom.items  = G('.item' , this.dom.nav.get(0));
+
+            this.dom.lists.each(function(dom){
+                dom = G(dom);
+                if (dom.equals(self.dom.firstList.get(0))) {
+                    return ;
+                }
+                dom.addClass('hide');
+            });
 
             this.dom.items.each(function(item){
                 item = G(item);
@@ -40,14 +52,14 @@
 
         initDynamic: function(){} ,
 
-        init: function(){} ,
-
         mouseEnterEvent: function(e){
             var tar = G(e.currentTarget);
             var list = tar.children({
                 tagName: 'div' ,
                 className: 'list' ,
             }).first();
+            tar.addClass('hover');
+            list.removeClass('hide');
             list.startTransition('show');
         } ,
 
@@ -57,7 +69,10 @@
                 tagName: 'div' ,
                 className: 'list' ,
             }).first();
-            list.endTransition('show');
+            tar.removeClass('hover');
+            list.endTransition('show' , function () {
+                list.addClass('hide');
+            });
         } ,
 
         clickEvent: function(e){
@@ -68,15 +83,14 @@
         } ,
 
         initEvent: function(){
-            // this.dom.items.on('mouseenter' , this.mouseEnterEvent.bind(this));
-            // this.dom.items.on('mouseleave' , this.mouseLeaveEvent.bind(this));
-            this.dom.item.on('click' , this.clickEvent.bind(this));
+            this.dom.items.on('mouseenter' , this.mouseEnterEvent.bind(this));
+            this.dom.items.on('mouseleave' , this.mouseLeaveEvent.bind(this));
+            this.dom.items.on('click' , this.clickEvent.bind(this));
         } ,
 
         run: function () {
             this.initStatic();
             this.initDynamic();
-            this.init();
             this.initEvent();
         }
     };

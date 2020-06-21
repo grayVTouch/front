@@ -9,10 +9,12 @@ html {
 	-webkit-tap-highlight-color:transparent;
 	/* 字体默认最小：12px */
 	-webkit-text-size-adjust:100%;
+	/*font-size: 100px;*/
 }
 
 body {
 	font-family:微软雅黑;
+	font-size: 16px;
 }
 
 body , form , div , ul , ol , p , h1 , h2 , h3 , h4 , h5 , h6 , nav , section , header , footer , table , frameset ,iframe , figure {
