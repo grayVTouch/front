@@ -2,22 +2,11 @@
  * author 陈学龙 2016-12-12 17:03:00
  * 兼容性：IE 10及以上或同等级别其他浏览器
  */
-(function(global , factory) {
+(function(window) {
     'use strict';
 
-    if (typeof module != 'undefined' && typeof module.exports == 'object') {
-        module.exports = factory(global , true);
-    } else {
-        factory(window);
-    }
-})(typeof window !== 'undefined' ? window : this , function(window , noGlobal){
-    function Loading(selector , opt){
-        var thisRange = [undefined , null , window];
-        if (G.contain(this , thisRange) || !G.contain(this , thisRange) && this.constructor !== Loading) {
-            return new Loading(selector , opt);
-        }
-
-        this._default = {
+    function Loading(selector , option){
+        this.default = {
             // 动画时间
             time: 300 ,
             // 类名
@@ -31,20 +20,29 @@
             text: '' ,
             // 点击关闭后回调函数
             close: null ,
+            // 是否全屏固定
+            fixed: true , 
         };
 
-        this._statusRange = ['show' , 'hide'];
-        this._typeRange = ['roll-loader' , 'line-scale' , 'ball-pulse'];
-        this._textRange = ['String' , 'Array'];
+        if (!G.isValid(option)) {
+            option = this.default;
+        }
 
-        this._con	  		= G(selector);
-        this._time 			= G.type(opt['time'])	 !== 'Number'			 			? this._default['time']	   : opt['time'];
-        this._status 		= !G.contain(opt['status'] , this._statusRange) 			? this._default['status']  : opt['status'];
-        this._type 			= !G.contain(opt['type'] , this._typeRange) 				? this._default['type']  : opt['type'];
-        this._text 			= !G.contain(G.type(opt['text']) , this._textRange) ? this._default['text'] : opt['text'];
-        this._close 	    = G.isFunction(opt.close) ? opt.close : this._default.close;
+        this.statusRange = ['show' , 'hide'];
+        this.typeRange = ['roll-loader' , 'line-scale' , 'ball-pulse'];
+        this.textRange = ['String' , 'Array'];
 
-        this._run();
+        this.option = {};
+
+        this.root	  		    = G(selector);
+        this.option.time        = G.type(option.time)	 !== 'Number'                   ? this.default.time	    : option.time;
+        this.option.status 		= !G.contain(option.status , this.statusRange) 			? this.default.status   : option.status;
+        this.option.type        = !G.contain(option.type , this.typeRange) 				? this.default.type     : option.type;
+        this.option.text        = !G.contain(G.type(option.text) , this.textRange)      ? this.default.text     : option.text;
+        this.option.close 	    = G.isFunction(option.close)                            ? option.close          : this.default.close;
+        this.option.fixed 	    = G.isBoolean(option.fixed)                             ? option.fixed          : this.default.fixed;
+
+        this.run();
     }
 
     Loading.prototype = {
@@ -52,82 +50,61 @@
         cTime: '2016/12/12 17:53:00' ,
         constructor: Loading ,
 
-        _initStaticHTML: function(){
-
-        } ,
-
-        _initStaticArgs: function(){
-            // this._loading	= G('.Loading' , this._con.get(0)).first();
-            this._loading   = this._con.children({
+        initStatic: function(){
+            var self = this;
+            this.loading   = this.root.children({
                 tagName: 'div' ,
                 className: 'Loading'
             } , false , true).first();
-            this._bg		= G('.bg' , this._loading.get(0));
-            this._cons		= G('.cons' , this._loading.get(0));
-            this._text_		= G('.text' , this._cons.get(0));
-            this._animate	= G('.animate' , this._cons.get(0));
-            this._items		= G('.item' , this._animate.get(0));
-            this._btns      = G('.btns' , this._loading.get(0)).first();
-            this._close_    = G('.close' , this._btns.get(0));
+            this.bg		= G('.bg' , this.loading.get(0));
+            this.cons		= G('.cons' , this.loading.get(0));
+            this.text		= G('.text' , this.cons.get(0));
+            this.animate	= G('.animate' , this.cons.get(0));
+            this.items		= G('.item' , this.animate.get(0));
+            this.btns      = G('.btns' , this.loading.get(0)).first();
+            this.close    = G('.close' , this.btns.get(0));
 
             // 获取容器元素高度
-            this._startOpacity  = 0;
-            this._endOpacity    = 1;
-
-            this.status = this._status;
+            this.startOpacity  = 0;
+            this.endOpacity    = 1;
+            this.status = this.option.status;
             // close 回调函数接收的参数
             this.args = null;
             // close 上下文环境
             this.context = null;
             this.event = {
-                close: this._close
+                close: this.option.close
             };
-        } ,
-
-        _initStatic: function(){
-            var self = this;
-
             // 处理文本
-            this.text(this._text);
-
+            this.text.text(this.option.text);
             // 仅显示给定的加载容器
-            this._items.each(function(dom){
+            this.items.each(function(dom){
                 dom = G(dom);
-                if (dom.hasClass(self._type)) {
+                if (dom.hasClass(self.option.type)) {
                     dom.removeClass('hide');
                 }
             });
         } ,
 
-        _initDynamicHTML: function(){
 
-        } ,
-
-        _initDynamicArgs: function(){
+        initDynamic: function(){
             // 要获取 offsetParent 就必须要元素存在于文档中
-            this._loading.removeClass('hide');
-            this._offsetParent = this._loading.offsetParent();
+            this.loading.removeClass('hide');
+            this._offsetParent = this.loading.offsetParent();
             // 要获取元素的真实尺寸，就必须不能让其受 Loading 元素的影响
-            this._loading.addClass('hide');
+            this.loading.addClass('hide');
             this._offsetParentScrollW = this._offsetParent.isDom() ? this._offsetParent.scrollWidth() : 0;
             this._offsetParentScrollH = this._offsetParent.isDom() ? this._offsetParent.scrollHeight() : 0;
-        } ,
 
-        _initDynamic: function(){
             // 设置容器高度
-            this._loading.css({
+            this.loading.css({
                 width: this._offsetParentScrollW + 'px' ,
                 height: this._offsetParentScrollH + 'px'
             });
         } ,
 
-        _initialize: function(){
-            // this._loading.css({
-            //     opacity: 1
-            // });
-
-            // 初始化状态设置
-            if (this._status === 'hide') {
+        initStyle: function(){
+            if (this.status === 'hide') {
                 this.hide();
             } else {
                 this.show();
@@ -135,45 +112,38 @@
         } ,
 
         show: function(){
-            this._initDynamicHTML();
-            this._initDynamicArgs();
-            this._initDynamic();
+            this.initDynamic();
 
-            this._loading.removeClass('hide');
+            this.loading.removeClass('hide');
             this.status = 'show';
 
-            // this._loading.animate({
-            //     opacity: this._endOpacity
-            // });
-
-            this._loading.start('show');
+            this.loading.animate({
+                opacity: this.endOpacity
+            });
         } ,
 
         hide: function(){
             var self = this;
             this.status = 'hide';
-            // this._loading.animate({
-            //     opacity: this._startOpacity
-            // } , function(){
-            //     self._loading.addClass('hide');
-            // });
-            this._loading.end('show' , function(){
-                self._loading.addClass('hide');
+            this.loading.animate({
+                opacity: this.startOpacity
+            } , function(){
+                self.loading.addClass('hide');
             });
         } ,
 
         text: function(text){
             if (!G.isValid(text)) {
-                this._text_.html('');
+                this.text.html('');
                 return ;
             }
             var self = this;
             var res = [];
             if (!G.isValid(text)) {
-                this._text_.addClass('hide');
+                this.text.addClass('hide');
                 return ;
             }
-            this._text_.removeClass('hide');
+            this.text.removeClass('hide');
             if (G.isString(text)) {
                 res.push(text);
             }
@@ -181,14 +151,14 @@
                 res = text;
             }
             // 清空原内容
-            this._text_.html('');
+            this.text.html('');
             // 新增内容
             res.forEach(function(v){
                 var span = document.createElement('span');
                 span = G(span);
                 span.attr('class' , 'line');
                 span.text(v);
-                self._text_.append(span.get(0));
+                self.text.append(span.get(0));
             });
         } ,
 
@@ -203,18 +173,16 @@
         } ,
 
         // 缩放事件
-        _resizeEvent: function(){
-            this._initDynamicHTML();
-            this._initDynamicArgs();
-            this._initDynamic();
+        resizeEvent: function(){
+            this.initDynamic();
 
             // 根据当前状态设置
             if (this.status === 'show') {
-                this._loading.removeClass('hide');
+                this.loading.removeClass('hide');
             }
         } ,
 
-        _closeEvent: function(){
+        closeEvent: function(){
             this.hide();
 
             if (G.isFunction(this.event.close)) {
@@ -227,26 +195,20 @@
         } ,
 
         // 定义事件
-        _defineEvent: function(){
+        initEvent: function(){
             var win = G(window);
-            this._close_.on('click' , this._closeEvent.bind(this) , true , false);
-            win.on('resize' , this._resizeEvent.bind(this) , true , false);
+
+            this.close.on('click' , this.closeEvent.bind(this) , true , false);
+            win.on('resize' , this.resizeEvent.bind(this) , true , false);
         } ,
 
-        _run: function(){
-            this._initStaticHTML();
-            this._initStaticArgs();
-            this._initStatic();
-            this._initDynamicHTML();
-            this._initDynamicArgs();
-            this._initDynamic();
-            this._initialize();
-            this._defineEvent();
+        run: function(){
+            this.initStatic();
+            this.initDynamic();
+            this.initStyle();
+            this.initEvent();
         }
     };
 
-    if (!noGlobal) {
-        window.Loading = Loading;
-    }
-    return Loading;
-});
+    window.Loading = Loading;
+})(window);

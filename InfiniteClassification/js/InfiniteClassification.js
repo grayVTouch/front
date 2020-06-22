@@ -271,7 +271,7 @@
                     }
                     return ;
                 }
-                id = first.data('id');
+                id = dom.data('id');
                 self.spreadSpecified([id]);
             };
             search(first.get(0));
@@ -296,10 +296,6 @@
                     var isEmpty = item.data('isEmpty');
 
                     self.spread(id , function(){
-                        if (res.length > 0) {
-                            spread();
-                            return ;
-                        }
                         if (self._topFocus) {
                             self.topFocus(id);
                         }
@@ -310,11 +306,15 @@
                                 self._click.call(this , id);
                             }
                         }
-                        if (isEmpty == 'y' && G.isFunction(self._child)) {
+                        console.log(isEmpty , self._child);
+                        if (isEmpty === 'y' && G.isFunction(self._child)) {
                             self._child.call(self , id);
                         }
-                        if (isEmpty == 'n' && G.isFunction(self._parent)) {
+                        if (isEmpty === 'n' && G.isFunction(self._parent)) {
                             self._parent.call(self , id);
+                        }
+                        if (res.length > 0) {
+                            spread();
                         }
                     });
                 };
@@ -398,12 +398,13 @@
             // 记录点击次数
             this.inc(countKey);
 
-            // console.log(countKey , '调用');
-
             // 切换图标
             this.flag(id);
 
             if (isEmpty === 'y') {
+                if (G.isFunction(callback)) {
+                    callback();
+                }
                 return ;
             }
 
