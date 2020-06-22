@@ -31,16 +31,27 @@
 .pic-play-touch .images ._images .link {
 	float:left;
 	height: 100%;
+	position: relative;
 	box-sizing:border-box;
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing:border-box;
 	-o-box-sizing:border-box;
 	-ms-box-sizing:border-box;
+	overflow: hidden;
 }
 
 .pic-play-touch .images ._images .link .image {
 	width: 100%;
 	min-height: 100%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50% , -50%);
+	-webkit-transform: translate(-50% , -50%);
+	-moz-transform: translate(-50% , -50%);
+	-o-transform: translate(-50% , -50%);
+	-ms-transform: translate(-50% , -50%);
+
 }
 
 /*** 索引水平摆放 ***/

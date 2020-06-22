@@ -221,22 +221,22 @@
  * 执行动作
  * *************'
  */
-.run-action {
+.run-action-title {
     height: 40px;
     line-height: 40px;
 }
 
-.run-action:after {
+.run-action-title:after {
     display: block;
     content: '';
     clear: both;
 }
 
-.run-action .left {
+.run-action-title .left {
     float: left;
     font-weight: bold;
 }
 
-.run-action .right {
+.run-action-title .right {
     float: right;
 }
