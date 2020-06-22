@@ -29,6 +29,10 @@
     background-color: #d8d8d8;
 }
 
+.__nav__ .list .item.cur > .action {
+    background-color: #d8d8d8;
+}
+
 /*.__nav__ .list .item:hover > .action > .ico {*/
 /*    transform: rotateZ(180deg);*/
 /*    -webkit-transform: rotateZ(180deg);*/
@@ -79,6 +83,7 @@
     -ms-transform: rotateZ(0deg);
     -o-transform: rotateZ(0deg);
 }
+
 
 
 
