@@ -7,21 +7,7 @@
 (function(global , factory){
     "use strict";
 
-    if (typeof module !== 'undefined' && typeof module.exports === 'object') {
-        module.exports = factory(global , true);
-    } else {
-        factory(global);
-    }
-})(typeof window === 'undefined' ? this : window , function(window , noGlobal){
-    "use strict";
-
     function PicPlay_Touch(selector , opt){
-        var thisRange = [window , null , undefined];
-
-        if (G.contain(this , thisRange) || (!G.contain(this , thisRange) && this.constructor !== PicPlay_Touch)) {
-            return new PicPlay_Touch(selector , opt);
-        }
-
         this._default = {
             // 动画过度时间
             time: 200 ,
@@ -576,7 +562,7 @@
 
             var self = this;
             var json = {};
-                json[this._attr] = val;
+            json[this._attr] = val;
 
             SmallJsObj.animate(json , function(){
                 var curVal  = Math.floor(self.__images.getCoordVal(self._attr));
@@ -618,8 +604,8 @@
         _prevEvent: function(){
             this.clearTime();
             var index   = this.index;
-                index  -= 1;
-                index   = index < this._minIndex ? this._minIndex - 1 : index;
+            index  -= 1;
+            index   = index < this._minIndex ? this._minIndex - 1 : index;
             var val     = this._fullPos[index] + this._unit;
             this._animate(this.__images , val);
         } ,
@@ -627,8 +613,8 @@
         _nextEvent: function(){
             this.clearTime();
             var index   = this.index;
-                index  += 1;
-                index   = index < this._minIndex ? this._minIndex + 1 : index;
+            index  += 1;
+            index   = index < this._minIndex ? this._minIndex + 1 : index;
             var val     = this._fullPos[index]  + this._unit;
             this._animate(this.__images , val);
         } ,
@@ -689,7 +675,7 @@
                 }
 
                 var imageCssJson = {};
-                    imageCssJson[this._attr] = this._endVal + this._unit;
+                imageCssJson[this._attr] = this._endVal + this._unit;
                 this.__images.css(imageCssJson);
             }
         } ,
@@ -914,9 +900,5 @@
         }
     };
 
-    if (!noGlobal) {
-        window.PicPlay_Touch = PicPlay_Touch;
-    }
-
-    return PicPlay_Touch;
-});
+    window.PicPlay_Touch = PicPlay_Touch;
+})();

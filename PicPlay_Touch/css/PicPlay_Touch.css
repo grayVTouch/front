@@ -131,6 +131,11 @@
 	vertical-align:middle;
 }
 
+.pic-play-touch .images .prev i , .pic-play-touch .images .next i {
+	font-size: 45px;
+	color: #555;
+}
+
 .pic-play-touch .index {
     position:absolute;
 }

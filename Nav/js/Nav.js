@@ -121,6 +121,7 @@
                 if (parents.length < 1) {
                     return ;
                 }
+                console.log(parents.get());
                 parents.last().addClass('cur');
             }
         } ,
