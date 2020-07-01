@@ -1335,6 +1335,37 @@
             });
         } ,
 
+        // 监听过渡动画
+        onTransition: function(callback){
+            var self = this;
+            this.loop(function(dom){
+                dom = G(dom);
+                self.callbacks.forEach((v) => {
+                    if (!dom.equals(v.dom)) {
+                        return ;
+                    }
+                    if (v.action.toLowerCase() !== 'transitionend') {
+                        return ;
+                    }
+                    dom.off(v.action , v.callback , v.option);
+                });
+                var end = function(e){
+                    if (e.target !== e.currentTarget) {
+                        return ;
+                    }
+                    dom.off('transitionend' , end , false);
+                    G.invoke(callback);
+                };
+                dom.on('transitionend' , end , true , false);
+                self.callbacks.push({
+                    dom: dom.get(0) ,
+                    action: 'transitionend' ,
+                    callback: end ,
+                    option: false ,
+                });
+            });
+        } ,
+
         cssTransition: function(key , value , callback){
             var self = this;
             this.loop(function(dom){
@@ -1937,53 +1968,50 @@
             var self = this;
             // 移除原有的类名
             this.removeClass(cn);
-
-            if (g.isString(cn)) {
-                this.loop(function(dom){
-                    var origin  = dom.className;
-                    var res     = origin === '' ? cn : origin + ' ' + cn;
-                    res     = g.trim(res);
-                    dom.className = res;
-                });
-            } else if (g.isArray(cn)) {
-                cn = cn.join(' ');
-                this.loop(function(dom){
-                    var origin  = dom.className;
-                    var res     = origin === '' ? cn : origin + ' ' + cn;
-                    res     = g.trim(res);
-                    dom.className = res;
-                });
-            } else {
-                throw new Error("参数 1 类型错误");
+            var typeRange = ['String' , 'Array'];
+            if (!G.contain(G.type(cn) , typeRange)) {
+                throw new Error('参数 1 类型错误');
             }
+            if (g.isString(cn)) {
+                cn = [cn];
+            }
+            cn = cn.join(' ');
+            this.loop(function(dom){
+                var className = dom.className;
+                var endClassName = className === '' ? cn : className + ' ' + cn;
+                endClassName = g.trim(endClassName);
+                dom.className = endClassName;
+            });
         } ,
 
         // 移除类名
         removeClass: function(cn){
             var self = this;
-            if (g.isString(cn)) {
-                this.loop(function(dom){
-                    var origin  = dom.className;
-                    var reg     = new RegExp(cn , 'ig');
-                    var res     = origin.replace(reg , '');
-                    res     = g.trim(res);
-
-                    dom.className = res;
-                });
-            } else if (g.isArray(cn)) {
-                cn.forEach(function(v){
-                    self.loop(function(dom){
-                        var origin = dom.className;
-                        var reg = new RegExp(v , 'ig');
-                        var res = origin.replace(reg , '');
-                        res = g.trim(res);
-
-                        dom.className = res;
-                    });
-                });
-            } else {
+            var typeRange = ['String' , 'Array'];
+            if (!G.contain(G.type(cn) , typeRange)) {
                 throw new Error('参数 1 类型错误');
             }
+            if (g.isString(cn)) {
+                cn = [cn];
+            }
+            cn.forEach(function(v){
+                v = v.toLowerCase();
+                self.loop(function(dom){
+                    var className = dom.className.toLowerCase();
+                    var classNameArray = className.split(' ');
+                    var i = 0;
+                    var cur;
+                    for (i = 0; i < classNameArray.length; ++i)
+                    {
+                        cur = classNameArray[i];
+                        if (cur === v) {
+                            classNameArray.splice(i , 1);
+                            i--;
+                        }
+                    }
+                    dom.className = g.trim(classNameArray.join(' '));
+                });
+            });
         } ,
 
         // 替换类名
@@ -2478,6 +2506,24 @@
      以下是以 SmallJs 作为命名空间的 基础函数库
      * ******************************************
      */
+    g.nextTick = function(callback){
+        var self = this;
+        window.setTimeout(function(){
+            if (self.isFunction(callback)) {
+                callback();
+            }
+        } , 0);
+    };
+
+    g.getUri = function(url){
+        var replaceHost = /^https?:\/\/\w+\.\w+/g;
+        var replaceQuery = /\?.*/g;
+        var replaceAnchor = /#.*/g;
+        return url
+            .replace(replaceHost , '')
+            .replace(replaceQuery , '')
+            .replace(replaceAnchor , '');
+    };
     // 表单验证
     g.validate = {
         // 检查错误信息

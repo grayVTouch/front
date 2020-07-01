@@ -265,3 +265,219 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .run-rotateZ-180 {
 	transform: rotateZ(180deg);
 }
+
+
+
+
+/*
+ * 加粗
+ */
+.weight {
+	font-weight:bold;
+}
+
+
+/**
+ * ***********
+ * 各种风格
+ * ***********
+ */
+.line-through {
+	text-decoration:line-through;
+}
+
+
+/**
+ * *************
+ * 悬浮时下划线
+ * *************
+ */
+.underline:hover {
+	text-decoration:underline;
+}
+
+/**
+ * *******************
+ * 字体大小
+ * *******************
+ */
+.f-12 {
+	font-size: 12px !important;
+}
+
+.f-13 {
+	font-size: 13px !important;
+}
+
+.f-14 {
+	font-size: 14px !important;
+}
+
+.f-15 {
+	font-size: 15px !important;
+}
+
+.f-16 {
+	font-size: 16px !important;
+}
+
+.f-17 {
+	font-size: 17px !important;
+}
+
+.f-18 {
+	font-size: 18px !important;
+}
+
+.f-19 {
+	font-size: 19px !important;
+}
+
+.f-20 {
+	font-size: 20px !important;
+}
+
+.f-21 {
+	font-size: 21px !important;
+}
+
+.f-22 {
+	font-size: 22px !important;
+}
+
+.f-23 {
+	font-size: 23px !important;
+}
+
+.f-24 {
+	font-size: 24px !important;
+}
+
+.f-25 {
+	font-size: 25px !important;
+}
+
+.f-26 {
+	font-size: 26px !important;
+}
+
+.f-27 {
+	font-size: 27px !important;
+}
+
+.f-28 {
+	font-size: 28px !important;
+}
+
+.f-29 {
+	font-size: 29px !important;
+}
+
+.f-30 {
+	font-size: 30px !important;
+}
+
+/**
+ * *****************
+ * margin
+ * *****************
+ */
+.m-b-10 {
+	margin-bottom: 10px !important;
+}
+
+.m-b-12 {
+	margin-bottom: 12px !important;
+}
+
+.m-b-15 {
+	margin-bottom: 15px !important;
+}
+
+.m-b-20 {
+	margin-bottom: 20px !important;
+}
+
+.m-b-30 {
+	margin-bottom: 30px !important;
+}
+
+/**
+ * *****************
+ * padding
+ * *****************
+ */
+.p-r-5 {
+	padding-right: 5px !important;
+}
+
+.p-r-10 {
+	padding-right: 10px !important;
+}
+
+/**
+ * ************
+ * vertical
+ * ************
+ */
+.v-a-t {
+	vertical-align: top !important;
+}
+
+.v-a-m {
+	vertical-align: middle !important;
+}
+
+.v-a-b {
+	vertical-align: bottom !important;
+}
+
+/**
+ * ************
+ * text-align
+ * ************
+ */
+.t-a-l {
+	text-align: left !important;
+}
+
+.t-a-c {
+	text-align: center !important;
+}
+
+.t-a-r {
+	text-align: right !important;
+}
+
+/*** 红色 **/
+.run-red {
+	color:red !important;
+}
+
+/*
+ * 绿色
+ */
+.run-green {
+	color:green !important;
+}
+
+/*
+ * purple
+ */
+.run-purple {
+	color:purple !important;
+}
+
+/*
+ * 禁用
+ */
+.run-gray {
+	color:#7B7B7B !important;
+}
+
+/**
+ * 禁用
+ */
+.run-bg-gray {
+	background-color:gray !important;
+}

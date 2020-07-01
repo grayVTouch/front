@@ -1,0 +1,321 @@
+.pic-preview {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.3,0.3);
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.pic-preview.show {
+    opacity: 1;
+    transform: scale(1,1);
+}
+
+.pic-preview.full .preview {
+    margin-right: 300px;
+}
+
+.pic-preview.full .s-images {
+    transform: translateX(0);
+}
+
+/**
+ **********************
+ * 预览
+ **********************
+ */
+.pic-preview .preview {
+    margin-right: 0;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: relative;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+}
+
+.pic-preview .preview .header {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    color: #d0d0d0;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 0 20px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    transform: translateY(-100%);
+    transition:all 0.3s;
+}
+
+.pic-preview .preview .header.show {
+    transform: translateY(0%);
+}
+
+
+.pic-preview .preview .header > div {
+    margin: 0;
+    flex: 0 0 auto;
+}
+
+.pic-preview .preview .header .info {
+    font-size: 14px;
+}
+
+.pic-preview .preview .header .action button {
+    color: #d0d0d0;
+    transition: all 0.3s;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+
+.pic-preview .preview .header .action .close .run-iconfont {
+    font-size: 14px;
+}
+
+.pic-preview .preview .header .action button:nth-last-of-type(1) {
+    margin-right: 0;
+}
+
+.pic-preview .preview .header .action button:hover {
+    color: #fff;
+}
+
+.pic-preview .preview .content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.pic-preview .preview .content .b-images {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    transition: all 0.6s;
+}
+
+.pic-preview .preview .content .b-images > div {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.pic-preview .preview .content .b-images .item {
+    transition: all 0.3s;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.pic-preview .preview .content .b-images .item .image {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50% , -50%);
+    transition: all 0.3s;
+}
+
+.pic-preview .preview .content .b-images .item .image.grab {
+    cursor: grab;
+}
+
+.pic-preview .preview .content .b-images .item .image.grabbing {
+    cursor: grabbing;
+}
+
+.pic-preview .preview .content .b-images .item.horizontal .image {
+    width: 80%;
+    top: 50%;
+    transform: translate(-50% , -50%) scale(1,1);;
+}
+
+.pic-preview .preview .content .b-images .item.vertical .image {
+    top: 0;
+    transform: translate(-50% , 0%) scale(1,1);
+    height: 100%;
+}
+
+.pic-preview .preview .content .b-images .item.nature .image {
+    top: 50%;
+    transform: translate(-50% , -50%) scale(1,1);;
+}
+
+.pic-preview .preview .content .action {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #d0d0d0;
+    font-size: 50px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.pic-preview .preview .content .action:hover {
+    color: #fff;
+}
+
+.pic-preview .preview .content .action .run-iconfont {
+    font-size: 30px;
+}
+.pic-preview .preview .content .prev {
+    left: 0;
+    transform: translate(-100% , -50%);
+}
+
+.pic-preview .preview .content .prev.show {
+    transform: translate(40px , -50%);
+}
+
+.pic-preview .preview .content .next {
+    right: 0;
+    transform: translate(100% , -50%);
+}
+
+.pic-preview .preview .content .next.show {
+    transform: translate(-40px , -50%);
+}
+
+
+/**
+ **********************
+ * 预览图
+ **********************
+ */
+.pic-preview .s-images {
+    position: absolute;
+    right: 0;
+    top:0;
+    width: 300px;
+    height: 100%;
+    background-color: #4e4e4e;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transform: translateX(100%);
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+
+.pic-preview .s-images .title {
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+    color: #c5c5c5;
+    border-bottom: 1px solid #5f5f5f;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pic-preview .s-images .title > div {
+    margin: 0;
+}
+
+.pic-preview .s-images .title .name {
+
+}
+
+.pic-preview .s-images .title .action {
+
+}
+
+.pic-preview .s-images .title .action button {
+    color: #d0d0d0;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.pic-preview .s-images .title .action .close .run-iconfont {
+    font-size: 14px;
+}
+
+.pic-preview .s-images .title .action button:hover {
+    color: #fff;
+}
+
+.pic-preview .s-images .list {
+    display: flex;
+    flex-wrap: wrap;
+    height: calc(100% - 56px);
+    box-sizing: border-box;
+    overflow: hidden;
+    overflow-y: auto;
+    align-content: flex-start;
+}
+
+.pic-preview .s-images .list .item {
+    width: calc(50% - 6px);
+    height: 80px;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    border: 4px solid #6f6f6f;
+    box-sizing: border-box;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    cursor: pointer;
+}
+
+.pic-preview .s-images .list .item.cur {
+    border-color: #35a5f7;
+}
+
+.pic-preview .s-images .list .item:hover {
+    border-color: #35a5f7;
+}
+
+.pic-preview .s-images .list .item:nth-of-type(2n) {
+    margin-right: 0;
+}
+
+.pic-preview .s-images .list .item .image {
+    width: 100%;
+    min-height: 100%;
+    vertical-align: top;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50% , -50%);
+}
+
+.pic-preview .preview .message {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 0 20px;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    border-radius: 5px;
+    transform: translate(-50% , -50%) scale(0.6 ,0.6);
+    opacity: 0.3;
+    transition: all 0.3s;
+    visibility: hidden;
+    z-index: -1;
+}
+
+.pic-preview .preview .message.show {
+    opacity: 1;
+    visibility: visible;
+    z-index: 0;
+    transform: translate(-50% , -50%) scale(1 , 1);
+}

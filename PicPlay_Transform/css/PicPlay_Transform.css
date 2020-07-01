@@ -1,0 +1,103 @@
+.pic-play-transform {
+    position: relative;
+    overflow: hidden;
+}
+
+.pic-play-transform .images {
+    display: flex;
+}
+
+.pic-play-transform .images .link {
+    flex: 0 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.pic-play-transform .images .link .image {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50% , -50%);
+    width: 100%;
+    min-height: 100%;
+    vertical-align: top;
+}
+
+.pic-play-transform .index {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.5);
+    padding: 2px 10px;
+    border-radius: 10px;
+}
+
+.pic-play-transform .index .item {
+    width: 10px;
+    height: 10px;
+    margin: 0;
+    background-color: #a0a0a0;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 5px;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    cursor: pointer;
+}
+
+.pic-play-transform .index .item.cur {
+    background-color: #cecece;
+}
+
+.pic-play-transform .index .item:nth-last-of-type(1) {
+    margin-right: 0;
+}
+
+
+.pic-play-transform .action {
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    color: #cecece;
+    cursor: pointer;
+}
+
+.pic-play-transform .action .run-iconfont {
+    font-size: 50px;
+}
+
+.pic-play-transform .prev {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(-100% , -50%);
+    -webkit-transform: translate(-100% , -50%);
+    -moz-transform: translate(-100% , -50%);
+    -ms-transform: translate(-100% , -50%);
+    -o-transform: translate(-100% , -50%);
+}
+
+.pic-play-transform:hover .action {
+    transform: translate(0% , -50%);
+    -webkit-transform: translate(0% , -50%);
+    -moz-transform: translate(0% , -50%);
+    -ms-transform: translate(0% , -50%);
+    -o-transform: translate(0% , -50%);
+}
+
+.pic-play-transform .next {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(100% , -50%);
+    -webkit-transform: translate(100% , -50%);
+    -moz-transform: translate(100% , -50%);
+    -ms-transform: translate(100% , -50%);
+    -o-transform: translate(100% , -50%);
+}
