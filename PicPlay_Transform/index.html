@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="../Run/base.css">
+    <link rel="stylesheet" href="../Run/font/iconfont.css">
+    <link rel="stylesheet" href="./css/PicPlay_Transform.css">
+</head>
+<body>
+
+<style>
+    .root {
+        width: 600px;
+        height: 400px;
+    }
+
+</style>
+
+<div class="root">
+
+    <div class="pic-play-transform">
+        <div class="images">
+            <a class="link"><img src="./res/01.jpg" class="image"></a>
+            <a class="link"><img src="./res/02.jpg" class="image"></a>
+            <a class="link"><img src="./res/03.jpg" class="image"></a>
+            <a class="link"><img src="./res/04.jpg" class="image"></a>
+            <a class="link"><img src="./res/05.jpg" class="image"></a>
+        </div>
+        <div class="index">
+<!--            <div class="item cur"></div>-->
+        </div>
+        <div class="action prev"><i class="run-iconfont run-iconfont-prev01"></i></div>
+        <div class="action next"><i class="run-iconfont run-iconfont-next01"></i></div>
+    </div>
+
+</div>
+
+
+<script src="../SmallJs/SmallJs.js"></script>
+<script src="./js/PicPlay_Transform.js"></script>
+
+<script>
+    var root = G('.root');
+    var p = new PicPlay_Transform(root.get(0) , {
+        // timer: true ,
+    });
+
+    // window.setTimeout(() => {
+    //     root.addClass('hide');
+    // } , 6 * 1000);
+</script>
+
+</body>
+</html>

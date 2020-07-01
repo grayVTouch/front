@@ -39,8 +39,6 @@
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    -o-box-sizing: border-box;
 }
 
 .run-page .links .link {
@@ -48,48 +46,32 @@
     line-height: 28px;
     padding: 0 15px;
     border: 1px solid #e2e2e2;
-    border-left: none;
+    /*border-left-color: transparent;*/
     background-color: #fff;
     color: #333;
     position: relative;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    cursor: pointer;
+    margin-right: -1px;
 }
 
-.run-page .links .link:nth-of-type(1) {
-    border-left: 1px solid #e2e2e2;
+.run-page .links .link:nth-last-of-type(1) {
+    margin-right: 0;
 }
 
 .run-page .links .cur {
     background-color: #009688;
     color: #fff !important;
-    border-top-color: #009688;
-    border-bottom-color: #009688;
-}
-
-.run-page .links .cur:before {
-    display: block;
-    content: '';
-    position: absolute;
-    left: -1px;
-    top: -1px;
-    height: 30px;
-    width: 1px;
-    background-color: #009688;
-}
-
-.run-page .links .cur:after {
-    display: block;
-    content: '';
-    position: absolute;
-    right: -1px;
-    top: -1px;
-    height: 30px;
-    width: 1px;
-    background-color: #009688;
-    cursor: pointer;
+    border-color: #009688;
 }
 
 .run-page .link:hover {
     color: #009688;
+    border-color: #009688;
+    z-index: 5;
 }
 
 .run-page .go-to {
@@ -123,8 +105,23 @@
     margin-left: 8px;
     vertical-align: top;
     cursor: pointer;
+    transition: all 0.3s;
+}
+
+.run-page .go-to .step {
+    width: 40px;
+    height: 24px;
+    /*line-height: 30px;*/
+    /*vertical-align: top;*/
+    margin-top: -3px;
+    text-indent: 0;
+}
+
+.run-page .go-to .step:focus {
+    border-color: #009688 ;
 }
 
 .run-page .go-to .confirm:hover {
     color: #009688;
+    border-color: #009688;
 }

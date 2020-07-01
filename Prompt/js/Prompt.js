@@ -146,13 +146,15 @@
                 self.dom.btns.append(btn.get(0));
             });
 
-
             // this.dom.background    = G('.background' , this.dom.prompt.get(0));
             this.dom.header     = G('.header' , this.dom.content.get(0));
             this.dom.title      = G('.title' , this.dom.header.get(0));
             this.dom.action     = G('.action' , this.dom.header.get(0));
             this.dom.close      = G('.close' , this.dom.action.get(0));
             this.dom.msg        = G('.msg' , this.dom.content.get(0));
+
+            // 设置内容
+            this.dom.msg.html(this.option.html);
 
             // 参数
             this.startOpacity      = 0;

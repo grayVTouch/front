@@ -6,6 +6,111 @@
   "description": "Run ui 框架必备的一些字体/图标",
   "glyphs": [
     {
+      "icon_id": "593498",
+      "name": "收缩",
+      "font_class": "weibiaoti26",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "785013",
+      "name": "菜单",
+      "font_class": "caidan",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "7674864",
+      "name": "展开",
+      "font_class": "daohangzhankai-",
+      "unicode": "e712",
+      "unicode_decimal": 59154
+    },
+    {
+      "icon_id": "815884",
+      "name": "关闭",
+      "font_class": "close",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "3091945",
+      "name": "全屏",
+      "font_class": "quanping",
+      "unicode": "e768",
+      "unicode_decimal": 59240
+    },
+    {
+      "icon_id": "3546178",
+      "name": "缩小",
+      "font_class": "suoxiao",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "4867073",
+      "name": "后退",
+      "font_class": "houtui",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
+      "icon_id": "4867080",
+      "name": "前进",
+      "font_class": "qianjin",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    },
+    {
+      "icon_id": "4922582",
+      "name": "还原",
+      "font_class": "restore",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "10515484",
+      "name": "放大",
+      "font_class": "fangda-copy",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "12323755",
+      "name": "全屏",
+      "font_class": "quanping1",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "12659768",
+      "name": "还原",
+      "font_class": "huanyuan",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "1135988",
+      "name": "加载中",
+      "font_class": "jiazaizhong",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "5387528",
+      "name": "加载_单",
+      "font_class": "jiazai_dan",
+      "unicode": "eaf3",
+      "unicode_decimal": 60147
+    },
+    {
+      "icon_id": "10232771",
+      "name": "加载",
+      "font_class": "jiazai",
+      "unicode": "e78b",
+      "unicode_decimal": 59275
+    },
+    {
       "icon_id": "10025415",
       "name": "上一个",
       "font_class": "prev01",

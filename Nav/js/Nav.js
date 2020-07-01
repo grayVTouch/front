@@ -100,10 +100,7 @@
                     list.addClass('hide');
                 });
             });
-            this.dom.items.each(function (item) {
-                item = G(item);
-                item.removeClass('hover');
-            });
+            this.dom.items.removeClass('hover');
         } ,
 
         focusByItem: function(item){
@@ -121,8 +118,8 @@
                 if (parents.length < 1) {
                     return ;
                 }
-                console.log(parents.get());
-                parents.last().addClass('cur');
+                // parents.last().addClass('cur');
+                parents.addClass('cur');
             }
         } ,
 
@@ -136,13 +133,25 @@
                     return item.get(0);
                 }
             }
-            throw new Error('未找到 id 对应项');
+            console.warn('未找到 id: ' + id + ' 对应项');
+            return false;
         } ,
 
         focusById: function(id){
             const item = this.findItemById(id);
+            if (!G.isDom(item)) {
+                return ;
+            }
             this.focusByItem(item);
+        } ,
 
+        blurById: function(id){
+
+        } ,
+
+        // 全部失去焦点
+        blur: function(){
+            this.dom.items.removeClass('cur');
         } ,
 
         clickEvent: function(e){
