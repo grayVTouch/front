@@ -6,6 +6,27 @@
   "description": "Run ui 框架必备的一些字体/图标",
   "glyphs": [
     {
+      "icon_id": "1135988",
+      "name": "加载中",
+      "font_class": "jiazaizhong",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "5387528",
+      "name": "加载_单",
+      "font_class": "jiazai_dan",
+      "unicode": "eaf3",
+      "unicode_decimal": 60147
+    },
+    {
+      "icon_id": "10232771",
+      "name": "加载",
+      "font_class": "jiazai",
+      "unicode": "e78b",
+      "unicode_decimal": 59275
+    },
+    {
       "icon_id": "10025415",
       "name": "上一个",
       "font_class": "prev01",

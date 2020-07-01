@@ -452,12 +452,12 @@
                 div.data('url' , url);
             var html = '';
                 html += '    <div class="inner">';
-                html += '       <div class="line ico"><i class="iconfont run-iconfont run-wenjian"></i></div>';
+                html += '       <div class="line ico"><i class="iconfont run-iconfont run-iconfont-wenjian"></i></div>';
                 html += '       <div class="line text">' + name + '</div>';
                 html += '    </div>';
                 html += '   <div class="mask">';
-                html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-chakan"></i></div>';
-                html += '       <div class="line delete run-action-feedback-round"><i class="iconfont run-iconfont run-shanchu"></i></div>';
+                html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-chakan"></i></div>';
+                html += '       <div class="line delete run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-shanchu"></i></div>';
                 html += '   </div>';
                 html += '   <div class="progress hide">';
                 html += '       <div class="total">';
@@ -465,8 +465,8 @@
                 html += '       </div>';
                 html += '    </div>';
                 html += '   <div class="status hide">';
-                html += '       <i class="success iconfont run-iconfont run-chenggong hide"></i>';
-                html += '       <i class="error iconfont run-iconfont run-shibai hide"></i>';
+                html += '       <i class="success iconfont run-iconfont run-iconfont-chenggong hide"></i>';
+                html += '       <i class="error iconfont run-iconfont run-iconfont-shibai hide"></i>';
                 html += '    </div>';
 
 
@@ -485,8 +485,8 @@
             html += '       <img src="' + src + '" class="image">';
             html += '    </div>';
             html += '   <div class="mask">';
-            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-chakan"></i></div>';
-            html += '       <div class="line delete run-action-feedback-round"><i class="iconfont run-iconfont run-shanchu"></i></div>';
+            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-chakan"></i></div>';
+            html += '       <div class="line delete run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-shanchu"></i></div>';
             html += '   </div>';
             html += '   <div class="progress hide">';
             html += '       <div class="total">';
@@ -494,8 +494,8 @@
             html += '       </div>';
             html += '    </div>';
             html += '   <div class="status hide">';
-            html += '       <i class="success iconfont run-iconfont run-chenggong hide"></i>';
-            html += '       <i class="error iconfont run-iconfont run-shibai hide"></i>';
+            html += '       <i class="success iconfont run-iconfont run-iconfont-chenggong hide"></i>';
+            html += '       <i class="error iconfont run-iconfont run-iconfont-shibai hide"></i>';
             html += '    </div>';
             div.html(html);
             return div.get(0);
@@ -512,7 +512,7 @@
             html += '       <div class="line text">' + name + '</div>';
             html += '    </div>';
             html += '   <div class="mask">';
-            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-chakan"></i></div>';
+            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-chakan"></i></div>';
             html += '   </div>';
             html += '   <div class="progress hide">';
             html += '       <div class="total">';
@@ -520,8 +520,8 @@
             html += '       </div>';
             html += '    </div>';
             html += '   <div class="status hide">';
-            html += '       <i class="success iconfont run-iconfont run-chenggong hide"></i>';
-            html += '       <i class="error iconfont run-iconfont run-shibai hide"></i>';
+            html += '       <i class="success iconfont run-iconfont run-iconfont-chenggong hide"></i>';
+            html += '       <i class="error iconfont run-iconfont run-iconfont-shibai hide"></i>';
             html += '    </div>';
 
 
@@ -539,7 +539,7 @@
             html += '       <img src="' + src + '" class="image">';
             html += '    </div>';
             html += '   <div class="mask">';
-            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-chakan"></i></div>';
+            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-chakan"></i></div>';
             html += '   </div>';
             html += '   <div class="progress hide">';
             html += '       <div class="total">';
@@ -547,8 +547,8 @@
             html += '       </div>';
             html += '    </div>';
             html += '   <div class="status hide">';
-            html += '       <i class="success iconfont run-iconfont run-chenggong hide"></i>';
-            html += '       <i class="error iconfont run-iconfont run-shibai hide"></i>';
+            html += '       <i class="success iconfont run-iconfont run-iconfont-chenggong hide"></i>';
+            html += '       <i class="error iconfont run-iconfont run-iconfont-shibai hide"></i>';
             html += '    </div>';
             div.html(html);
             return div.get(0);

@@ -37,7 +37,7 @@
  */
 
 .input-table tbody tr td .form-text , .input-table tbody tr td .form-select , .input-table tbody tr td .form-textarea {
-	min-width: 400px;
+	width: 400px;
 }
 
 .input-table tbody tr td .form-text , .input-table tbody tr td .form-select {

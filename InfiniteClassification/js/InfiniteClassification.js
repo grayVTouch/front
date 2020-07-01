@@ -306,7 +306,6 @@
                                 self._click.call(this , id);
                             }
                         }
-                        console.log(isEmpty , self._child);
                         if (isEmpty === 'y' && G.isFunction(self._child)) {
                             self._child.call(self , id);
                         }
