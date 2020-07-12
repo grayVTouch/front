@@ -1,4 +1,4 @@
-.Loading {
+.run-loading {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -10,11 +10,11 @@
 
 }
 
-.Loading.show {
+.run-loading.show {
 	opacity: 1;
 }
 
-.Loading > .bg {
+.run-loading > .bg {
 	background-color:black;
 	position:absolute;
 	left:0;
@@ -24,7 +24,7 @@
 	opacity: 0.7;
 }
 
-.Loading > .cons {
+.run-loading > .cons {
 	position:absolute;
 	left:50%;
 	top:50%;
@@ -34,52 +34,52 @@
 	-o-transform:translate3d(-50% , -50% , 0px);
 }
 
-.Loading > .cons .text {
+.run-loading > .cons .text {
 	color:white;
 	text-align:center;
 	font-size:14px;
 	margin-bottom:20px;
 }
 
-.Loading > .cons .text .line {
+.run-loading > .cons .text .line {
 
 }
 
-.Loading > .cons .text .line:after {
+.run-loading > .cons .text .line:after {
 	font-family: SimSun;
 	content: ' -> ';
 }
 
-.Loading > .cons .text .line:nth-last-of-type(1)::after {
+.run-loading > .cons .text .line:nth-last-of-type(1)::after {
 	content: ''
 }
 
-.Loading > .cons .animate {
+.run-loading > .cons .animate {
 
 }
 
-.Loading > .cons .animate .center {
+.run-loading > .cons .animate .center {
 	text-align:center;
 }
 
-.Loading > .cons .animate .hide {
+.run-loading > .cons .animate .hide {
 	display: none;
 }
 
 /*** 加载状态 ***/
-.Loading > .btns {
+.run-loading > .btns {
 	position: absolute;
 	right: 15px;
 	top: 15px;
 }
 
-.Loading > .btns:after {
+.run-loading > .btns:after {
 	display: block;
 	content: '';
 	clear: both;
 }
 
-.Loading > .btns .btn {
+.run-loading > .btns .btn {
 	float: left;
 	cursor: pointer;
 	transition: all 0.3s linear;
@@ -89,18 +89,18 @@
 	-o-transition: all 0.3s linear;
 }
 
-.Loading > .btns .close {
+.run-loading > .btns .close {
 	width: 30px;
 	height: 30px;
 	border-radius: 20px;
 	overflow: hidden;
 }
 
-.Loading > .btns .close:hover {
+.run-loading > .btns .close:hover {
 	background-color: #8c8c8c;
 }
 
-.Loading > .btns .close > * {
+.run-loading > .btns .close > * {
 	width: 2px;
 	height: 20px;
 	background-color: #fff;
@@ -109,7 +109,7 @@
 	top: 50%;
 }
 
-.Loading > .btns .close .positive {
+.run-loading > .btns .close .positive {
 	transform: translate3d(-50% , -50% , 0) rotateZ(45deg);
 	-webkit-transform: translate3d(-50% , -50% , 0) rotateZ(45deg);
 	-moz-transform: translate3d(-50% , -50% , 0) rotateZ(45deg);
@@ -117,7 +117,7 @@
 	-o-transform: translate3d(-50% , -50% , 0) rotateZ(45deg);
 }
 
-.Loading > .btns .close .negative {
+.run-loading > .btns .close .negative {
 	transform: translate3d(-50% , -50% , 0) rotateZ(-45deg);
 	-webkit-transform: translate3d(-50% , -50% , 0) rotateZ(-45deg);
 	-moz-transform: translate3d(-50% , -50% , 0) rotateZ(-45deg);
@@ -130,7 +130,7 @@
  * Line-scale
  * *********************************
  */
-.Loading .cons .animate .line-scale > * {
+.run-loading .cons .animate .line-scale > * {
 	background-color: #fff;
 	width: 4px;
 	height: 35px;
@@ -144,7 +144,7 @@
 	-o-animation-fill-mode: both;
 }
 
-.Loading .cons .animate .line-scale > *:nth-child(1) {
+.run-loading .cons .animate .line-scale > *:nth-child(1) {
 	animation: line-scale 1s 0.1s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-webkit-animation: line-scale 1s 0.1s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-moz-animation: line-scale 1s 0.1s infinite cubic-bezier(.2, .68, .18, 1.08);
@@ -152,7 +152,7 @@
 	-o-animation: line-scale 1s 0.1s infinite cubic-bezier(.2, .68, .18, 1.08);
 }
 
-.Loading .cons .animate .line-scale > *:nth-child(2) {
+.run-loading .cons .animate .line-scale > *:nth-child(2) {
 	animation: line-scale 1s 0.2s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-webkit-animation: line-scale 1s 0.2s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-moz-animation: line-scale 1s 0.2s infinite cubic-bezier(.2, .68, .18, 1.08);
@@ -160,7 +160,7 @@
 	-o-animation: line-scale 1s 0.2s infinite cubic-bezier(.2, .68, .18, 1.08);
 }
 
-.Loading .cons .animate .line-scale > *:nth-child(3) {
+.run-loading .cons .animate .line-scale > *:nth-child(3) {
 	animation: line-scale 1s 0.3s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-webkit-animation: line-scale 1s 0.3s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-moz-animation: line-scale 1s 0.3s infinite cubic-bezier(.2, .68, .18, 1.08);
@@ -168,7 +168,7 @@
 	-o-animation: line-scale 1s 0.3s infinite cubic-bezier(.2, .68, .18, 1.08);
 }
 
-.Loading .cons .animate .line-scale > *:nth-child(4) {
+.run-loading .cons .animate .line-scale > *:nth-child(4) {
 	animation: line-scale 1s 0.4s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-webkit-animation: line-scale 1s 0.4s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-moz-animation: line-scale 1s 0.4s infinite cubic-bezier(.2, .68, .18, 1.08);
@@ -176,7 +176,7 @@
 	-o-animation: line-scale 1s 0.4s infinite cubic-bezier(.2, .68, .18, 1.08);
 }
 
-.Loading .cons .animate .line-scale > *:nth-child(5) {
+.run-loading .cons .animate .line-scale > *:nth-child(5) {
 	animation: line-scale 1s 0.5s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-webkit-animation: line-scale 1s 0.5s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-moz-animation: line-scale 1s 0.5s infinite cubic-bezier(.2, .68, .18, 1.08);
@@ -189,7 +189,7 @@
  * ball-pulse
  * *********************************
  */
-.Loading .cons .animate .ball-pulse > *:nth-child(1) {
+.run-loading .cons .animate .ball-pulse > *:nth-child(1) {
 	animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-webkit-animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-moz-animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
@@ -197,7 +197,7 @@
 	-o-animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
 }
 
-.Loading .cons .animate .ball-pulse > *:nth-child(2) {
+.run-loading .cons .animate .ball-pulse > *:nth-child(2) {
 	animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-webkit-animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-moz-animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
@@ -205,7 +205,7 @@
 	-o-animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
 }
 
-.Loading .cons .animate .ball-pulse > *:nth-child(3) {
+.run-loading .cons .animate .ball-pulse > *:nth-child(3) {
 	animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-webkit-animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
 	-moz-animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
@@ -213,7 +213,7 @@
 	-o-animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
 }
 
-.Loading .cons .animate .ball-pulse > * {
+.run-loading .cons .animate .ball-pulse > * {
 	background-color: #fff;
 	width: 8px;
 	height: 8px;
@@ -229,11 +229,11 @@
  * loader
  * **********************
  */
-.Loading .cons .animate .roll-loader {
+.run-loading .cons .animate .roll-loader {
 	height: 80px;
 }
 
-.Loading .cons .animate .roll-loader .loader {
+.run-loading .cons .animate .roll-loader .loader {
 	width: 60px;
 	height: 60px;
 	border-radius: 50%;
@@ -249,7 +249,7 @@
 
 }
 
-.Loading .cons .animate .roll-loader .loader .loader-outter {
+.run-loading .cons .animate .roll-loader .loader .loader-outter {
 	position: absolute;
 	border: 4px solid #f50057;
 	border-left-color: transparent;
@@ -264,7 +264,7 @@
 	-ms-animation: loader-outer 1s cubic-bezier(.42, .61, .58, .41) infinite;
 }
 
-.Loading .cons .animate .roll-loader .loader .loader-inner {
+.run-loading .cons .animate .roll-loader .loader .loader-inner {
 	position: absolute;
 	border: 4px solid #f50057;
 	border-radius: 50%;

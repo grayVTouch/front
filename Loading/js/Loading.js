@@ -10,7 +10,7 @@
             // 动画时间
             time: 300 ,
             // 类名
-            class: 'Loading' ,
+            class: 'loading' ,
             // 支持 'show' , 'hide'
             status: 'show' ,
             // 具体风格: line-scale ball-pulse
@@ -54,7 +54,7 @@
             var self = this;
             this.loading   = this.root.children({
                 tagName: 'div' ,
-                className: 'Loading'
+                className: 'run-loading'
             } , false , true).first();
             this.bg		= G('.bg' , this.loading.get(0));
             this.cons		= G('.cons' , this.loading.get(0));
