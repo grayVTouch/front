@@ -38,6 +38,7 @@
 
 .input-table tbody tr td .form-text , .input-table tbody tr td .form-select , .input-table tbody tr td .form-textarea {
 	width: 400px;
+	font-size: 12px;
 }
 
 .input-table tbody tr td .form-text , .input-table tbody tr td .form-select {
