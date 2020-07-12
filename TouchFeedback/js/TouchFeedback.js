@@ -4,65 +4,36 @@
  * 2019-02-23 01:06
  * ********************
  */
-(function(global , factory){
-    "use strict";
-
-    if (typeof module === "object" && typeof module.exports === "object" ) {
-        module.exports = factory(global , true);
-    } else {
-        factory(global);
-    }
-})(typeof window === 'undefined' ? this : window , function(window , noGlobal) {
+(function(){
     "use strict";
 
     function TouchFeedback(selector , option){
-        var thisRange = [window , null , undefined];
-
-        if (G.contain(this , thisRange) || (!G.contain(this , thisRange) && this.constructor !== TouchFeedback)) {
-            return new TouchFeedback(selector , option);
-        }
-
         this.default = {
-            time: 500 ,
-            backgroundColor: '#626a77' ,
+            time: 300 ,
+            opacity: 0.5 ,
         };
 
         if (!G.isObject(option)) {
             option = this.default;
         }
 
-        this.con = G(selector);
+        this.dom = {
+            root: G(selector)
+        };
         this.time = G.isNumber(option.time) ? option.time : this.default.time;
-        this.backgroundColor = G.isString(option.backgroundColor) ? option.backgroundColor : this.default.backgroundColor;
-
+        this.opacity = G.isNumeric(option.opacity) ? option.opacity : this.default.opacity;
         this.run();
     }
 
     TouchFeedback.prototype = {
         constructor: TouchFeedback ,
 
-        initStaticHTML: function(){
-
-        } ,
-
-        initStaticArgs: function(){
+        initStatic: function(){
             this.once = true;
             this.sW = 0;
             this.sH = 0;
-            this.maxOpacity = 1;
+            this.maxOpacity = this.opacity;
             this.domLen = 0;
-        } ,
-
-        initStatic: function(){
-
-        } ,
-
-        initDynamicHTML: function(){
-
-        } ,
-
-        initDynamicArgs: function(){
-
         } ,
 
         initDynamic: function(){
@@ -72,7 +43,7 @@
         start: function(){
             var touchFeedback = document.createElement('div');
             touchFeedback.className = 'touch-feedback';
-            this.con.append(touchFeedback);
+            this.dom.root.append(touchFeedback);
             this.touchFeedback = G(touchFeedback);
             this.conW = this.touchFeedback.width('border-box');
             this.conH = this.touchFeedback.height('border-box');
@@ -80,13 +51,19 @@
 
         end: function(){
             this.domLen = 0;
-            this.con.remove(this.touchFeedback.get(0));
+            this.dom.root.remove(this.touchFeedback.get(0));
+            if (this.position !== this.dom.root.getStyleVal('position')) {
+                this.dom.root.css({
+                    position: this.position ,
+                });
+            }
+
         } ,
 
         create: function(){
             var div = document.createElement('div');
-                div = G(div);
-                div.addClass('circle');
+            div = G(div);
+            div.addClass('circle');
             this.touchFeedback.append(div.get(0));
             this.domLen++;
             div.css({
@@ -102,6 +79,14 @@
             if (e.which !== 1) {
                 return ;
             }
+            this.position = this.dom.root.getStyleVal('position');
+            this.backgroundColor = this.dom.root.getStyleVal('color');
+
+            if (this.position === 'static') {
+                this.dom.root.css({
+                    position: 'relative'
+                });
+            }
             this.animate(x , y);
         } ,
 
@@ -109,8 +94,8 @@
             if (this.domLen < 1) {
                 this.start();
             }
-            var bX = this.con.getWindowOffsetVal('left');
-            var bY = this.con.getWindowOffsetVal('top');
+            var bX = this.dom.root.getWindowOffsetVal('left');
+            var bY = this.dom.root.getWindowOffsetVal('top');
             var left = Math.abs(clientX - bX);
             var top = Math.abs(clientY - bY);
             var leftTop = Math.ceil(Math.sqrt(Math.pow(left , 2) + Math.pow(top , 2)));
@@ -122,7 +107,7 @@
             var h = w;
 
             var dom = this.create();
-                dom = G(dom);
+            dom = G(dom);
             G.CAF(dom.get(0).__touch_feedback_timer__);
             window.clearTimeout(dom.get(0).__touch_feedback_timer_1__);
             var wAmount = w - this.sW;
@@ -178,23 +163,15 @@
             animate();
         } ,
 
-        defineEvent: function(){
-            this.con.on('mousedown' , this.mousedownEvent.bind(this) , true , false);
+        initEvent: function(){
+            this.dom.root.on('mousedown' , this.mousedownEvent.bind(this) , true , false);
         } ,
         run: function(){
-            this.initStaticHTML();
-            this.initStaticArgs();
             this.initStatic();
-            this.initDynamicHTML();
-            this.initDynamicArgs();
             this.initDynamic();
-            this.defineEvent();
+            this.initEvent();
         } ,
     };
 
-    if (!noGlobal) {
-        window.TouchFeedback = TouchFeedback;
-    }
-
-    return TouchFeedback;
-});
+    window.TouchFeedback = TouchFeedback;
+})();

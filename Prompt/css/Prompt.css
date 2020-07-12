@@ -78,7 +78,7 @@
     float: right;
 }
 
-.prompt .content .header .btns .close {
+.prompt .content .header .action .close {
     border-radius: 5px;
     width: 30px;
     height: 30px;
@@ -93,15 +93,15 @@
     -o-transition: all 0.3s linear;
 }
 
-.prompt .content .header .btns .close:hover {
+.prompt .content .header .action .close:hover {
     background-color: #ddd;
 }
 
-.prompt .content .header .btns .close:active {
+.prompt .content .header .action .close:active {
     background-color: #efefef;
 }
 
-.prompt .content .header .btns .close .positive {
+.prompt .content .header .action .close .positive {
     width: 10px;
     height: 1px;
     position: absolute;
@@ -120,7 +120,7 @@
     -o-transform-origin: 0 0;
 }
 
-.prompt .content .header .btns .close .negative {
+.prompt .content .header .action .close .negative {
     width: 10px;
     height: 1px;
     position: absolute;

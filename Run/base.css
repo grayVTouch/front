@@ -78,7 +78,12 @@ input[type=text] , input[type=password] , input[type=search] , input[type=number
 	-ms-transition:all 0.3s ease-in-out;
 }
 
-input[type=text] , input[type=password] , input[type=search] , input[type=number] , input[type=email] {
+input[type=text] ,
+input[type=password] ,
+input[type=search] ,
+input[type=number] ,
+input[type=email]
+{
 	text-indent:12px;
 }
 
@@ -133,7 +138,9 @@ a {
 }
 
 /* 滚动槽 */
-::-webkit-scrollbar-corner , ::-webkit-scrollbar-track {
+::-webkit-scrollbar-corner ,
+::-webkit-scrollbar-track
+{
 	background-color:rgba(140, 140, 140, 0.15);
 }
 
@@ -174,7 +181,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 
 .hide {
-	display:none;
+	display:none !important;
 }
 
 .simsun {
@@ -272,7 +279,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 /*
  * 加粗
  */
-.weight {
+.run-weight {
 	font-weight:bold;
 }
 
@@ -282,7 +289,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
  * 各种风格
  * ***********
  */
-.line-through {
+.run-line-through {
 	text-decoration:line-through;
 }
 
@@ -292,7 +299,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
  * 悬浮时下划线
  * *************
  */
-.underline:hover {
+.run-underline:hover {
 	text-decoration:underline;
 }
 
@@ -382,6 +389,19 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
  * margin
  * *****************
  */
+.m-t--1 {
+	margin-top: -1px !important;
+}
+
+.m-t--2 {
+	margin-top: -2px !important;
+}
+
+.m-t--3 {
+	margin-top: -3px !important;
+}
+
+
 .m-b-10 {
 	margin-bottom: 10px !important;
 }
@@ -400,6 +420,14 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
 .m-b-30 {
 	margin-bottom: 30px !important;
+}
+
+.m-r-5 {
+	margin-right: 5px !important;
+}
+
+.m-r-10 {
+	margin-right: 10px !important;
 }
 
 /**
@@ -480,4 +508,40 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
  */
 .run-bg-gray {
 	background-color:gray !important;
+}
+
+.run-position-relative {
+	position: relative;
+}
+
+.run-position-fixed {
+	position: fixed;
+}
+
+.run-position-absolute {
+	position: absolute;
+}
+
+.run-t-1 {
+	top: 1px;
+}
+
+.run-t-2 {
+	top: 2px;
+}
+
+.run-t-3 {
+	top: 3px;
+}
+
+.run-t--1 {
+	top: -1px;
+}
+
+.run-t--2 {
+	top: -2px;
+}
+
+.run-t--3 {
+	top: -3px;
 }

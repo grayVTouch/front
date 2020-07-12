@@ -52,6 +52,7 @@
     -webkit-transition: all 0.3s 0s;
     -moz-transition: all 0.3s 0s;
     -o-transition: all 0.3s 0s;
+    display: block;
 }
 
 /*.__nav__ .list .item.hover > .action {*/

@@ -38,7 +38,37 @@
 <script>
     "use strict";
 
-    var p = new Prompt('fuck you now !! i love this');
+    var p = new Prompt('fuck you now !! i love this' , {
+        time: 300 ,
+        // 状态：show hide
+        status: 'show' ,
+        opacity: 0.2 ,
+        maxWidth: '' ,
+        title: '信息' ,
+        margin: '10px' ,
+        // 弹层打开后毁掉
+        success: null ,
+        // 点击确认按钮回调
+        confirm: null ,
+        // 点击取消按钮回调
+        cancel: null ,
+        // 点击关闭按钮回调
+        close: null ,
+        // 是否显示关闭按钮
+        closeBtn: true ,
+        // 容器元素
+        container: document.body ,
+        // 按钮列表
+        btn: [
+            {
+                name: '确认' ,
+                callback: function(){
+                    // 关闭当前弹窗
+                    self.hide(self.option.confirm);
+                }
+            }
+        ]
+    });
 
     // 或者
     Prompt.alert('你好');

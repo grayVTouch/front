@@ -189,7 +189,7 @@
             this.dom.msg.html(this.option.html);
 
             // 是否隐藏关闭按钮
-            if (this.option.closeBtn) {
+            if (!this.option.closeBtn) {
                 this.dom.close.addClass('hide');
             }
 

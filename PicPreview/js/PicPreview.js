@@ -562,6 +562,7 @@
             this.next();
         } ,
         initEvent: function(){
+            var self = this;
             this.dom.fullScreen.on('click' , this.switchFullOrNormalScreen.bind(this , 'full'));
             this.dom.normalScreen.on('click' , this.switchFullOrNormalScreen.bind(this , 'normal'));
             this.dom.spread.on('click' , this.switchSpreadOrShrink.bind(this , 'spread' , true));
@@ -574,8 +575,7 @@
             this.dom.origin.on('click' , this.originEvent.bind(this));
             this.dom.imagesForBImages.on('click' , G.stop);
 
-            // this.dom.imagesForBImages.on('dblclick' , this.origin.bind(this));
-
+            this.dom.imagesForBImages.on('dblclick' , this.originEvent.bind(this));
             this.dom.imagesForBImages.on('mousedown' , this.imageMouseDownEvent.bind(this));
             this.dom.win.on('mousemove' , this.imageMouseMoveEvent.bind(this));
             this.dom.win.on('mouseup' , this.imageMouseupEvent.bind(this));
@@ -586,6 +586,15 @@
             this.dom.closeInSImage.on('click' , this.hide.bind(this));
             // this.dom.content.on('click' , this.hide.bind(this));
             this.dom.header.on('click' , G.stop);
+
+
+            this.dom.win.on('keyup' , function(e){
+                // console.log('keycode' , e.keyCode);
+                if (e.keyCode !== 27) {
+                    return ;
+                }
+                self.hide();
+            });
         } ,
 
         wheelEvent: function(e){

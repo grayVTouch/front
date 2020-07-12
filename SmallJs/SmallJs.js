@@ -5150,7 +5150,7 @@
 
         // 清空 cookie
         clear: function(){
-            var cookies = this.get()
+            var cookies = this.get();
             var k;
             var v;
 
