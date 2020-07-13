@@ -53,6 +53,13 @@
             this.domLen = 0;
             this.dom.root.remove(this.touchFeedback.get(0));
             if (this.position !== this.dom.root.getStyleVal('position')) {
+                if (this.position === 'static') {
+                    // 去掉 position 样式设置
+                    this.dom.root.css({
+                        position: '' ,
+                    });
+                    return ;
+                }
                 this.dom.root.css({
                     position: this.position ,
                 });

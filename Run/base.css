@@ -546,3 +546,32 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .run-t--3 {
 	top: -3px;
 }
+
+/**
+ * ************
+ * 常见尺寸
+ * ************
+ */
+.w-100 {
+	width: 100px !important;
+}
+
+.w-120 {
+	width: 120px !important;
+}
+
+.w-150 {
+	width: 150px !important;
+}
+
+.w-200 {
+	width: 200px !important;
+}
+
+.w-300 {
+	width: 300px !important;
+}
+
+.w-400 {
+	width: 300px !important;
+}
