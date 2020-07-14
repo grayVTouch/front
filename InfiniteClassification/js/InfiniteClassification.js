@@ -665,9 +665,10 @@
                     icon.removeClass('hide');
                     if (type === 'text') {
                         text.highlight('hide' , icon.children().get() , true);
+                        text.removeClass('hide');
                         continue ;
                     }
-                    text.highlight('hide' , icon.children().get() , true);
+                    text.addClass('hide');
                     continue ;
                 }
                 _function.addClass('no-icon');

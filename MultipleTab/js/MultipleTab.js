@@ -29,7 +29,7 @@
             // 标签页删除后回调函数
             deleted: null ,
             // 标签点击后回调
-            click: null ,
+            focus: null ,
             // 图标
             ico: '../image/default/default.png' ,
             // 内容
@@ -52,7 +52,7 @@
         this.option = {};
         this.option.created = G.type(option['created']) !== 'Function' ? this.default.created   : option['created'];
         this.option.deleted = G.type(option['deleted']) !== 'Function' ? this.default.deleted   : option['deleted'];
-        this.option.click   = G.type(option['click'])   !== 'Function' ? this.default.click     : option['click'];
+        this.option.focus   = G.type(option['focus'])   !== 'Function' ? this.default.focus     : option['focus'];
         this.option.ico     = G.type(option['ico'])     !== 'String'   ? this.default.ico       : option['ico'];
         this.option.title   = G.type(option['title'])     !== 'String'   ? this.default.title       : option['title'];
         this.option.time    = G.type(option['time'])     !== 'Number'   ? this.default.time       : option['time'];
@@ -339,6 +339,7 @@
                 if (G.isFunction(self.option.created)) {
                     self.option.created.call(self , id);
                 }
+                G.invoke(self.option.focus , self , id);
             } , this.option.time);
             return id;
         } ,
@@ -353,8 +354,8 @@
 
             var id = tab.data('id');
 
-            if (G.type(this.option.click) === 'Function') {
-                this.option.click.call(this , id);
+            if (G.type(this.option.focus) === 'Function') {
+                this.option.focus.call(this , id);
             }
         } ,
 
