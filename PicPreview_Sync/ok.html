@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<style>
+    #outer {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        width: 100%;
+        height: 100%;
+        transform: translate(-50% , -50%) scale(1,1);
+        background-color: rgba(0,0,0,0.5);
+        opacity: 0;
+        transition: all 0.3s;
+    }
+
+    #outer.show {
+        opacity: 1;
+    }
+
+    #inner {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    #inner img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transition: all 0.3s;
+        transform: translate(-50% , -50%) scale(0.3,0.3);
+        opacity: 0;
+    }
+
+    #inner.vertical img {
+        transform: translate(-50% , -50%) scale(1,1);
+        opacity: 1;
+        width: 80%;
+    }
+
+    #inner.vertical.start img {
+        transform: translate(-50% , -50%) scale(0.3,0.3);
+        opacity: 0;
+    }
+
+    #inner.horizontal img {
+        transform: translate(-50% , -50%) scale(1,1);
+        opacity: 1;
+        width: 80%;
+        height: 8%;
+    }
+
+    #inner.horizontal.start img {
+        transform: translate(-50% , -50%) scale(0.3,0.3);
+        opacity: 0;
+    }
+
+    #inner img {
+        height: 100%;
+    }
+</style>
+
+<div id="outer"></div>
+
+<script>
+    var src = 'http://api.xq.test/upload/20200623/k3nEmn866mZpyDjTzCpf731jU36lDxnR0LCFRqUI.jpeg';
+    src = 'http://api.xq.test/upload/20200628/raQfnAEoRour15hrtn7X5Vca2b5SByyUl6c23Gza.jpeg';
+    var outer = document.getElementById('outer');
+    // var inner = document.getElementById('inner');
+
+    // outer.classList.add('show');
+    // setTimeout(() => {
+        outer.classList.add('show');
+        // outer.ontransitionend = (e) => {
+        //     if (e.target !== e.currentTarget) {
+        //         return ;
+        //     }
+            // inner.classList.add('vertical');
+            // var
+
+            var div = document.createElement('div');
+            div.id = 'inner';
+            var img = new Image();
+            div.appendChild(img);
+            outer.appendChild(div);
+            img.onload = () => {
+                div.classList.add('horizontal' , 'start');
+                setTimeout(() => {
+                    div.classList.remove('start');
+                } , 0);
+            };
+            img.src = src;
+            // setTimeout(() => {
+            //
+            // } , 0);
+        // }
+    // } , 500);
+</script>
+</body>
+</html>

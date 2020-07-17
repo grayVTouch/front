@@ -6,6 +6,69 @@
   "description": "Run ui 框架必备的一些字体/图标",
   "glyphs": [
     {
+      "icon_id": "7450652",
+      "name": "验证码",
+      "font_class": "yanzhengma",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    },
+    {
+      "icon_id": "9974452",
+      "name": "验证码",
+      "font_class": "yanzhengma1",
+      "unicode": "e70b",
+      "unicode_decimal": 59147
+    },
+    {
+      "icon_id": "11518456",
+      "name": "验证码",
+      "font_class": "yanzhengma2",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "5027",
+      "name": "手机",
+      "font_class": "shouji",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "253567",
+      "name": "手机",
+      "font_class": "shouji1",
+      "unicode": "e6c7",
+      "unicode_decimal": 59079
+    },
+    {
+      "icon_id": "1220303",
+      "name": "生日",
+      "font_class": "shengri",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "4867111",
+      "name": "邮箱",
+      "font_class": "youxiang",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "4893453",
+      "name": "邮箱",
+      "font_class": "youxiang1",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "6528454",
+      "name": "手机",
+      "font_class": "shouji2",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
       "icon_id": "2507443",
       "name": "隐藏",
       "font_class": "yincang",

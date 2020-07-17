@@ -41,10 +41,10 @@
 
             if (this.dom.links.length > 0) {
                 // 补充首尾节点
-                var first = this.dom.links.first(true).clone().get(0);
-                var last = this.dom.links.last(true).clone().get(0);
-                this.dom.links.first(true).insertBefore(last);
-                this.dom.images.append(first);
+                var first = this.dom.links.first(true).clone();
+                var last = this.dom.links.last(true).clone();
+                last.insertBefore(this.dom.links.first(true).get(0));
+                this.dom.images.append(first.get(0));
             }
 
             this.dom.allLinks = G('.link' , this.dom.images.get(0));
@@ -220,6 +220,7 @@
                 this.data.translateX = this.data.position[this.data.index - 1];
                 this.setTranslateX(this.data.translateX);
             } else {
+                this.data.transitionStartTime = Date.now();
                 this.data.transitionrun = true;
                 this.data.index = this.data.minIndex;
                 this.setTranslateX(this.data.minTranslateX , function(){

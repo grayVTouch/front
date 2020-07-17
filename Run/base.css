@@ -477,6 +477,10 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	text-align: right !important;
 }
 
+.run-white {
+	color: #fff !important;
+}
+
 /*** 红色 **/
 .run-red {
 	color:red !important;
@@ -574,4 +578,15 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
 .w-400 {
 	width: 300px !important;
+}
+
+/**
+ * 指针
+ */
+.run-cursor-not-allow {
+	cursor: not-allowed !important;
+}
+
+.run-cursor-pointer {
+	cursor: pointer !important;
 }

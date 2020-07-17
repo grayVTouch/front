@@ -507,7 +507,7 @@
         // 插入节点
         insertBefore: function(node){
             this.loop(function(dom){
-                dom.parentNode.insertBefore(node , dom);
+                node.parentNode.insertBefore(dom , node);
             });
 
             return this;
@@ -2512,7 +2512,7 @@
             if (self.isFunction(callback)) {
                 callback();
             }
-        } , 0);
+        }, 20);
     };
 
     g.getUri = function(url){
