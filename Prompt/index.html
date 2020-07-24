@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提示框</title>
+    <link rel="stylesheet" href="../Run/base.css">
+    <link rel="stylesheet" href="../Run/font/iconfont.css">
+    <link rel="stylesheet" href="css/Prompt.css">
+</head>
+<body>
+
+<!-- 弹出层 -->
+<div class="prompt">
+    <!-- 背景颜色 -->
+    <div class="background"></div>
+    <!-- 内容 -->
+    <div class="content">
+        <div class="header">
+            <div class="left title">信息</div>
+            <div class="right action">
+                <div class="action close">
+                    <i class="run-iconfont run-iconfont-close f-14"></i>
+                </div>
+            </div>
+        </div>
+        <div class="message">
+            <i class="run-iconfont run-iconfont-xiaolian hide"></i>
+            <i class="run-iconfont run-iconfont-tishi2 hide"></i>
+            <i class="run-iconfont run-iconfont-shibaixiaolian hide"></i>
+            我是内容
+        </div>
+        <div class="actions">
+            <button class="action btn-1">确认</button>
+            <button class="action btn-1">你好</button>
+            <button class="action btn-1">取消</button>
+        </div>
+    </div>
+</div>
+
+<script src="../SmallJs/SmallJs.js"></script>
+<script src="js/Prompt.js"></script>
+<script>
+    "use strict";
+
+
+    // Prompt.alert('普通信息');
+    // Prompt.success('成功信息');
+    // Prompt.error('失败信息');
+    // Prompt.info('提示信息');
+</script>
+</body>
+</html>

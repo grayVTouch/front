@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="../Run/base.css">
+    <link rel="stylesheet" href="../Run/font/iconfont.css">
+    <link rel="stylesheet" href="./css/SlideSwitch.css">
+</head>
+<body>
+
+<style>
+    .root {
+        width: 600px;
+        height: 400px;
+    }
+
+    .images {
+        width: 300px;
+        height: 300px;
+    }
+
+</style>
+
+<div class="root">
+
+    <div class="slide-switch">
+        <div class="list">
+            <div class="item" data-id="one">
+                <div class="images">
+                    <img src="./res/01.jpg" class="image">
+                </div>
+            </div>
+            <div class="item" data-id="two">我很好 2</div>
+            <div class="item" data-id="three">我很好 3</div>
+            <div class="item" data-id="three">我很好 4</div>
+            <div class="item" data-id="three">我很好 5</div>
+            <div class="item" data-id="three">我很好 6</div>
+            <div class="item" data-id="three">我很好 7</div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="../SmallJs/SmallJs.js"></script>
+<script src="./js/SlideSwitch.js"></script>
+
+<style>
+
+    /* 要求对 item 内的内容自行排版 */
+    .slide-switch .list .item .image {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50% , -50%);
+        width: 100%;
+        min-height: 100%;
+        vertical-align: top;
+    }
+
+</style>
+
+<script>
+    var root = G('.root');
+    var p = new SlideSwitch(root.get(0) , {
+        // 单位 ms
+        time: 300 ,
+        id: "one" ,
+    });
+
+    // window.setTimeout(() => {
+    //     root.addClass('hide');
+    // } , 6 * 1000);
+</script>
+
+</body>
+</html>

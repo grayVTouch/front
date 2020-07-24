@@ -343,7 +343,7 @@
             indexDom.highlight('cur' , this.dom.itemsForSImages.get());
             if (scroll) {
                 var floor = Math.ceil(index / 2);
-                var margin = (floor - 1 ) * parseInt(indexDom.getStyleVal('marginBottom'));
+                var margin = (floor - 1 ) * parseInt(indexDom.css('marginBottom'));
                 var top = floor * indexDom.height('border-box') + margin;
                 var listH = this.dom.list.height('content-box');
                 if (top <= listH) {
@@ -427,7 +427,7 @@
             var image = G('.image' , item.get(0));
             image.addClass('grab');
 
-            var transform = image.getStyleVal('transform');
+            var transform = image.css('transform');
             transform = G.parseTransform(transform);
             // console.log(transform);
             this.data.x = e.clientX;
@@ -474,7 +474,7 @@
             var item = this.dom.itemsForBImages.jump(this.data.index - 1 , true);
             var image = G('.image' , item.get(0));
             var placement = item.data('placement');
-            var transform = image.getStyleVal('transform');
+            var transform = image.css('transform');
             var transformInfo = G.parseTransform(transform);
             this.data.sTranslateX = transformInfo.translateX;
             this.data.sTranslateY = transformInfo.translateY;

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提示框</title>
+    <link rel="stylesheet" href="../Run/base.css">
+    <link rel="stylesheet" href="../Run/font/iconfont.css">
+    <link rel="stylesheet" href="css/TIp.css">
+    <link rel="stylesheet" href="../TouchFeedback_Transform/css/TouchFeedback_Transform.css">
+</head>
+<body>
+
+<!-- 弹出层 -->
+<div class="__tip__">
+    <div class="message">我是消息内容fsfakf复健科第三方开始了地方开放就开了房间克里斯多夫就开始了对方就考虑是否家乐福克里斯多夫就开始砥砺奋斗开始了福克斯的房间开始了房间克里斯多夫圣诞快乐f</div>
+    <div class="close">关闭</div>
+</div>
+
+<button type="button" id="fake">弹出提示框</button>
+
+<script src="../SmallJs/SmallJs.js"></script>
+<script src="../TouchFeedback_Transform/js/TouchFeedback_Transform.js"></script>
+<script src="js/Tip.js"></script>
+<script>
+    "use strict";
+
+    var fake = G('#fake');
+    fake.on('click' , function(){
+        Tip.info('hello');
+    });
+</script>
+</body>
+</html>

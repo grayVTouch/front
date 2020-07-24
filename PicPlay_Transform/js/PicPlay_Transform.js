@@ -58,11 +58,11 @@
             }
 
             this.dom.indexs = G('.item' , this.dom.index.get(0));
-            
+
             this.data = {
-                index: 1 , 
-                maxIndex: this.dom.links.length , 
-                minIndex: 1 , 
+                index: 1 ,
+                maxIndex: this.dom.links.length ,
+                minIndex: 1 ,
                 transitionrun: false ,
                 transitionStartTime: 0 ,
                 transition: 'all ' + this.option.time + 'ms' ,
@@ -254,7 +254,7 @@
         index: function(index){
             index = parseInt(index);
             var indexDom = G(this.findIndexByIndex(index));
-                indexDom.highlight('cur' , this.dom.indexs.get());
+            indexDom.highlight('cur' , this.dom.indexs.get());
             this.data.index = index;
             this.data.translateX = this.data.position[index - 1];
             this.setTranslateX(this.data.translateX);

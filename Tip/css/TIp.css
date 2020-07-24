@@ -1,0 +1,56 @@
+.__tip__ {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 1000;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    background-color: #424242;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    align-items: center;
+    -webkit-align-items: center;
+    padding: 0 15px;
+    font-size: 14px;
+    /*max-width: 568px;*/
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(calc(100% + 20px));
+}
+
+.__tip__.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.__tip__ > * {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin: 0;
+}
+
+.__tip__ .message {
+    color: #fff;
+    max-width: 300px;
+}
+
+.__tip__ .close {
+    color: #f3c669;
+    margin-left: 50px;
+    /*padding: 10px 20px;*/
+    padding: 10px;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    cursor: pointer;
+}
+
+.__tip__ .close:hover {
+    /*background-color: rgba(243, 198, 105, 0.3);*/
+}

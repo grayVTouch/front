@@ -401,6 +401,13 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	margin-top: -3px !important;
 }
 
+.m-b-3 {
+	margin-bottom: 3px !important;
+}
+
+.m-b-5 {
+	margin-bottom: 5px !important;
+}
 
 .m-b-10 {
 	margin-bottom: 10px !important;
@@ -428,6 +435,14 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
 .m-r-10 {
 	margin-right: 10px !important;
+}
+
+.m-l-5 {
+	margin-left: 5px !important;
+}
+
+.m-l-10 {
+	margin-left: 10px !important;
 }
 
 /**
@@ -589,4 +604,27 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
 .run-cursor-pointer {
 	cursor: pointer !important;
+}
+
+/**
+ *
+ */
+.run-none-border-bottom {
+	border-bottom: none !important;
+}
+
+.run-none-border-left {
+	border-left: none !important;
+}
+
+.run-none-border-top {
+	border-top: none !important;
+}
+
+.run-none-border-right {
+	border-right: none !important;
+}
+
+.run-none-border {
+	border: none !important;
 }

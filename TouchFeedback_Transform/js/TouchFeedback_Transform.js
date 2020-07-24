@@ -7,7 +7,7 @@
 (function(){
     "use strict";
 
-    function TouchFeedback(selector , option){
+    function TouchFeedback_Transform(selector , option){
         this.default = {
             time: 300 ,
             opacity: 0.5 ,
@@ -25,8 +25,8 @@
         this.run();
     }
 
-    TouchFeedback.prototype = {
-        constructor: TouchFeedback ,
+    TouchFeedback_Transform.prototype = {
+        constructor: TouchFeedback_Transform ,
 
         initStatic: function(){
             this.once = true;
@@ -101,10 +101,17 @@
             if (this.domLen < 1) {
                 this.start();
             }
+            // 根元素中心点的位置
+            var centerPointLeft = this.conW / 2;
+            var centerPointTop  = this.conH / 2;
+
             var bX = this.dom.root.getWindowOffsetVal('left');
             var bY = this.dom.root.getWindowOffsetVal('top');
+
+            // 这个是实际中心点的位置
             var left = Math.abs(clientX - bX);
             var top = Math.abs(clientY - bY);
+
             var leftTop = Math.ceil(Math.sqrt(Math.pow(left , 2) + Math.pow(top , 2)));
             var leftBtm = Math.ceil(Math.sqrt(Math.pow(left , 2) + Math.pow(this.conH - top , 2)));
             var rightTop = Math.ceil(Math.sqrt(Math.pow(this.conW - left , 2) + Math.pow(top , 2)));
@@ -113,66 +120,54 @@
             var w = radius * 2;
             var h = w;
 
+            // 元素一半的位置
+            var halfW = w / 2;
+            var halfH = h / 2;
+
             var dom = this.create();
             dom = G(dom);
-            G.CAF(dom.get(0).__touch_feedback_timer__);
-            window.clearTimeout(dom.get(0).__touch_feedback_timer_1__);
-            var wAmount = w - this.sW;
-            var hAmount = h - this.sH;
-            var sTime = new Date().getTime();
-            var eTime = sTime;
-            var duration = 0;
-            var ratio = 0;
-            var _wAmount = 0;
-            var _hAmount = 0;
-            var endLeft = 0;
-            var endTop = 0;
-            var endW = 0;
-            var endH = 0;
-            var opacity = this.maxOpacity;
-            var opacityAmount = this.maxOpacity;
-            var _opacityAmount = 0;
-            var endOpacity = 0;
-            var self = this;
-            var animate = function(){
-                eTime = new Date().getTime();
-                duration = eTime - sTime;
-                ratio = duration / self.time;
-                ratio = Math.min(ratio , 1);
-                _wAmount = wAmount * ratio;
-                _hAmount = hAmount * ratio;
-                _opacityAmount = opacityAmount * ratio;
-                endW = self.sW + _wAmount;
-                endH = self.sH + _hAmount;
-                endTop = top - _hAmount / 2;
-                endLeft = left - _wAmount / 2;
-                endOpacity = opacity - _opacityAmount;
-                dom.css({
-                    width: endW + 'px' ,
-                    height: endH + 'px' ,
-                    top: endTop + 'px' ,
-                    left: endLeft + 'px' ,
-                    opacity: endOpacity ,
-                });
 
-                if (ratio != 1) {
-                    dom.get(0).__touch_feedback_timer__ = G.RAF(animate);
-                    return ;
-                }
-                dom.get(0).__touch_feedback_timer_1__ = window.setTimeout(function(){
+            var translateX =  -halfW - (centerPointLeft - left)  + 'px';
+            var translateY =  -halfH - (centerPointTop - top) + 'px';
+
+            dom.css({
+                transition: '' ,
+                translateX: translateX ,
+                translateY: translateY ,
+                scaleX: 0 ,
+                scaleY: 0 ,
+                width: w + 'px' ,
+                height: h + 'px' ,
+                opacity: this.opacity ,
+            });
+
+            var self = this;
+
+            G.nextTick(function(){
+                dom.css({
+                    transition: 'all ' +  self.time + 'ms linear' ,
+                    // scale
+                    translateX: translateX ,
+                    translateY: translateY ,
+                    scaleX: 1 ,
+                    scaleY: 1 ,
+                    opacity: 0 ,
+                });
+                dom.onTransition(function(){
                     dom.parent().remove(dom.get(0));
                     self.domLen--;
                     if (self.domLen == 0) {
                         self.end();
                     }
-                } , 100);
-            };
-            animate();
+
+                });
+            });
         } ,
 
         initEvent: function(){
             this.dom.root.on('mousedown' , this.mousedownEvent.bind(this) , true , false);
         } ,
+
         run: function(){
             this.initStatic();
             this.initDynamic();
@@ -180,5 +175,5 @@
         } ,
     };
 
-    window.TouchFeedback = TouchFeedback;
+    window.TouchFeedback_Transform = TouchFeedback_Transform;
 })();

@@ -1,0 +1,19 @@
+.slide-switch {
+    position: relative;
+    overflow: hidden;
+}
+
+.slide-switch > .list {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.slide-switch > .list > .item {
+    flex: 0 0 auto;
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    width: 100%;
+}
