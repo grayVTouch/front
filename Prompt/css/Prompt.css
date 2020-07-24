@@ -5,7 +5,7 @@
     width:100%;
     height:100%;
     z-index: 1000;
-    transition: all 0.3s ease;
+    transition: all 0.12s;
     opacity: 0;
     background-color: rgba(0,0,0,0.6);
 }
@@ -25,7 +25,7 @@
 /*    !*opacity:0.7;*!*/
 /*}*/
 
-.prompt .content {
+.prompt > .content {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -36,72 +36,77 @@
 
     /*opacity: 0;*/
     transform: translate(-50% , -50%) scale(0.6 , 0.6);
-    transition: all 0.3s ease;
+    /*transform: translate(-50% , -50%);*/
+    transition: all 0.2s;
 }
 
-.prompt .content.show {
+.prompt > .content.show {
     /*opacity: 1;*/
     transform: translate(-50% , -50%) scale(1 , 1);
 }
 
-.prompt .content > * {
+.prompt > .content > * {
 
 }
 
-.prompt .content .header {
-    cursor:move;
-    padding: 12px 20px;
-    border-bottom: 1px solid #F0F0F0;
+.prompt > .content .header {
+    cursor: move;
+    padding: 0 20px;
+    height: 43px;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    align-items: center;
+    -webkit-align-items: center;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+    background-color: #F8F8F8;
 }
 
-.prompt .content .header:after {
-    display: block;
-    content: '';
-    clear: both;
-}
-
-.prompt .content .header > * {
-    height: 30px;
+.prompt > .content .header > * {
+    margin: 0;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    -o-box-sizing: border-box;
 }
 
-.prompt .content .header .left {
-    float:left;
-    line-height: 30px;
+.prompt > .content .header .left {
+    font-size: 14px;
 }
 
-.prompt .content .header .right {
-    float: right;
-}
+/*.prompt > .content .header .right {*/
+/*    float: right;*/
+/*}*/
 
-.prompt .content .header .action .close {
+.prompt > .content .header .action .close {
     border-radius: 5px;
-    width: 30px;
-    height: 30px;
+    /*width: 30px;*/
+    /*height: 30px;*/
     position: relative;
     cursor:pointer;
     /*background-color: red;*/
-    opacity: 0.8;
-    transition: all 0.3s linear;
-    -webkit-transition: all 0.3s linear;
-    -moz-transition: all 0.3s linear;
-    -ms-transition: all 0.3s linear;
-    -o-transition: all 0.3s linear;
+    /*opacity: 0.8;*/
+    /*transition: all 0.3s linear;*/
+    /*-webkit-transition: all 0.3s linear;*/
+    /*-moz-transition: all 0.3s linear;*/
+    /*-ms-transition: all 0.3s linear;*/
+    /*-o-transition: all 0.3s linear;*/
 }
 
-.prompt .content .header .action .close:hover {
-    background-color: #ddd;
+.prompt > .content .header .action .close:hover {
+    /*background-color: #ddd;*/
+    /*color: #808080;*/
+    opacity: 0.7;
 }
 
-.prompt .content .header .action .close:active {
-    background-color: #efefef;
+.prompt > .content .header .action .close:active {
+    /*background-color: #efefef;*/
 }
 
-.prompt .content .header .action .close .positive {
+.prompt > .content .header .action .close .positive {
     width: 10px;
     height: 1px;
     position: absolute;
@@ -120,7 +125,7 @@
     -o-transform-origin: 0 0;
 }
 
-.prompt .content .header .action .close .negative {
+.prompt > .content .header .action .close .negative {
     width: 10px;
     height: 1px;
     position: absolute;
@@ -139,16 +144,38 @@
     -o-transform-origin: 0 0;
 }
 
-.prompt .content .msg {
+.prompt > .content > .message {
     padding: 20px;
+    font-size: 14px;
+    position: relative;
 }
 
-.prompt .content > .btns {
+.prompt > .content > .message.icon {
+    padding-left: 70px;
+}
+
+.prompt > .content > .message .run-iconfont {
+    position: absolute;
+    left: 20px;
+    top: 15px;
+    font-size: 30px;
+    display: none;
+}
+
+.prompt > .content > .message.icon .run-iconfont {
+    display: inline-block;
+}
+
+.prompt > .content > .message > .html {
+
+}
+
+.prompt > .content > .actions {
     padding: 0 20px 20px;
     text-align: right;
 }
 
-.prompt .content > .btns .btn {
+.prompt > .content > .actions > .action {
     display: inline-block;
     padding: 5px 12px;
     color: #555;
@@ -156,6 +183,11 @@
     cursor: pointer;
     margin-right:8px;
     border: 1px solid #e2e2e2;
+
+    /*border-color: #1E9FFF;*/
+    /*background-color: #1E9FFF;*/
+    /*color: #fff;*/
+
     transition: all 0.12s linear;
     -webkit-transition: all 0.12s linear;
     -moz-transition: all 0.12s linear;
@@ -163,28 +195,28 @@
     -o-transition: all 0.12s linear;
 }
 
-.prompt .content > .btns .btn:nth-last-of-type(1) {
+.prompt > .content > .actions > .action:nth-last-of-type(1) {
     margin-right: 0;
 }
 
-.prompt .content > .btns .btn:hover {
+.prompt > .content > .actions > .action:hover {
     background-color: #f5f5f5;
 }
 
-.prompt .content > .btns .btn:active {
+.prompt > .content > .actions > .action:active {
     background-color: #ececec;
 }
 
-.prompt .content > .btns .btn:nth-of-type(1) {
+.prompt > .content > .actions > .action:nth-of-type(1) {
     background-color: #5FB878;
     color: #fff;
     border-color: transparent;
 }
 
-.prompt .content > .btns .btn:nth-of-type(1):hover {
+.prompt > .content > .actions > .action:nth-of-type(1):hover {
     background-color: #68c783;
 }
 
-.prompt .content > .btns .btn:nth-of-type(1):active {
+.prompt > .content > .actions > .action:nth-of-type(1):active {
     background-color: #6fda8d;
 }

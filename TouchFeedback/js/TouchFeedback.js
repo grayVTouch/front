@@ -52,7 +52,7 @@
         end: function(){
             this.domLen = 0;
             this.dom.root.remove(this.touchFeedback.get(0));
-            if (this.position !== this.dom.root.getStyleVal('position')) {
+            if (this.position !== this.dom.root.css('position')) {
                 if (this.position === 'static') {
                     // 去掉 position 样式设置
                     this.dom.root.css({
@@ -86,8 +86,8 @@
             if (e.which !== 1) {
                 return ;
             }
-            this.position = this.dom.root.getStyleVal('position');
-            this.backgroundColor = this.dom.root.getStyleVal('color');
+            this.position = this.dom.root.css('position');
+            this.backgroundColor = this.dom.root.css('color');
 
             if (this.position === 'static') {
                 this.dom.root.css({

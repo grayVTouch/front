@@ -792,7 +792,7 @@ weight 加粗
 
 <!-- 加载依赖 -->
 <script src="../SmallJs/SmallJs.js"></script>
-<script src="js/Prompt.js"></script>
+<script src="js/Tip.js"></script>
 
 <!-- 使用 -->
 <script>

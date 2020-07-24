@@ -101,7 +101,8 @@
             var first   = this._links.first(true);
             var last    = this._links.last(true).clone();
 
-            first.insertBefore(last.get(0));
+            // first.insertBefore(last.get(0));
+            last.insertBefore(first.get(0));
             this.__images.append(first.clone().get(0));
 
             this._s_images   = G('.link .image' , this.__images.get(0));

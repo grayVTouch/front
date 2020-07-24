@@ -507,7 +507,7 @@
         // 插入节点
         insertBefore: function(node){
             this.loop(function(dom){
-                dom.parentNode.insertBefore(node , dom);
+                node.parentNode.insertBefore(dom , node);
             });
 
             return this;
@@ -823,21 +823,104 @@
             if (!g.isValid(val) && g.isString(key)) {
                 return this.getStyleVal(key);
             }
-
+            var css3Range = [
+                'translateX' ,
+                'translateY' ,
+                'translateZ' ,
+                'rotateX' ,
+                'rotateY' ,
+                'rotateZ' ,
+                'scaleX' ,
+                'scaleY' ,
+                'scaleZ' ,
+                'skewX' ,
+                'skewY' ,
+                // 'skewZ'
+            ];
             var json = {};
             if (g.isObject(key)) {
                 json = key;
             } else {
                 json[key] = val;
             }
-
+            var css3Style = {};
             this.loop(function(dom){
                 var key  = null;
-
+                var val = null;
+                var count = 0;
                 for (key in json)
                 {
-                    dom.style[key] = json[key];
+                    val = json[key];
+                    if (g.contain(key , css3Range)) {
+                        css3Style[key] = val;
+                        count++;
+                        continue ;
+                    }
+                    dom.style[key] = val;
                 }
+                if (G.isValid(json.transform)) {
+                    return ;
+                }
+                if (count < 1) {
+                    return ;
+                }
+                var transform = '';
+                var translateX = g.isValid(css3Style.translateX) ? css3Style.translateX : false;
+                var translateY = g.isValid(css3Style.translateY) ? css3Style.translateY : false;
+                var translateZ = g.isValid(css3Style.translateZ) ? css3Style.translateZ : false;
+                var rotateX = g.isValid(css3Style.rotateX) ? css3Style.rotateX : false;
+                var rotateY = g.isValid(css3Style.rotateY) ? css3Style.rotateY : false;
+                var rotateZ = g.isValid(css3Style.rotateZ) ? css3Style.rotateZ : false;
+                var scaleX = g.isValid(css3Style.scaleX) ? css3Style.scaleX : false;
+                var scaleY = g.isValid(css3Style.scaleY) ? css3Style.scaleY : false;
+                var scaleZ = g.isValid(css3Style.scaleZ) ? css3Style.scaleZ : false;
+                var skewX = g.isValid(css3Style.skewX) ? css3Style.skewX : false;
+                var skewY = g.isValid(css3Style.skewY) ? css3Style.skewY : false;
+
+                // console.log(css3Style , scaleX);
+
+                // transform += 'translate3d(' + translateX + ',' + translateY + ',' + translateZ + ') ';
+                if (translateX !== false) {
+                    transform += 'translateX(' + translateX + ') ';
+                }
+                if (translateY !== false) {
+                    transform += 'translateY(' + translateY + ') ';
+                }
+                if (translateZ !== false) {
+                    transform += 'translateZ(' + translateZ + ') ';
+                }
+                if (rotateX !== false) {
+                    transform += 'rotateX(' + rotateX + ') ';
+                }
+                if (rotateY !== false) {
+                    transform += 'rotateY(' + rotateY + ') ';
+                }
+                if (rotateZ !== false) {
+                    transform += 'rotateZ(' + rotateZ + ') ';
+                }
+                if (scaleX !== false) {
+                    transform += 'scaleX(' + scaleX + ') ';
+                }
+                if (scaleY !== false) {
+                    transform += 'scaleY(' + scaleY + ') ';
+                }
+                if (scaleZ !== false) {
+                    transform += 'scaleZ(' + scaleZ + ') ';
+                }
+                if (skewX !== false) {
+                    transform += 'skewX(' + skewX + ') ';
+                }
+                if (skewY !== false) {
+                    transform += 'skewY(' + skewY + ') ';
+                }
+
+                // transform += 'scale3d(' + scaleX + ' , ' + scaleY + ',' + scaleZ + ')';
+                // transform += 'skew(' + skewX + ' , ' + skewY  + ')';
+
+                dom.style.transform = transform;
+                dom.style.webkitTransform = transform;
+                dom.style.mozTransform = transform;
+                dom.style.msTransform = transform;
             });
 
             return this;
@@ -907,13 +990,13 @@
             var boxRange = ['border-box' , 'padding-box' , 'content-box'];
             boxType =  g.contain(boxType , boxRange) ? boxType : 'content-box';
             // 宽度
-            var w = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('width'))));
+            var w = Math.max(0 , Math.floor(parseFloat(this.css('width'))));
             // padding
-            var pl = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('paddingLeft'))));
-            var pr = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('paddingRight'))));
+            var pl = Math.max(0 , Math.floor(parseFloat(this.css('paddingLeft'))));
+            var pr = Math.max(0 , Math.floor(parseFloat(this.css('paddingRight'))));
             // 边框
-            var bl = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('borderLeftWidth'))));
-            var br = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('borderRightWidth'))));
+            var bl = Math.max(0 , Math.floor(parseFloat(this.css('borderLeftWidth'))));
+            var br = Math.max(0 , Math.floor(parseFloat(this.css('borderRightWidth'))));
             // 当前的元素 box-sizing 值
             var boxSizing;
             var bReg;
@@ -925,7 +1008,7 @@
             br = isNaN(br) ? 0 : br;
 
             // box-sizing
-            boxSizing = this.getStyleVal('boxSizing');
+            boxSizing = this.css('boxSizing');
 
             /*
              * 浏览器检测
@@ -982,13 +1065,13 @@
             boxType =  g.contain(boxType , boxRange) ? boxType : 'content-box';
 
             // 高度
-            var h = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('height'))));
+            var h = Math.max(0 , Math.floor(parseFloat(this.css('height'))));
             // padding
-            var pt = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('paddingTop'))));
-            var pb = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('paddingBottom'))));
+            var pt = Math.max(0 , Math.floor(parseFloat(this.css('paddingTop'))));
+            var pb = Math.max(0 , Math.floor(parseFloat(this.css('paddingBottom'))));
             // 边框
-            var bt = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('borderTopWidth'))));
-            var bb = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('borderBottomWidth'))));
+            var bt = Math.max(0 , Math.floor(parseFloat(this.css('borderTopWidth'))));
+            var bb = Math.max(0 , Math.floor(parseFloat(this.css('borderBottomWidth'))));
             // 盒子类型范围
             var boxRange = ['border-box' , 'padding-box' , 'content-box'];
             // 当前的元素 box-sizing 值
@@ -1003,7 +1086,7 @@
 
             bReg      = /ie|edge/i;
             // box-sizing
-            boxSizing = this.getStyleVal('boxSizing');
+            boxSizing = this.css('boxSizing');
 
             if (boxType === 'border-box') {
                 if (boxSizing === 'content-box') {
@@ -1044,16 +1127,16 @@
          */
         getTW: function(){
             // 宽度
-            var w = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('width'))));
+            var w = Math.max(0 , Math.floor(parseFloat(this.css('width'))));
             // padding
-            var pl = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('paddingLeft'))));
-            var pr = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('paddingRight'))));
+            var pl = Math.max(0 , Math.floor(parseFloat(this.css('paddingLeft'))));
+            var pr = Math.max(0 , Math.floor(parseFloat(this.css('paddingRight'))));
             // 边框
-            var bl = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('borderLeftWidth'))));
-            var br = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('borderRightWidth'))));
+            var bl = Math.max(0 , Math.floor(parseFloat(this.css('borderLeftWidth'))));
+            var br = Math.max(0 , Math.floor(parseFloat(this.css('borderRightWidth'))));
             // margin
-            var ml = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('marginLeft'))));
-            var mr = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('marginRight'))));
+            var ml = Math.max(0 , Math.floor(parseFloat(this.css('marginLeft'))));
+            var mr = Math.max(0 , Math.floor(parseFloat(this.css('marginRight'))));
             var boxSizing;
             var bReg = /ie|edge/i;
 
@@ -1066,7 +1149,7 @@
             mr = isNaN(mr) ? 0 : mr;
 
             // box-sizing
-            boxSizing = this.getStyleVal('boxSizing');
+            boxSizing = this.css('boxSizing');
 
             if (boxSizing == 'content-box') {
                 return  w + pl + pr + bl + br + ml + mr;
@@ -1086,16 +1169,16 @@
          */
         getTH: function(){
             // 高度
-            var h = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('height'))));
+            var h = Math.max(0 , Math.floor(parseFloat(this.css('height'))));
             // padding
-            var pt = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('paddingTop'))));
-            var pb = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('paddingBottom'))));
+            var pt = Math.max(0 , Math.floor(parseFloat(this.css('paddingTop'))));
+            var pb = Math.max(0 , Math.floor(parseFloat(this.css('paddingBottom'))));
             // 边框
-            var bt = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('borderTopWidth'))));
-            var bb = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('borderBottomWidth'))));
+            var bt = Math.max(0 , Math.floor(parseFloat(this.css('borderTopWidth'))));
+            var bb = Math.max(0 , Math.floor(parseFloat(this.css('borderBottomWidth'))));
             // margin
-            var mt = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('marginTop'))));
-            var mb = Math.max(0 , Math.floor(parseFloat(this.getStyleVal('marginBottom'))));
+            var mt = Math.max(0 , Math.floor(parseFloat(this.css('marginTop'))));
+            var mb = Math.max(0 , Math.floor(parseFloat(this.css('marginBottom'))));
             var boxSizing;
             var bReg = /ie|edge/i;
 
@@ -1108,7 +1191,7 @@
             mb = isNaN(mb) ? 0 : mb;
 
             // box-sizing
-            boxSizing = this.getStyleVal('boxSizing');
+            boxSizing = this.css('boxSizing');
 
             if (boxSizing == 'content-box') {
                 return h + pt + pb + bt + bb + mt + mb;
@@ -1129,7 +1212,7 @@
                 throw new RangeError('不支持的位置，受支持的位置有：' + typeRange.join(' '));
             }
 
-            return parseFloat(this.getStyleVal(type));
+            return parseFloat(this.css(type));
         } ,
 
         /*
@@ -1204,7 +1287,7 @@
                 // 以下代码会导致页面回流，严重影响性能！
                 // 故而不能使用！
                 // parent = dom.parent();
-                // oPosition = parent.getStyleVal('position');
+                // oPosition = parent.css('position');
                 // // 父元素设置为 position
                 // // 这样才有 offsetTop or offsetleft 值
                 // isCssDefine = g.contain(oPosition , posTypeRange);
@@ -2512,7 +2595,8 @@
             if (self.isFunction(callback)) {
                 callback();
             }
-        } , 0);
+        }, 0);
+        // }, 20);
     };
 
     g.getUri = function(url){
@@ -2701,7 +2785,7 @@
                 rotateZ: 0 ,
                 skewX: 0 ,
                 skewY: 0 ,
-                skewZ: 0
+                // skewZ: 0
             };
         } else {
             // 2d 变换
@@ -2719,13 +2803,13 @@
                 // 以下两个参数会受到旋转和拉伸的影响，不可认为是 css 样式设置值！！
                 scaleX: val[0] ,
                 scaleY: val[3] ,
-                scaleZ: 0 ,
+                scaleZ: 1 ,
                 rotateX: 0 ,
                 rotateY: 0 ,
                 rotateZ: Math.round(Math.acos(val[0]) * unit) ,
                 skewX: Math.round(Math.atan(val[1]) * unit) ,
                 skewY: Math.round(Math.atan(val[3]) * unit) ,
-                skewZ: 0
+                // skewZ:
             };
         }
         return res;
