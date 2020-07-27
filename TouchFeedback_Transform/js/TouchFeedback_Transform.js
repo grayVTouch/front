@@ -50,6 +50,7 @@
         } ,
 
         end: function(){
+
             this.domLen = 0;
             this.dom.root.remove(this.touchFeedback.get(0));
             if (this.position !== this.dom.root.css('position')) {
@@ -154,9 +155,10 @@
                     opacity: 0 ,
                 });
                 dom.onTransition(function(){
-                    dom.parent().remove(dom.get(0));
+                    // 特别注意，子元素的频繁 增删 会影响 父元素事件的触发！！
+                    // dom.parent().remove(dom.get(0));
                     self.domLen--;
-                    if (self.domLen == 0) {
+                    if (self.domLen === 0) {
                         self.end();
                     }
 
@@ -165,7 +167,7 @@
         } ,
 
         initEvent: function(){
-            this.dom.root.on('mousedown' , this.mousedownEvent.bind(this) , true , false);
+            this.dom.root.on('mousedown' , this.mousedownEvent.bind(this));
         } ,
 
         run: function(){
