@@ -238,6 +238,23 @@
 	text-overflow: ellipsis;
 }
 
+
+/**
+ * 视频
+ */
+.uploader .preview .video {
+
+}
+
+.uploader .preview .video .inner {
+	height: 100%;
+}
+
+.uploader .preview  .video > .inner video {
+	height: 100%;
+}
+
+
 /*** 图片 ***/
 .uploader .preview  > .image {
 

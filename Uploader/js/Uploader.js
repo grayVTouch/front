@@ -72,6 +72,7 @@
             this.file = [];
 
             this.imageExtRange = ['jpg' , 'jpeg' , 'png' , 'gif' , 'bmp' , 'ico' , 'tif' , 'webp'];
+            this.videoExtRange = ['mp4' , 'mkv' , 'mov' , 'avi' , 'ts' , 'flv' , 'rmvb' , 'webm'];
 
             if (this.option.multiple) {
                 this.dom.fileInput.native('multiple' , true);
@@ -290,6 +291,8 @@
                 var ext = G.getFileSuffix(file.name);
                 if (G.contain(ext , self.imageExtRange)) {
                     dom = self.createImage(file.id , blobUrl);
+                } else if (G.contain(ext , self.videoExtRange)) {
+                    dom = self.createVideo(file.id , blobUrl);
                 } else {
                     dom = self.createFile(file.id , file.name , blobUrl);
                 }
@@ -393,6 +396,9 @@
 
                         console.log('error' , e);
                     } ,
+                    uError: function(e){
+                        console.log('uError' , e);
+                    } ,
                     netError: function (e) {
                         failed++;
                         self.status(file.id , false);
@@ -436,6 +442,8 @@
             var ext = G.getFileSuffix(val);
             if (G.contain(ext , this.imageExtRange)) {
                 dom = this.createPreviewImage(val);
+            } else if (G.contain(ext , this.videoExtRange)) {
+                dom = this.createPreviewVideo(val);
             } else {
                 filename = G.getFilename(val);
                 dom = this.createPreviewFile(filename , val);
@@ -501,6 +509,33 @@
             return div.get(0);
         } ,
 
+        createVideo: function(id , src) {
+            var div = document.createElement('div');
+            div = G(div);
+            div.addClass(['item' , 'video']);
+            div.data('id' , id);
+            div.data('url' , src);
+            var html = '';
+            html += '    <div class="inner">';
+            html += '       <video src="' + src + '"></video>';
+            html += '    </div>';
+            html += '   <div class="mask">';
+            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-chakan"></i></div>';
+            html += '       <div class="line delete run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-shanchu"></i></div>';
+            html += '   </div>';
+            html += '   <div class="progress hide">';
+            html += '       <div class="total">';
+            html += '           <div class="current"></div>';
+            html += '       </div>';
+            html += '    </div>';
+            html += '   <div class="status hide">';
+            html += '       <i class="success iconfont run-iconfont run-iconfont-chenggong hide"></i>';
+            html += '       <i class="error iconfont run-iconfont run-iconfont-shibai hide"></i>';
+            html += '    </div>';
+            div.html(html);
+            return div.get(0);
+        } ,
+
         createPreviewFile: function(name , url) {
             var div = document.createElement('div');
             div = G(div);
@@ -537,6 +572,31 @@
             var html = '';
             html += '    <div class="inner">';
             html += '       <img src="' + src + '" class="image">';
+            html += '    </div>';
+            html += '   <div class="mask">';
+            html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-chakan"></i></div>';
+            html += '   </div>';
+            html += '   <div class="progress hide">';
+            html += '       <div class="total">';
+            html += '           <div class="current"></div>';
+            html += '       </div>';
+            html += '    </div>';
+            html += '   <div class="status hide">';
+            html += '       <i class="success iconfont run-iconfont run-iconfont-chenggong hide"></i>';
+            html += '       <i class="error iconfont run-iconfont run-iconfont-shibai hide"></i>';
+            html += '    </div>';
+            div.html(html);
+            return div.get(0);
+        } ,
+
+        createPreviewVideo: function(src) {
+            var div = document.createElement('div');
+            div = G(div);
+            div.addClass(['item' , 'image']);
+            div.data('url' , src);
+            var html = '';
+            html += '    <div class="inner">';
+            html += '       <video src="' + src + '" controls type="video/mp4"></video>';
             html += '    </div>';
             html += '   <div class="mask">';
             html += '       <div class="line view run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-chakan"></i></div>';
