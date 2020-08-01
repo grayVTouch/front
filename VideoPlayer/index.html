@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../Run/base.css">
+    <link rel="stylesheet" href="../Run/font/iconfont.css">
+    <link rel="stylesheet" href="css/VideoPlayer.css">
+</head>
+<body>
+
+<style>
+    .player {
+        width: 960px;
+        height: 540px;
+    }
+</style>
+
+<div class="player">
+
+    <!-- 普通播放器 -->
+    <div class="video-player">
+
+        <!-- 标题 -->
+        <div class="title"></div>
+
+        <div class="video-wrapper">
+            <video class="video"></video>
+        </div>
+
+        <!-- 控制栏 -->
+        <div class="control">
+            <div class="tip">
+<!--                上次看到-->
+            </div>
+            <div class="progress">
+                <div class="inner">
+                    <div class="amount">
+                        <!-- 当前进度 -->
+                        <div class="ratio"></div>
+                        <!-- 已经加载部分 -->
+                        <div class="loaded"></div>
+                        <!-- 当前预览时间节点 -->
+                        <div class="at-position"></div>
+                    </div>
+                    <!-- 当前时间点 -->
+                    <div class="point">
+                        <!-- 实际移动的点 -->
+                        <div class="c-point"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="actions">
+                <div class="left">
+                    <div class="play-ctrl play run-action-feedback-round">
+                        <i class="run-iconfont run-iconfont-danseshixintubiao-"></i>
+                    </div>
+                    <div class="play-ctrl pause run-action-feedback-round"><i class="run-iconfont run-iconfont-zanting1"></i></div>
+                    <div class="video-ctrl prev run-action-feedback-round"><i class="run-iconfont run-iconfont-ai10"></i></div>
+                    <div class="video-ctrl next run-action-feedback-round"><i class="run-iconfont run-iconfont-ai09"></i></div>
+                    <div class="sound-ctrl">
+                        <div class="muted-ctrl">
+                            <div class="not-muted run-action-feedback-round"><i class="run-iconfont run-iconfont-shengyin"></i></div>
+                            <div class="muted run-action-feedback-round"><i class="run-iconfont run-iconfont-jingyin"></i></div>
+                        </div>
+                        <div class="sound">
+                            <div class="inner">
+                                <div class="ratio"></div>
+                                <div class="point"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-info">
+                        <span class="current-time">--:--</span>
+                        /
+                        <span class="duration">--:--</span>
+                    </div>
+                </div>
+                <div class="right">
+
+                    <div class="definition">
+                        <span class="name">1080P</span>
+                        <div class="settings hide">
+<!--                            <div class="item">360P</div>-->
+                        </div>
+                    </div>
+                    <div class="speed">
+                        <span class="name">1.x</span>
+                        <div class="settings hide">
+<!--                            <div class="item">速度 1</div>-->
+                        </div>
+                    </div>
+
+                    <div class="settings">
+                        <div class="set run-action-feedback-round"><i class=" run-iconfont run-iconfont-shezhi"></i></div>
+                        <div class="config">
+                            <div class="operation">
+                                <div class="item subtitle" data-id="subtitle">
+                                    <div class="name">字幕</div>
+                                    <div class="value">
+                                        <span class="text">无</span><i class="run-iconfont run-iconfont-next01"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mapping">
+                                <div class="mapping-item subtitle hide" data-id="subtitle">
+                                    <div class="title">
+                                        <div class="name back-to-operation">
+                                            <div class="text"><i class="run-iconfont run-iconfont-prev01 v-a-m m-r-5"></i>切换字幕</div>
+                                            <div class="action"></div>
+                                        </div>
+                                        <div class="action"></div>
+                                    </div>
+                                    <div class="list">
+                                        <div class="item">动作1</div>
+                                        <div class="item">动作2</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="screen not-full-screen run-action-feedback-round"><i class="run-iconfont run-iconfont-quanping"></i></div>
+                    <div class="screen full-screen run-action-feedback-round"><i class="run-iconfont run-iconfont-quanping1"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 预览 -->
+        <div class="preview hide">
+            <div class="inner">
+                <div class="move">
+                    <div class="image-wrapper">
+                        <img src="./res/test.jpeg" alt="" class="image">
+                    </div>
+                    <div class="time-point">--:--</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加载层 -->
+        <div class="loading hide">
+            <i class="run-iconfont run-iconfont-jiazai_dan"></i>
+        </div>
+
+        <!-- 海报 -->
+        <div class="poster">
+            <img src="" alt="" class="image">
+        </div>
+
+
+        <!-- 播放 | 暂停 提示 -->
+        <div class="play-ctrl-tip hide">
+            <div class="item play hide"><i class="run-iconfont run-iconfont-danseshixintubiao-"></i></div>
+            <div class="item pause hide"><i class="run-iconfont run-iconfont-zanting1"></i></div>
+            <div class="item volume hide"><i class="run-iconfont run-iconfont-shengyin"></i></div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="../SmallJs/SmallJs.js"></script>
+<script src="js/VideoPlayer.js"></script>
+<script>
+    const c = G('.player');
+    const v = new VideoPlayer(c.get(0) , {
+
+    });
+</script>
+</body>
+</html>

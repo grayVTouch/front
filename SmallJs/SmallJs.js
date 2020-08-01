@@ -820,7 +820,7 @@
 
         // 设置元素 Css 样式
         css: function(key , val){
-            if (!g.isValid(val) && g.isString(key)) {
+            if (!g.isObject(key) && g.isUndefined(val)) {
                 return this.getStyleVal(key);
             }
             var css3Range = [
@@ -4173,9 +4173,6 @@
      * 判断一个值是否是有效值
      */
     g.isValid = function(val){
-        if (val === '') {
-            return false;
-        }
         if (this.isUndefined(val)) {
             return false;
         }
@@ -5638,7 +5635,7 @@
                 s = '0' + s;
             }
         };
-
+        var res = '';
         if (format === 'D天H时I分S秒') {
             s = getTime(duration , sRatio , 60);
             i = getTime(duration , iRatio , 60);
@@ -5655,8 +5652,14 @@
                     second: s
                 };
             }
-
-            return d + '天' + h + '时' + i + '分' + s + '秒';
+            if (duration >= 24 * 3600) {
+                res += d + '天';
+            }
+            if (duration >=  3600) {
+                res += h + '时';
+            }
+            return res + h + '分' + s + '秒';
+            // return d + '天' + h + '时' + i + '分' + s + '秒';
         }
 
         if (format === 'HH:II:SS') {
@@ -5673,8 +5676,11 @@
                     second: s
                 };
             }
-
-            return h + ':' + i + ':' + s;
+            if (duration >=  3600) {
+                res += h + ':';
+            }
+            // return h + ':' + i + ':' + s;
+            return res + i + ':' + s;
         }
 
         if (format === 'HH时II分SS秒') {
@@ -5691,8 +5697,11 @@
                     second: s
                 };
             }
-
-            return h + '时' + i + '分' + s + '秒';
+            if (duration >=  3600) {
+                res += h + '时';
+            }
+            // return h + '时' + i + '分' + s + '秒';
+            return res + i + '分' + s + '秒';
         }
     };
 

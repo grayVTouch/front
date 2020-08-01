@@ -184,6 +184,14 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	display:none !important;
 }
 
+.run-v-hide {
+	visibility: hidden;
+}
+
+.run-v-show {
+	visibility: visible;
+}
+
 .simsun {
 	font-family: SimSun;
 }
@@ -196,11 +204,6 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .run-action-feedback {
 	position: relative;
 	overflow: hidden;
-}
-
-.run-action-feedback .run-iconfont {
-	position: relative;
-	z-index: 1;
 }
 
 .run-action-feedback:hover::before {
@@ -222,7 +225,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	left: 0;
 	top: 0;
 	transition: all 0.12s linear;
-	z-index: 0;
+	z-index: -1;
 }
 
 /***
@@ -235,8 +238,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	overflow: hidden;
 }
 
-.run-action-feedback-round .run-iconfont {
-	position: relative;
+.run-action-feedback-round > * {
 	z-index: 1;
 }
 
@@ -259,7 +261,10 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	left: 0;
 	top: 0;
 	border-radius: 50%;
-	transition: all 0.12s linear;
+	transition: all 0.12s;
+	-webkit-transition: all 0.12s;
+	-moz-transition: all 0.12s;
+	-o-transition: all 0.12s;
 	z-index: 0;
 }
 

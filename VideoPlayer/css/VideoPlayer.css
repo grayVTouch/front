@@ -1,0 +1,792 @@
+.video-player {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: black;
+}
+
+.video-player > .title {
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    text-shadow: 0 0 5px black;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 3;
+}
+
+.video-player > .title.hover {
+    opacity: 1;
+}
+
+.video-player .video-wrapper {
+    width: inherit;
+    height: inherit;
+
+}
+
+.video-player .video-wrapper .video {
+    width: inherit;
+    height: inherit;
+}
+
+.video-player .control {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: inherit;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0% , transparent);
+    /*height: 50px;*/
+    /*display: flex;*/
+    /*display: -webkit-flex;*/
+    /*justify-content: space-between;*/
+    /*align-items: center;*/
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 3;
+}
+
+.video-player .control.hover {
+    opacity: 1;
+}
+
+.video-player .control .progress {
+    padding: 0 12px;
+}
+
+.video-player .control .progress .inner {
+    position: relative;
+    width: 100%;
+    height: 15px;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.video-player .control .progress .inner .amount {
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 100%;
+    height: 3px;
+    transition: all 0.12s;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    z-index: 0;
+    transform: translate(0 , -50%);
+}
+
+.video-player .control .progress .inner .amount.hover {
+    transform: translate(0 , -50%) scale(1 , 2);
+
+}
+
+.video-player .control .progress .inner .amount .ratio ,
+.video-player .control .progress .inner .amount .loaded ,
+.video-player .control .progress .inner .amount .at-position
+{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: inherit;
+
+
+}
+
+.video-player .control .progress .inner .amount .ratio {
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left top;
+    background-color: rgba(255, 0, 0, 0.6);
+    z-index: 3;
+}
+
+.video-player .control .progress .inner .amount .loaded {
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left top;
+    background-color: rgba(197, 197, 197, 0.5);
+    z-index: 1;
+}
+
+.video-player .control .progress .inner .amount .at-position {
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left top;
+    background-color: rgba(197, 197, 197, 0.5);
+    z-index: 0;
+}
+
+.video-player .control .progress .inner .point {
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    transform: translate(0 , -50%);
+    z-index: 4;
+}
+
+.video-player .control .progress .inner .point.show .c-point {
+    transform: scale(1 , 1);
+
+}
+
+.video-player .control .progress .inner .point .c-point {
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    transform: scale(0 , 0);
+    background-color: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: all 0.12s;
+}
+
+.video-player .control .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    color: #fff;
+    height: 40px;
+}
+
+.video-player .control .actions > * {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    height: inherit;
+}
+
+.video-player .control .actions > * > * {
+    /*margin-right: 15px;*/
+}
+
+.video-player .control .actions > * > *:nth-last-of-type(1) {
+    /*margin-right: 0;*/
+}
+
+.video-player .control .actions .run-iconfont {
+    font-size: 20px;
+}
+
+.video-player .preview {
+    position: absolute;
+    bottom: 75px;
+    /*left: 100px;*/
+    padding: 0 10px;
+    width: 100%;
+    box-sizing: border-box;
+    transform: translateY(-10px);
+    transition: all 0.12s;
+}
+
+.video-player .preview.show {
+    transform: translateY(0px);
+}
+
+.video-player .preview .inner {
+
+}
+
+.video-player .preview .inner .move {
+    display: inline-block;
+}
+
+.video-player .preview .inner .move .image-wrapper {
+    width: 160px;
+    height: 90px;
+    overflow: hidden;
+    border: 3px solid #d2d2d2;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: 0;
+}
+
+
+
+.video-player .preview .inner .move .image-wrapper .image {
+    /*transform: translate(0 , 0);*/
+}
+
+.video-player .preview .inner .move .time-point {
+    text-align: center;
+    color: #fff;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.video-player .actions .play-ctrl ,
+.video-player .actions .video-ctrl ,
+.video-player .actions .muted-ctrl
+{
+    width: 40px;
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.video-player .actions .video-ctrl.disabled {
+    color: gray;
+    cursor: not-allowed;
+}
+
+/* 时间信息 */
+.video-player .actions .time-info {
+    font-size: 12px;
+    color: #fff;
+    padding: 0 10px;
+}
+
+/* 音量 */
+.video-player .actions .sound-ctrl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: inherit;
+}
+
+.video-player .actions .sound-ctrl .muted-ctrl {
+    width: 40px;
+    height: inherit;
+    margin-right: 5px;
+}
+
+.video-player .actions .sound-ctrl .muted-ctrl div {
+    width: inherit;
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-player .actions .sound-ctrl .sound {
+    position: relative;
+    height: 4px;
+    margin: 0 10px 0 0;
+    background-color: rgba(197, 197, 197, 0.5);
+    /*overflow: hidden;*/
+    transition: all 0.3s;
+
+}
+
+.video-player .actions .sound-ctrl .sound.hidden {
+    width: 0;
+}
+
+.video-player .actions .sound-ctrl .sound .inner {
+    width: 60px;
+    height: inherit;
+    cursor: pointer;
+    position: relative;
+}
+
+.video-player .actions .sound-ctrl .sound .inner .ratio {
+    left: 0;
+    width: 100%;
+    transform: scaleX(0.2);
+    height: inherit;
+    margin: 0;
+    background-color: #fff;
+    position: absolute;
+    transform-origin: 0 0;
+}
+
+.video-player .actions .sound-ctrl .sound .inner .point {
+    position: absolute;
+    left: -6px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    transform: translate(0 , -50%);
+    background-color: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 4;
+}
+
+/* 清晰度 */
+.video-player .actions .definition {
+    width: 60px;
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.video-player .actions .definition > .name {
+    opacity: 0.8;
+}
+
+.video-player .actions .definition:hover > .name {
+    opacity: 1;
+}
+
+.video-player .actions .definition .settings {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    opacity: 0;
+    /*transform: translate(-50% , calc(-100% - 20px));*/
+    transform: translate(-50% , calc(-100% - 10px));
+    background-color: rgba(28,28,28,0.9);
+    transition: all 0.3s;
+}
+
+.video-player .actions .definition .settings.show {
+    opacity: 1;
+    transform: translate(-50% , -100%);
+}
+
+.video-player .actions .definition .settings .item {
+    padding: 0 20px;
+    height: 30px;
+    transition: all 0.3s;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.video-player .actions .definition .settings .item:hover {
+    background-color: rgba(255 , 255 , 255 , 0.1);
+}
+
+.video-player .actions .definition .settings .item.cur {
+    background-color: rgba(255 , 255 , 255 , 0.1);
+}
+
+/* 速度 */
+.video-player .actions .speed {
+    width: 60px;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.video-player .actions .speed > .name {
+    opacity: 0.8;
+}
+
+.video-player .actions .speed:hover > .name {
+    opacity: 1;
+}
+
+.video-player .actions .speed .settings {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50% , calc(-100% - 10px));
+    background-color: rgba(28,28,28,0.9);
+    transition: all 0.3s;
+}
+
+.video-player .actions .speed .settings.show {
+    opacity: 1;
+    transform: translate(-50% , -100%);
+}
+
+.video-player .actions .speed .settings .item {
+    padding: 0 20px;
+    height: 30px;
+    transition: all 0.3s;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    white-space: nowrap;
+
+}
+
+.video-player .actions .speed .settings .item:hover {
+    background-color: rgba(255 , 255 , 255 , 0.1);
+}
+
+.video-player .actions .speed .settings .item.cur {
+    background-color: rgba(255 , 255 , 255 , 0.1);
+}
+
+/* 设置 */
+.video-player .actions .right > .settings {
+    width: 40px;
+    height: inherit;
+    position: relative;
+}
+
+.video-player .actions .right > .settings .set {
+    width: inherit;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.video-player .actions .right > .settings .config {
+    position: absolute;
+    top: 0;
+    /*left: 50%;*/
+    /*transform: translate(-50% , -100%);*/
+    right: 0;
+    background-color: rgba(28,28,28,0.9);
+    padding: 10px 0;
+    width: 200px;
+    transform: translate(40px , calc(-100% - 20px));
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.video-player .actions .right > .settings .config.show {
+    transform: translate(40px , calc(-100% - 10px));
+    opacity: 1;
+}
+
+.video-player .actions .right > .settings .config .operation .item {
+    height: 30px;
+    transition: all 0.3s;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.video-player .actions .right > .settings .config .operation .item:hover {
+    background-color: rgba(255 , 255 , 255 , 0.1);
+}
+
+.video-player .actions .right > .settings .config .operation .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.video-player .actions .right > .settings .config .operation .item > * {
+    margin: 0;
+}
+
+.video-player .actions .right > .settings .config .operation .item .run-iconfont {
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+.video-player .actions .right > .settings .mapping {
+    transition: all 0.3s;
+}
+
+.video-player .actions .right > .settings .mapping .title {
+
+}
+
+.video-player .actions .right > .settings .mapping .title .name {
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.video-player .actions .right > .settings .mapping .title .name > * {
+    margin: 0;
+}
+
+.video-player .actions .right > .settings .mapping .mapping-item .list {
+
+}
+
+.video-player .actions .right > .settings .mapping .mapping-item .list .item {
+    background-color: rgba(28, 28, 28, 0.9);
+}
+
+.video-player .actions .right > .settings .mapping .mapping-item .list .item {
+    height: 40px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.video-player .actions .right > .settings .mapping .mapping-item .list .item:hover {
+    background-color: rgba(255 , 255 , 255 , 0.1);
+}
+
+.video-player .actions .right > .settings .mapping .mapping-item .list .item.cur {
+    background-color: rgba(255 , 255 , 255 , 0.1);
+}
+
+/* 屏幕 */
+.video-player .actions .right .screen {
+    width: 40px;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.video-player .message {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 0 20px;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    border-radius: 5px;
+    transform: translate(-50% , -50%) scale(0.6 ,0.6);
+    opacity: 0.3;
+    transition: all 0.3s;
+    visibility: hidden;
+    z-index: -1;
+}
+
+.video-player .message.show {
+    opacity: 1;
+    visibility: visible;
+    z-index: 0;
+    transform: translate(-50% , -50%) scale(1 , 1);
+}
+
+.video-player .loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50% , -50%);
+    -webkit-transform: translate(-50% , -50%);
+    -moz-transform: translate(-50% , -50%);
+    -o-transform: translate(-50% , -50%);
+    -ms-transform: translate(-50% , -50%);
+}
+
+.video-player .loading i {
+    font-size: 50px;
+    color: #fff;
+    display: inline-block;
+    animation: loading 0.6s infinite linear;
+    -webkit-animation: loading 0.6s infinite linear;
+    -moz-animation: loading 0.6s infinite linear;
+    -o-animation: loading 0.6s infinite linear;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotateZ(0);
+        -webkit-transform: rotateZ(0);
+        -moz-transform: rotateZ(0);
+        -ms-transform: rotateZ(0);
+        -o-transform: rotateZ(0);
+    }
+
+    100% {
+        transform: rotateZ(360deg);
+        -webkit-transform: rotateZ(360deg);
+        -moz-transform: rotateZ(360deg);
+        -ms-transform: rotateZ(360deg);
+        -o-transform: rotateZ(360deg);
+    }
+}
+
+/**
+ * *********************
+ * 全屏后样式
+ * *********************
+ */
+.video-player.full-screen {
+
+}
+
+.video-player.full-screen .control .progress .inner {
+    height: 30px;
+}
+
+.video-player.full-screen .control .progress .inner .amount {
+    height: 6px;
+}
+
+.video-player.full-screen .control .progress .inner .point {
+    width: 20px;
+    height: 20px;
+}
+
+.video-player.full-screen .preview {
+    bottom: 90px;
+}
+
+.video-player.full-screen .actions .play-ctrl ,
+.video-player.full-screen .actions .video-ctrl ,
+.video-player.full-screen .actions .muted-ctrl ,
+.video-player.full-screen .actions .right > .settings ,
+.video-player.full-screen .actions .screen
+{
+    width: 50px;
+    height: 50px;
+}
+
+.video-player.full-screen .actions .right > .definition ,
+.video-player.full-screen .actions .right > .speed
+{
+    height: 50px;
+}
+
+.video-player.full-screen .actions .run-iconfont
+{
+    font-size: 22px;
+}
+
+.video-player.full-screen .sound-ctrl .sound {
+    height: 8px;
+}
+
+.video-player.full-screen .sound-ctrl .sound .inner {
+    width: 150px;
+}
+
+.video-player.full-screen .sound-ctrl .sound .inner .point {
+    width: 15px;
+    height: 15px;
+}
+
+.video-player.full-screen .actions .definition .settings .item ,
+.video-player.full-screen .actions .speed .settings .item
+{
+    padding: 0 40px;
+    height: 40px;
+}
+
+.video-player.full-screen .actions .right > .settings .config .operation .item {
+    height: 40px;
+}
+
+.video-player.full-screen .preview {
+    /*bottom: calc(100px +  90px * 0.5 / 2);*/
+}
+
+/*.video-player.full-screen .preview .inner {*/
+/*    !*transform: scale(1.5 , 1.5);*!*/
+/*}*/
+
+.video-player.full-screen .actions .time-info {
+    font-size: 14px;
+}
+
+.video-player.full-screen > .title {
+    font-size: 20px;
+}
+
+
+/**
+ * 字幕样式
+ */
+.video-player .video-wrapper .video::cue {
+    color: #fff;
+    background-color: transparent;
+    font-family: 微软雅黑;
+    line-height: 200px;
+    font-size: 24px;
+    text-shadow: 0 0 10px black;
+    white-space: nowrap;
+}
+
+.video-player.not-control .video-wrapper .video::cue {
+    line-height: 48px;
+}
+
+.video-player.full-screen .video-wrapper .video::cue {
+    line-height: 250px;
+    font-size: 30px;
+}
+
+.video-player.full-screen.not-control .video-wrapper .video::cue {
+    line-height: 100px;
+}
+
+/**
+ * ****************
+ * 播放暂停控制提示
+ * ****************
+ */
+.video-player .play-ctrl-tip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+}
+
+.video-player .play-ctrl-tip .item {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50% , -50%);
+    font-size: 30px;
+    color: #fff;
+    /*background-color: rgba(0,0,0,0.5);*/
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.6s;
+    opacity: 1;
+    box-shadow: 0 0 20px 0 black inset;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.video-player .play-ctrl-tip.animate .item {
+    opacity: 0;
+    transform: translate(-50% , -50%) scale(1.5 , 1.5);
+}
+
+.video-player .play-ctrl-tip .item .run-iconfont {
+    font-size: 30px;
+}
+
+/**
+ * 海报
+ */
+.video-player .poster {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.video-player .poster .image {
+    width: 100%;
+    min-height: 100%;
+}

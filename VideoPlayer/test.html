@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<video src="./res/test.mkv" id="v" width="800" controls style="margin-top: 50px;margin-left: 50px;" muted>
+    <track kind="subtitles" srclang="en" id="one" src="./res/subtitle_1.vtt" label="简体中文">
+    <track kind="subtitles" srclang="en" id="two" src="./res/subtitle_2.vtt" label="繁体中文">
+</video>
+
+<button type="button" id="test">设置</button>
+<script>
+    var v = document.getElementById('v');
+    console.log('videoTracks' , v.videoTracks);
+    console.log('audioTracks' , v.audioTracks);
+    console.log('textTracks' , v.textTracks);
+
+    var one = document.getElementById('one');
+    var two = document.getElementById('two');
+
+    var last;
+
+    var test = document.getElementById('test');
+    test.onclick = () => {
+
+        one.default = true;
+
+        one.track.mode = 'showing';
+
+        console.log(one);
+
+
+        // var track = document.createElement('track');
+        // track.kind = 'subtitles';
+        // track.srclang = 'zh';
+        // track.label = '额外的字幕';
+        // track.src = './res/subtitle_2.vtt';
+        // track.default = true;
+        // v.appendChild(track);
+        // // last = track;
+        // console.log('额外字幕已经添加');
+
+    };
+
+
+</script>
+</body>
+</html>

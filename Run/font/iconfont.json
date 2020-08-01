@@ -6,6 +6,118 @@
   "description": "Run ui 框架必备的一些字体/图标",
   "glyphs": [
     {
+      "icon_id": "807273",
+      "name": "静音",
+      "font_class": "jingyin",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "1025132",
+      "name": "静音",
+      "font_class": "jingyin1",
+      "unicode": "e754",
+      "unicode_decimal": 59220
+    },
+    {
+      "icon_id": "15972001",
+      "name": "mute - 静音",
+      "font_class": "mute-jingyin",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "1025133",
+      "name": "声音",
+      "font_class": "shengyin",
+      "unicode": "e753",
+      "unicode_decimal": 59219
+    },
+    {
+      "icon_id": "1447728",
+      "name": "声音",
+      "font_class": "shengyin1",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "9626929",
+      "name": "声音",
+      "font_class": "shengyin2",
+      "unicode": "e87c",
+      "unicode_decimal": 59516
+    },
+    {
+      "icon_id": "14480279",
+      "name": "声音",
+      "font_class": "shengyin3",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "996525",
+      "name": "下一个",
+      "font_class": "ai09",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "996526",
+      "name": "上一个",
+      "font_class": "ai10",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "1186832",
+      "name": "暂停",
+      "font_class": "zanting",
+      "unicode": "e681",
+      "unicode_decimal": 59009
+    },
+    {
+      "icon_id": "1311996",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "1447738",
+      "name": "播放",
+      "font_class": "bofang",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "7417096",
+      "name": "暂停",
+      "font_class": "zanting1",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "8103420",
+      "name": "下一个",
+      "font_class": "danseshixintubiao-",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "8103421",
+      "name": "上一个",
+      "font_class": "danseshixintubiao-1",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "9509955",
+      "name": "设置",
+      "font_class": "shezhi1",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
       "icon_id": "845789",
       "name": "笑脸",
       "font_class": "xiaolian",
