@@ -6,6 +6,139 @@
   "description": "Run ui 框架必备的一些字体/图标",
   "glyphs": [
     {
+      "icon_id": "1068519",
+      "name": "3-系列",
+      "font_class": "3xilie",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "1236838",
+      "name": "视频",
+      "font_class": "01",
+      "unicode": "e670",
+      "unicode_decimal": 58992
+    },
+    {
+      "icon_id": "2180837",
+      "name": "视频",
+      "font_class": "shipin",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    },
+    {
+      "icon_id": "2542891",
+      "name": "关联",
+      "font_class": "guanlian1",
+      "unicode": "e68e",
+      "unicode_decimal": 59022
+    },
+    {
+      "icon_id": "3851390",
+      "name": "专题",
+      "font_class": "zhuanti",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
+      "icon_id": "4890385",
+      "name": "图片",
+      "font_class": "shangchuantupian",
+      "unicode": "e6e9",
+      "unicode_decimal": 59113
+    },
+    {
+      "icon_id": "6965101",
+      "name": "系统模块",
+      "font_class": "xitongmokuai",
+      "unicode": "e674",
+      "unicode_decimal": 58996
+    },
+    {
+      "icon_id": "7335438",
+      "name": "公司",
+      "font_class": "gongsi",
+      "unicode": "eb1a",
+      "unicode_decimal": 60186
+    },
+    {
+      "icon_id": "10593789",
+      "name": "图片_jurassic",
+      "font_class": "jurassic_image",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "11121429",
+      "name": "公共模块",
+      "font_class": "gonggongmokuai",
+      "unicode": "e676",
+      "unicode_decimal": 58998
+    },
+    {
+      "icon_id": "11121489",
+      "name": "模块",
+      "font_class": "mokuai",
+      "unicode": "e677",
+      "unicode_decimal": 58999
+    },
+    {
+      "icon_id": "11399525",
+      "name": "用户",
+      "font_class": "yonghu5",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    },
+    {
+      "icon_id": "13856700",
+      "name": "专题",
+      "font_class": "zhuanti1",
+      "unicode": "e6bb",
+      "unicode_decimal": 59067
+    },
+    {
+      "icon_id": "14945197",
+      "name": "系列",
+      "font_class": "xilie",
+      "unicode": "e679",
+      "unicode_decimal": 59001
+    },
+    {
+      "icon_id": "15222472",
+      "name": "关联",
+      "font_class": "guanlian2",
+      "unicode": "e67a",
+      "unicode_decimal": 59002
+    },
+    {
+      "icon_id": "992467",
+      "name": "上升",
+      "font_class": "shangsheng",
+      "unicode": "e739",
+      "unicode_decimal": 59193
+    },
+    {
+      "icon_id": "992468",
+      "name": "下降",
+      "font_class": "xiajiang",
+      "unicode": "e73a",
+      "unicode_decimal": 59194
+    },
+    {
+      "icon_id": "2104636",
+      "name": "上升",
+      "font_class": "web-icon-",
+      "unicode": "e6db",
+      "unicode_decimal": 59099
+    },
+    {
+      "icon_id": "6148381",
+      "name": "下降",
+      "font_class": "xiajiang1",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
       "icon_id": "807273",
       "name": "静音",
       "font_class": "jingyin",

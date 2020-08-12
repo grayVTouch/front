@@ -215,6 +215,11 @@
             } , this.option.time);
         } ,
 
+        closeTab: function(tabId){
+            var tab = this.tab(tabId);
+            this.deleteTab(tab);
+        } ,
+
         // 关闭事件
         closeEvent: function(e){
             G.stop(e);
@@ -387,6 +392,7 @@
 
         // 鼠标点击后触发事件（拖动标签时）
         tabMousedownEvent: function(e){
+            G.prevent(e);
             if (!this.option.draggable) {
                 return ;
             }
@@ -413,6 +419,7 @@
             if (!this.canDrag) {
                 return ;
             }
+            G.prevent(e);
             var tab = this.moveDOM;
 
             // 拖动标签
@@ -652,9 +659,8 @@
             if (!this.canDrag) {
                 return ;
             }
-
+            G.prevent(e);
             this.canDrag = false;
-
             this.determinePosition();
         } ,
 

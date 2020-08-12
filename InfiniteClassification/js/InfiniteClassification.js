@@ -278,8 +278,12 @@
         } ,
 
         // 展开指定项
-        spreadSpecified: function(ids){
+        spreadSpecified: function(ids , invoke){
+            invoke = G.isBoolean(invoke) ? invoke : true;
             var self = this;
+            if (!G.isArray(ids)) {
+                ids = [ids];
+            }
             ids.forEach(function(_id){
                 var item = G(self.item(_id));
                 var parents = item.parents({
@@ -302,14 +306,14 @@
                         if (self._focus) {
                             self.focus(id);
 
-                            if (G.isFunction(self._click)) {
+                            if (invoke && G.isFunction(self._click)) {
                                 self._click.call(this , id);
                             }
                         }
-                        if (isEmpty === 'y' && G.isFunction(self._child)) {
+                        if (invoke && isEmpty === 'y' && G.isFunction(self._child)) {
                             self._child.call(self , id);
                         }
-                        if (isEmpty === 'n' && G.isFunction(self._parent)) {
+                        if (invoke && isEmpty === 'n' && G.isFunction(self._parent)) {
                             self._parent.call(self , id);
                         }
                         if (res.length > 0) {

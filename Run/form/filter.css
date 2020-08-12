@@ -4,7 +4,7 @@
 .filter-option {
 	border:1px solid #ccc;
 	font-size:12px;
-	padding:5px;
+	padding: 5px 5px 10px 5px;
 }
 
 .filter-option:after {
@@ -25,6 +25,7 @@
 	-webkit-transition:all 0.15s linear;
 	-moz-transition:all 0.15s linear;
 	-o-transition:all 0.15s linear;
+	margin-top: 5px;
 }
 
 .filter-option .option:hover {
@@ -35,6 +36,10 @@
 	display:block;
 	content:'';
 	clear:both;
+}
+
+.filter-option .option .value .msg {
+	color: #999;
 }
 
 .filter-option .option .field , .filter-option .option .value {

@@ -2755,6 +2755,11 @@
         return dir;
     };
 
+    g.isEmptyObject = function(obj){
+        return Object.keys(obj).length <= 0;
+    };
+
+
     // 解析 transform 属性
     g.parseTransform = function(val){
         var reg     = /^matrix3d/;
@@ -4182,6 +4187,10 @@
         return true;
     };
 
+    g.isEmptyString = function(val){
+        return this.isString(val) && val.length === 0;
+    };
+
     g.isValidVal = function(val){
         console.warn('请使用 isValid 代替 isValidVal');
         return this.isValid(val);
@@ -4428,6 +4437,7 @@
 
 
     /*
+     * 代码很优美！虽然性能不高（暂存代码）
      * 递归 对象|数组 拷贝
      * @param Object obj 数组 | 对象
      * @return Object
@@ -4435,7 +4445,7 @@
     g.copyObj = function(obj , isDeep){
         var typeRange = ['Array' , 'Object'];
         var rel		  = g.type(obj)    === 'Object'  ? {}     : [];
-        var isDeep    = g.type(isDeep) === 'Boolean' ? isDeep : true;
+            isDeep    = g.type(isDeep) === 'Boolean' ? isDeep : true;
         var copy;
 
         // 核心函数
@@ -5417,9 +5427,9 @@
                 res.push(parent);
                 return get(parent , res);
             };
-
+            var saveSelf = self && g.isValid(cur);
             var parents = get(cur , []);
-            if (self) {
+            if (saveSelf) {
                 // 保留自身
                 parents.unshift(cur);
             }
@@ -5481,7 +5491,7 @@
                 }
                 return res;
             };
-            var saveSelf = self && cur !== false;
+            var saveSelf = self && g.isValid(cur);
             var res = get(id , saveSelf ? 2 : 1);
             if (saveSelf) {
                 // 保存自身

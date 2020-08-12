@@ -449,6 +449,9 @@
                 dom = this.createPreviewFile(filename , val);
             }
             this.initFileDomEvent(dom);
+            if (this.option.mode === 'override') {
+                this.clearAll();
+            }
             this.dom.preview.append(dom);
         } ,
 
