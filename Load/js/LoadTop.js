@@ -63,7 +63,7 @@
             });
             this._text_ = G('.text' , this._LoadTop.get(0));
 
-            this._LoadTopH = this._LoadTop.height('border-box');
+            this._LoadTopH = this._LoadTop.height();
             this._minOpacity = 0;
             this._maxOpacity = 1;
 

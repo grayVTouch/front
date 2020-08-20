@@ -90,7 +90,7 @@
         initDynamic: function(){
             var self = this;
             
-            this.multipleTabW  = this.multipleTab.width('content-box');
+            this.multipleTabW  = this.multipleTab.width();
             this.tabsW         = this.multipleTabW - this.scrollBarW;
             this.__tabs__      = G('.tab' , this.tabs.get(0));
 
@@ -110,8 +110,8 @@
                 var ico     = G('.ico'  , dom.get(0));
                 var text    = G('.text' , dom.get(0));
                 var close   = G('.close', dom.get(0));
-                var icoW    = ico.width('border-box');
-                var closeW  = close.width('border-box');
+                var icoW    = ico.width();
+                var closeW  = close.width();
                 var textML  = icoW + 10;
                 var textMR  = closeW + 15;
                 var textW   = self.tabW - textML - textMR;
@@ -379,7 +379,7 @@
             var clientW = document.documentElement.clientWidth;
             var extraL  = this.tabs.getDocOffsetVal('left');
             var extraR  = clientW - extraL - this.tabsW;
-            var w       = tab.width('border-box');
+            var w       = tab.width();
             var l       = tab.getDocOffsetVal('left');
             var minL    = -(l - extraL);
             var maxL    = clientW - extraL - extraR - w;
@@ -464,7 +464,7 @@
             index = Math.max(0 , index - 1);
 
             var curLeft = tab.getCoordVal('left');
-            // var tabW = tab.width('border-box');
+            // var tabW = tab.width();
             var prev = -(index * this.tabW + this.tabW / 3);
             var next = -prev;
 

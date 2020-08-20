@@ -42,8 +42,8 @@
         _initStaticHTML: function(){} ,
 
         _initStaticArgs: function(){
-            this._conW = this._con.width('border-box');
-            this._conH = this._con.height('border-box');
+            this._conW = this._con.width();
+            this._conH = this._con.height();
 
             this._oneStartX = 0;
             this._twoStartX = 0;
@@ -108,8 +108,8 @@
             this._twoStartY = e.touches[1].clientY;
             this._sL = this._con.getCoordVal('left');
             this._sT = this._con.getCoordVal('top');
-            this._sW = this._con.width('border-box');
-            this._sH = this._con.height('border-box');
+            this._sW = this._con.width();
+            this._sH = this._con.height();
 
             this._tmpOneX = 0;
             this._tmpTwoX = 0;
@@ -248,7 +248,7 @@
 
         // 是否缩放状态
         status: function(){
-            var conW = this._con.width('border-box');
+            var conW = this._con.width();
 
             if (conW < this._conW) {
                 return 'down';

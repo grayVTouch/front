@@ -110,8 +110,8 @@
         } ,
 
         _initDynamicArgs: function(){
-            this._conW = this._con_.width('border-box');
-            this._conH = this._con_.height('border-box');
+            this._conW = this._con_.width();
+            this._conH = this._con_.height();
             this._maxL = 0;
             this._minL = -this._conW;
             this._minR = -this._conW;

@@ -74,7 +74,7 @@
             this.value.single = '单选';
             this.value.multiple = '多选';
             this.value.mode = 'single';
-            this.value.brandH = this.dom.brand.height('border-box');
+            this.value.brandH = this.dom.brand.height();
             // 缓存的 idList
             this.value.idList = [];
 

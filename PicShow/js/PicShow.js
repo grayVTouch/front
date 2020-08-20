@@ -181,8 +181,8 @@
         // 动态参数
         _initDynamicArgs: function(){
             // 容器的宽高
-            this._picShowW = this._picShow.width('border-box');
-            this._picShowH = this._picShow.height('border-box');
+            this._picShowW = this._picShow.width();
+            this._picShowH = this._picShow.height();
 
             // 内容的宽高
             this._previewW  = this._picShowW;
@@ -195,7 +195,7 @@
             this._index_H	= this._picShowH - this._interval - this._previewH;
 
             // 按钮的宽度
-            this._btnW = this._prevForSmall.width('border-box');
+            this._btnW = this._prevForSmall.width();
 
             // 小图列表项顶级容器宽度
             this._smallW = this._index_W - this._btnW * 2;
