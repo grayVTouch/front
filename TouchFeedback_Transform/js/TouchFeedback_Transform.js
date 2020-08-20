@@ -45,8 +45,8 @@
             touchFeedback.className = 'touch-feedback';
             this.dom.root.append(touchFeedback);
             this.touchFeedback = G(touchFeedback);
-            this.conW = this.touchFeedback.width();
-            this.conH = this.touchFeedback.height();
+            this.conW = this.touchFeedback.width('border-box');
+            this.conH = this.touchFeedback.height('border-box');
         } ,
 
         end: function(){

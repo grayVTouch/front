@@ -422,7 +422,7 @@
 
             var child   = G('.child' , item.get(0)).first();
             var list    = G('.list' , child.get(0)).first();
-            var endH = list.height();
+            var endH = list.height('border-box');
 
             item.data('status' , status);
 

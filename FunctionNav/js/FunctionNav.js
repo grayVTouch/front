@@ -76,7 +76,7 @@
             for (i = 0; i < this._functions_.length; ++i)
             {
                 cur  = this._functions_.jump(i , true);
-                curW = cur.width();
+                curW = cur.width('border-box');
                 this._functionsW += curW;
             }
 
@@ -116,7 +116,7 @@
             var left = 0;
             prevSbilings.each(function(dom){
                 dom = G(dom);
-                left += dom.width();
+                left += dom.width('border-box');
             });
             return left;
         } ,
@@ -126,7 +126,7 @@
             // 当前选中项
             var _function = G(this.find(id));
             // 设置滑块宽度
-            var sliderW = _function.width();
+            var sliderW = _function.width('border-box');
             var sliderL = this.sliderLeft(id);
 
             // 滑块移动

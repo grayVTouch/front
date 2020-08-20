@@ -336,7 +336,7 @@
             // 显著的从视野下被删除
             imageItem.addClass('focus-line');
 
-            var sW = imageItem.width();
+            var sW = imageItem.width('border-box');
             var eW = 0;
 
             imageItem.animate({

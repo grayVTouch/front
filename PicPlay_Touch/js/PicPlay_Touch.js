@@ -191,8 +191,8 @@
         } ,
 
         _initDynamicArgs: function(){
-            this._maxW = Math.max(0 , this._picPlayTouch.width());
-            this._maxH = Math.max(0 , this._picPlayTouch.height());
+            this._maxW = Math.max(0 , this._picPlayTouch.width('content-box'));
+            this._maxH = Math.max(0 , this._picPlayTouch.height('content-box'));
 
             // 索引 与 图片分离时，间隔
             this._marginForImage = 20;
@@ -266,7 +266,7 @@
 
                 if (this._placementType === 'horizontal') {
                     this._curIndexW = this._maxW;
-                    this._curIndexH = this._curIndex.height();
+                    this._curIndexH = this._curIndex.height('border-box');
 
                     if (this._indexPos === 'inside') {
                         this._imagesW = this._maxW;
@@ -276,7 +276,7 @@
                         this._imagesH = this._maxH - this._marginForIndex - this._curIndexH;
                     }
                 } else {
-                    this._curIndexW = this._curIndex.width();
+                    this._curIndexW = this._curIndex.width('border-box');
                     this._curIndexH = this._maxH;
 
                     if (this._indexPos === 'inside') {
@@ -426,7 +426,7 @@
             // vertical 拖拽时，拖拽超过长度允许切换
             this._verticalMRange 	= this._imagesW * 0.4;
 
-            this._btnW = Math.max(0 , this._prevBtn.width());
+            this._btnW = Math.max(0 , this._prevBtn.width('border-box'));
             this._btnH = this._imagesH;
 
 

@@ -542,8 +542,8 @@
             if (scroll) {
                 var floor = Math.ceil(index / 2);
                 var margin = (floor - 1 ) * parseInt(indexDom.css('marginBottom'));
-                var top = floor * indexDom.height() + margin;
-                var listH = this.dom.list.height();
+                var top = floor * indexDom.height('border-box') + margin;
+                var listH = this.dom.list.height('content-box');
                 if (top <= listH) {
                     this.dom.list.vScroll(300 , 0);
                 } else {

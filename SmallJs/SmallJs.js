@@ -615,8 +615,8 @@
 
             var containerSW = container.scrollWidth();
             var containerSH = container.scrollHeight();
-            var containerCW = container.width();
-            var containerCH = container.height();
+            var containerCW = container.width('padding-box');
+            var containerCH = container.height('padding-box');
             var maxSW       = containerSW - containerCW;
             var maxSH       = containerSH - containerCH;
 
@@ -670,7 +670,7 @@
             {
                 cur = parents.jump(i , true);
 
-                if (cur.width() > cur.scrollWidth() || cur.height() > cur.scrollHeight()) {
+                if (cur.width('padding-box') > cur.scrollWidth() || cur.height('padding-box') > cur.scrollHeight()) {
                     return cur;
                 }
             }
@@ -985,11 +985,10 @@
          * @param   String   boxType   待获取元素的盒子类型，支持 content-box | padding-box | border-box | true <=> content-box
          * @return  Number
          */
-        width: function(){
-            var boxType = this.css('box-sizing');
+        width: function(boxType){
             // 盒子类型
-            // var boxRange = ['border-box' , 'padding-box' , 'content-box'];
-            // boxType =  g.contain(boxType , boxRange) ? boxType : 'content-box';
+            var boxRange = ['border-box' , 'padding-box' , 'content-box'];
+            boxType =  g.contain(boxType , boxRange) ? boxType : 'content-box';
             // 宽度
             var w = Math.max(0 , Math.floor(parseFloat(this.css('width'))));
             // padding
@@ -1060,11 +1059,10 @@
          * @param   String   boxType   待获取元素的盒子类型，支持 content-box | padding-box | border-box | true <=> content-box
          * @return  Number
          */
-        height: function(){
-            var boxType = this.css('box-sizing');
+        height: function(boxType){
             // 盒子类型
-            // var boxRange = ['border-box' , 'padding-box' , 'content-box'];
-            // boxType =  g.contain(boxType , boxRange) ? boxType : 'content-box';
+            var boxRange = ['border-box' , 'padding-box' , 'content-box'];
+            boxType =  g.contain(boxType , boxRange) ? boxType : 'content-box';
 
             // 高度
             var h = Math.max(0 , Math.floor(parseFloat(this.css('height'))));
@@ -2393,10 +2391,10 @@
                 dom = g(dom);
 
                 var con	   = g(container);
-                var conW   = con.width();
-                var conH   = con.height();
-                var myW    = dom.width();
-                var myH    = dom.height();
+                var conW   = con.width('padding-box');
+                var conH   = con.height('padding-box');
+                var myW    = dom.width('border-box');
+                var myH    = dom.height('border-box');
 
                 switch (pos)
                 {
@@ -3197,8 +3195,8 @@
 
         var minL = dom.getDocOffsetVal('left');
         var minT = dom.getDocOffsetVal('top');
-        var domW = dom.width();
-        var domH = dom.height();
+        var domW = dom.width('border-box');
+        var domH = dom.height('border-box');
         var maxL = minL +domW;
         var maxT = minT + domH;
 

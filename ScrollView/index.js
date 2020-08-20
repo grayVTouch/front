@@ -9,7 +9,7 @@
     let items = inner.children();
     const maxIndex = items.length - 1;
     const minIndex = 0;
-    const outerW = outer.width();
+    const outerW = outer.width('content-box');
 
     inner.css({
          width: 50 * items.length + 'px'
@@ -39,14 +39,14 @@
         for (let i = 0; i < prevSiblings.length; ++i)
         {
             let cur = prevSiblings.jump(i , true);
-            left += cur.width();
+            left += cur.width('border-box');
         }
         return left;
     };
 
     let getMiddleLeftVal = (index) => {
         let dom = findWithDom(index);
-        let domW = dom.width();
+        let domW = dom.width('border-box');
         return (outerW - domW) / 2;
     };
 
