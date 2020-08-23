@@ -8,7 +8,7 @@
 .video-player > .title {
     color: #fff;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     position: absolute;
     left: 0;
@@ -19,6 +19,7 @@
     opacity: 0;
     transition: all 0.3s;
     z-index: 3;
+    padding: 0 20px;
 }
 
 .video-player > .title.hover {
@@ -187,6 +188,7 @@
     box-sizing: border-box;
     transform: translateY(-10px);
     transition: all 0.12s;
+    z-index: 10;
 }
 
 .video-player .preview.show {
@@ -295,7 +297,7 @@
 .video-player .actions .sound-ctrl .sound .inner .ratio {
     left: 0;
     width: 100%;
-    transform: scaleX(0.2);
+    transform: scaleX(0);
     height: inherit;
     margin: 0;
     background-color: #fff;

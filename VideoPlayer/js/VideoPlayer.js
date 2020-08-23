@@ -10,6 +10,7 @@
             throw new Error('参数 1 错误');
         }
         this.option = {
+            debug: true ,
             // 海报
             // poster: './res/poster.jpg' ,
             poster: '' ,
@@ -336,7 +337,6 @@
             this.initPreview();
             this.volume(this.data.volume);
             this.muted(this.data.muted , false);
-            this.initPoster(this.data.poster);
             this.data.fullscreen ? this.fullscreen() : this.notFullscreen();
             this.data.onceForInit = false;
         } ,
@@ -401,10 +401,10 @@
 
         // 视频定位中
         seekingByMouseMove: function(e){
-            G.prevent(e);
             if (!this.data.canAjustProgress) {
                return ;
             }
+            G.prevent(e);
             // 视频进度
             this.data.endXForVideo = e.clientX;
             var xAmount = this.data.endXForVideo - this.data.startXForVideo;
@@ -416,10 +416,10 @@
 
         // 视频定位结束
         seekEndByMouseUp: function(e){
-            G.prevent(e);
             if (!this.data.canAjustProgress) {
                 return ;
             }
+            G.prevent(e);
             this.data.canAjustProgress = false;
             this.progress(this.data.endRatio , true);
             this.buffered();
@@ -613,9 +613,10 @@
             // 视频播放结束
             this.dom.video.on('ended' , this.endedEvent.bind(this));
             // 禁止右键功能
-            this.dom.video.on('contextmenu' , function(){
-                return false;
-            });
+            if (!this.data.debug) {
+                // 非开发模式禁用右键菜单
+                this.dom.video.on('contextmenu' , G.prevent);
+            }
 
             // 播放
             this.dom.play.on('click' , this.playEvent.bind(this));
@@ -711,6 +712,9 @@
         } ,
 
         hideTitle: function(){
+            if (this.data.paused) {
+                return ;
+            }
             this.dom.title.removeClass('hover');
         } ,
 
@@ -960,10 +964,10 @@
         } ,
 
         soundSeekingByMouseMove: function(e){
-            G.prevent(e);
             if (!this.data.canAjustVolume) {
                 return ;
             }
+            G.prevent(e);
             var volumeX = e.clientX;
             var amount = volumeX - this.data.volumeX;
             var ratio = amount / this.data.innerForSoundW;
@@ -976,10 +980,10 @@
         } ,
 
         soundSeekEndByMouseUp: function(e){
-            G.prevent(e);
             if (!this.data.canAjustVolume) {
                 return ;
             }
+            G.prevent(e);
             this.data.canAjustVolume = false;
             this.data.tempVolume = this.data.volume;
         } ,
@@ -1013,7 +1017,7 @@
             if (this.data.video.subtitle.length > 0) {
                 this.switchSubtitleById(this.data.video.subtitle[0].name);
             } else {
-                this.textForSubtitleInOperation.text('无');
+                this.dom.textForSubtitleInOperation.text('无');
             }
             this.speed(this.data.speed);
             if (!this.data.onceForLoadedData) {
@@ -1102,6 +1106,9 @@
 
         initVideo: function(){
             var self = this;
+
+            this.initPoster(this.data.video.thumb);
+
             this.dom.settingsForDefinition.html('');
             this.dom.listForSubtitleInMapping.html('');
             this.dom.title.text(this.data.video.name);
@@ -1284,7 +1291,6 @@
             this.dom.nameForSpeed.text(_speed.value);
             item.highlight('cur' , this.dom.itemsForSpeed.get());
             this.hideSpeed();
-
         } ,
 
         poster: function(poster){

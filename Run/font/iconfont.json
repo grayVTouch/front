@@ -6,6 +6,27 @@
   "description": "Run ui 框架必备的一些字体/图标",
   "glyphs": [
     {
+      "icon_id": "999227",
+      "name": "刷新",
+      "font_class": "ai245",
+      "unicode": "e6ea",
+      "unicode_decimal": 59114
+    },
+    {
+      "icon_id": "2122384",
+      "name": "空",
+      "font_class": "empty",
+      "unicode": "e736",
+      "unicode_decimal": 59190
+    },
+    {
+      "icon_id": "13640183",
+      "name": "空",
+      "font_class": "kong-copy",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
       "icon_id": "1068519",
       "name": "3-系列",
       "font_class": "3xilie",

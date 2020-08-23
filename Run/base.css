@@ -393,6 +393,10 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	font-size: 30px !important;
 }
 
+.f-40 {
+	font-size: 30px !important;
+}
+
 /**
  * *****************
  * margin
@@ -652,4 +656,22 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
 .run-none-border {
 	border: none !important;
+}
+
+/**
+ * *****************************
+ * 两端对齐布局
+ * *****************************
+ */
+.run-space-between {
+	display: flex;
+	display: -webkit-flex;
+	justify-content: space-between;
+	-webkit-justify-content: space-between;
+	align-items: center;
+	-webkit-align-items: center;
+}
+
+.run-space-between > * {
+	margin: 0;
 }

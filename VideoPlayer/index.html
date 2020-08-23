@@ -22,10 +22,11 @@
     <div class="video-player">
 
         <!-- 标题 -->
-        <div class="title"></div>
+        <div class="title hover"></div>
 
         <div class="video-wrapper">
-            <video class="video"></video>
+            <!-- crossorigin的值有： anonymous | use-credentials -->
+            <video class="video" crossorigin="anonymous"></video>
         </div>
 
         <!-- 控制栏 -->
@@ -62,7 +63,7 @@
                     <div class="sound-ctrl">
                         <div class="muted-ctrl">
                             <div class="not-muted run-action-feedback-round"><i class="run-iconfont run-iconfont-shengyin"></i></div>
-                            <div class="muted run-action-feedback-round"><i class="run-iconfont run-iconfont-jingyin"></i></div>
+                            <div class="muted run-action-feedback-round hide"><i class="run-iconfont run-iconfont-jingyin"></i></div>
                         </div>
                         <div class="sound">
                             <div class="inner">
@@ -85,6 +86,7 @@
 <!--                            <div class="item">360P</div>-->
                         </div>
                     </div>
+
                     <div class="speed">
                         <span class="name">1.x</span>
                         <div class="settings hide">
@@ -94,7 +96,7 @@
 
                     <div class="settings">
                         <div class="set run-action-feedback-round"><i class=" run-iconfont run-iconfont-shezhi"></i></div>
-                        <div class="config">
+                        <div class="config hide">
                             <div class="operation">
                                 <div class="item subtitle" data-id="subtitle">
                                     <div class="name">字幕</div>
@@ -131,7 +133,7 @@
             <div class="inner">
                 <div class="move">
                     <div class="image-wrapper">
-                        <img src="./res/test.jpeg" alt="" class="image">
+                        <img src="" alt="" class="image">
                     </div>
                     <div class="time-point">--:--</div>
                 </div>
@@ -165,7 +167,72 @@
 <script>
     const c = G('.player');
     const v = new VideoPlayer(c.get(0) , {
-
+        // 海报
+        // poster: './res/poster.jpg' ,
+        poster: './res/poster.jpeg' ,
+        // 单次步进时间，单位：s
+        step: 30 ,
+        // 音频步进：0-1
+        soundStep: 0.2 ,
+        // 视频源
+        playlist: [
+            {
+                // 视频名臣
+                name: '萤子' ,
+                // 视频封面
+                thumb: '' ,
+                // 视频预览图片
+                preview: {
+                    // src: './res/preview.jpeg' ,
+                    src: 'http://res.xq.test/upload/20200821/20200821174610ZjbQvS.jpeg' ,
+                    width: 160 ,
+                    height: 90 ,
+                    duration: 1 ,
+                    count: 5 ,
+                } ,
+                definition: [
+                    {
+                        name: '原画' ,
+                        // src: './res/test.mp4' ,
+                        src: 'http://res.xq.test/upload/20200821/20200821174611rbdUmZ.mp4' ,
+                    } ,
+                ] ,
+                // 字幕
+                subtitle: [
+                    // {
+                    //     name: '简体中文' ,
+                    //     src: './res/cyd_04.vtt' ,
+                    // } ,
+                ] ,
+            } ,
+        ] ,
+        index: 1 ,
+        muted: false ,
+        volume: 1 ,
+        speed: 1 ,
+        // 开启字幕
+        enableSubtitle: true ,
+        speeds: [
+            {
+                key: 0.5 ,
+                value: ' 0.5x' ,
+            } ,
+            {
+                key: 1 ,
+                value: '正常' ,
+            } ,
+            {
+                key: 2,
+                value: '2x' ,
+            } ,
+            {
+                key: 3 ,
+                value: '3x' ,
+            } ,
+        ] ,
+        definition: '原画' ,
+        // 当视频播放结束时的回调
+        ended: null ,
     });
 </script>
 </body>
