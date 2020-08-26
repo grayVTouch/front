@@ -75,6 +75,8 @@
             definition: '480P' ,
             // 当视频播放结束时的回调
             ended: null ,
+            // 视频切换后索引
+            switch: null ,
         };
 
         if (!G.isObject(option)) {
@@ -88,6 +90,7 @@
         this.option.speeds  = option.speeds ? option.speeds : this.option.speeds;
         this.option.definition = option.definition ? option.definition : this.option.definition;
         this.option.ended       = option.ended ? option.ended : this.option.ended;
+        this.option.switch       = option.switch ? option.switch : this.option.switch;
         this.option.step        = option.step ? option.step : this.option.step;
         this.option.soundStep   = G.isNumeric(option.soundStep) && option.soundStep >= 0 && option.soundStep <= 1 ? option.soundStep : this.option.soundStep;
         this.option.playlist        = option.playlist ? option.playlist : this.option.playlist;
@@ -339,6 +342,10 @@
             this.muted(this.data.muted , false);
             this.data.fullscreen ? this.fullscreen() : this.notFullscreen();
             this.data.onceForInit = false;
+            if (G.isFunction(this.data.switch)) {
+                this.data.switch.call(this , this.data.index);
+            }
+
         } ,
 
         initPoster: function(poster){
@@ -536,7 +543,7 @@
             this.initDynamic();
         } ,
 
-        prevEvent: function(){
+        prev: function(){
             if (this.data.index === this.data.minIndex) {
                 return ;
             }
@@ -545,6 +552,9 @@
         } ,
 
         index: function(index){
+            if (G.isUndefined(index)) {
+                return this.data.index;
+            }
             this.switchVideoByIndex(index);
         } ,
 
@@ -561,7 +571,7 @@
             }
         } ,
 
-        nextEvent: function(){
+        next: function(){
             if (this.data.index === this.data.maxIndex) {
                 return ;
             }
@@ -585,10 +595,29 @@
             this.initVideoCtrlStyle();
             this.initVideo();
             this.initPreview();
+            if (G.isFunction(this.data.switch)) {
+                this.data.switch.call(this , this.data.index);
+            }
         } ,
 
         endedEvent: function(){
             this.pause();
+            if (G.isFunction(this.data.ended)) {
+                this.data.ended.call(this);
+            }
+        } ,
+
+        soundSeekByWheel: function(e) {
+            G.prevent(e);
+            let soundStep;
+            if (e.deltaY < 0) {
+                // 音量放大
+                soundStep = this.data.soundStep;
+            } else {
+                // 音量缩小
+                soundStep = -this.data.soundStep;
+            }
+            this.soundStep(soundStep);
         } ,
 
         initEvent: function(){
@@ -631,9 +660,9 @@
             // 取消全屏
             this.dom.notFullscreen.on('click' , this.notFullscreen.bind(this));
             // 上一个视频
-            this.dom.prev.on('click' , this.prevEvent.bind(this));
+            this.dom.prev.on('click' , this.prev.bind(this));
             // 下一个视频
-            this.dom.next.on('click' , this.nextEvent.bind(this));
+            this.dom.next.on('click' , this.next.bind(this));
 
             // 视频预览
             this.dom.innerForProgress.on('mouseenter' , this.previewStartByMouseEnter.bind(this));
@@ -684,6 +713,7 @@
             this.dom.videoPlayer.on('mousemove' , this.initVideoPlayerEvent.bind(this));
             this.dom.videoPlayer.on('dblclick' , this.screenBydblClick.bind(this));
             this.dom.videoPlayer.on('click' , this.autoSwitchVideoPlayerPlayStatus.bind(this));
+            this.dom.videoPlayer.on('wheel' , this.soundSeekByWheel.bind(this));
             this.dom.title.on('click' , G.stop);
             this.dom.control.on('click' , function(e){
                 G.stop(e);
@@ -764,11 +794,11 @@
                     break;
                 case 33:
                     // page up
-                    this.prevEvent();
+                    this.prev();
                     break;
                 case 34:
                     // page down
-                    this.nextEvent();
+                    this.next();
                     break;
 
             }

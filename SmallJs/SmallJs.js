@@ -4255,6 +4255,13 @@
         return check(obj);
     };
 
+    // 响应式的新增对象属性
+    g.reactiveAttr = function(obj , attrName , attrVal){
+        var copyObj = {};
+        copyObj[attrName] = attrVal;
+        return Object.assign({} , obj , copyObj);
+    };
+
     /*
      * 将对象 转换为 json 字符串 json_encode 的增强版
      * @param Object | Array  obj
@@ -7768,7 +7775,7 @@
             // isUpload: false ,                        // 上传文件还是下载文件！ 决定了事件时定义在上传对象 还是 在下载对象上！
 
             // 是否允许携带用于区分普通请求 和 ajax 请求的请求头（标识）
-            isAllowAjaxHeader: true
+            isAllowAjaxHeader: false ,
         };
 
         if (g.isString(url)) {
@@ -8085,7 +8092,7 @@
 
             // progress
             if (g.type(this.progress) === 'Function') {
-                xhr.on('timeout' , this.progress , true , false);
+                xhr.on('progress' , this.progress , true , false);
             }
 
             // load
