@@ -17,7 +17,7 @@
             // 单次步进时间，单位：s
             step: 30 ,
             // 音频步进：0-1
-            soundStep: 0.2 ,
+            soundStep: 0.08 ,
             // 视频源
             playlist: [
                 // {
@@ -77,6 +77,8 @@
             ended: null ,
             // 视频切换后索引
             switch: null ,
+            // 单位：ms
+            initPlayerInterval: 6 * 1000 ,
         };
 
         if (!G.isObject(option)) {
@@ -95,6 +97,7 @@
         this.option.soundStep   = G.isNumeric(option.soundStep) && option.soundStep >= 0 && option.soundStep <= 1 ? option.soundStep : this.option.soundStep;
         this.option.playlist        = option.playlist ? option.playlist : this.option.playlist;
         this.option.enableSubtitle  = G.isBoolean(option.enableSubtitle) ? option.enableSubtitle : this.option.enableSubtitle;
+        this.option.initPlayerInterval  = G.isNumeric(option.initPlayerInterval) ? option.initPlayerInterval : this.option.initPlayerInterval;
 
         this.run();
     }
@@ -218,7 +221,8 @@
             this.dom.notMuted = G('.not-muted' , this.dom.actions.get(0));
             this.dom.muted = G('.muted' , this.dom.actions.get(0));
 
-            this.dom.sound = G('.sound' , this.dom.actions.get(0));
+            this.dom.soundCtrl = G('.sound-ctrl' , this.dom.actions.get(0));
+            this.dom.sound = G('.sound' , this.dom.soundCtrl.get(0));
             this.dom.innerForSound = G('.inner' , this.dom.sound.get(0));
             this.dom.ratioForSound = G('.ratio' , this.dom.sound.get(0));
             this.dom.pointForSound = G('.point' , this.dom.sound.get(0));
@@ -492,7 +496,7 @@
             this.progress(ratio , true , true);
             this.buffered();
             this.preview(ratio);
-            var self = this;
+            this.hidePoster();
         } ,
 
         playEvent: function(){
@@ -713,7 +717,7 @@
             this.dom.videoPlayer.on('mousemove' , this.initVideoPlayerEvent.bind(this));
             this.dom.videoPlayer.on('dblclick' , this.screenBydblClick.bind(this));
             this.dom.videoPlayer.on('click' , this.autoSwitchVideoPlayerPlayStatus.bind(this));
-            this.dom.videoPlayer.on('wheel' , this.soundSeekByWheel.bind(this));
+
             this.dom.title.on('click' , G.stop);
             this.dom.control.on('click' , function(e){
                 G.stop(e);
@@ -721,6 +725,9 @@
                 self.hideSpeed();
                 self.hideSettings();
             });
+
+            // 音量调节
+            this.dom.soundCtrl.on('wheel' , this.soundSeekByWheel.bind(this));
 
 
             // this.dom.win.on('keydown' , G.prevent);
@@ -756,7 +763,8 @@
              this.data.videoPlayerTimer = window.setTimeout(function(){
                  self.hideControl();
                  self.hideTitle();
-             } , 5000);
+                 // console.log('隐藏控制器等');
+             } , this.data.initPlayerInterval);
         } ,
 
         keyboardEvent: function(e){
@@ -828,7 +836,7 @@
             } else {
                 this.muted(false , false);
             }
-            this.switchPlayCtrlTip('volume');
+            // this.switchPlayCtrlTip('volume');
         } ,
 
 
@@ -856,9 +864,9 @@
             if (!this.data.canHideControl) {
                 return ;
             }
-            if (this.data.mouseIsInVideo) {
-                return ;
-            }
+            // if (this.data.mouseIsInVideo) {
+            //     return ;
+            // }
             this.dom.videoPlayer.addClass('not-control');
             this.dom.control.removeClass('hover');
         } ,

@@ -5582,6 +5582,19 @@
             get_struct(id , initFloor);
             return count;
         } ,
+
+        // 深层遍历符合条件的嵌套结构
+        loop: function(data , callback){
+            var self = this;
+            data.forEach(function(v){
+                if (g.isFunction(callback)) {
+                    callback(v);
+                }
+                if (v.children.length > 0) {
+                    self.loop(v.children , callback);
+                }
+            });
+        } ,
     };
 
     /*
