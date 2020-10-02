@@ -5442,16 +5442,16 @@
             }
             parents = parents.reverse();
             if (struct) {
-                var get_struct = function(list , res){
+                var getStruct = function(list , res){
                     if (list.length === 0) {
                         return res;
                     }
                     cur = list.shift();
                     res = cur;
-                    res.children = get_struct(list);
+                    res.children = getStruct(list);
                     return res;
                 };
-                parents = get_struct(parents);
+                parents = getStruct(parents);
             }
             return parents;
         } ,
@@ -5507,7 +5507,7 @@
             }
             if (struct) {
                 // 保存结构
-                var get_struct = function(id , floor){
+                var getStruct = function(id , floor){
                     var children = _self_.children(id , res , field);
                     var i = 0;
                     var v = null;
@@ -5515,11 +5515,11 @@
                     {
                         v = children[i];
                         v.floor = floor;
-                        v.children = get_struct(v[field['id']] , floor + 1);
+                        v.children = getStruct(v[field['id']] , floor + 1);
                     }
                     return children;
                 };
-                res = get_struct(id , saveSelf ? 2 : 1);
+                res = getStruct(id , saveSelf ? 2 : 1);
                 if (saveSelf) {
                     cur.floor = 1;
                     cur.children = res;
@@ -5529,6 +5529,7 @@
             return res;
         } ,
 
+        // 统计嵌套层级数量
         floor: function(id , data , field , self){
             data    = g.copyObj(data , true);
             field   = this.field(field);
@@ -5538,7 +5539,7 @@
             var saveSelf = self && cur !== false;
             var initFloor = saveSelf ? 2 : 1;
             var floorLog = [];
-            var get_struct = function(id , floor){
+            var getStruct = function(id , floor){
                 var children = _self_.children(id , data , field);
                 if (children.length < 1) {
                     return ;
@@ -5548,14 +5549,15 @@
                 for (; i < children.length; ++i)
                 {
                     v = children[i];
-                    get_struct(v[field['id']] , floor + 1);
+                    getStruct(v[field['id']] , floor + 1);
                 }
                 floorLog.push(floor);
             };
-            get_struct(id , initFloor);
+            getStruct(id , initFloor);
             return floorLog.length > 1 ? Math.max.apply(null , floorLog) : 0;
         } ,
 
+        // 获取每个层级下的子级数量
         floorCount: function(id , data , field , self){
             data    = g.copyObj(data , true);
             field   = this.field(field);
@@ -5568,7 +5570,7 @@
             if (saveSelf) {
                 count[1] = 1;
             }
-            var get_struct = function(id , floor){
+            var getStruct = function(id , floor){
                 var children = _self_.children(id , data , field);
                 var i = 0;
                 var v = null;
@@ -5576,12 +5578,67 @@
                 {
                     v = children[i];
                     count[floor] = g.isUndefined(count[floor]) ? 1 : ++count[floor];
-                    get_struct(v[field['id']] , floor + 1);
+                    getStruct(v[field['id']] , floor + 1);
                 }
             };
-            get_struct(id , initFloor);
+            getStruct(id , initFloor);
             return count;
         } ,
+
+        /**
+         * 附加上下级关联（增加 id | parentId | floor ）
+         *
+         * @param data 带数据结构的数据对象
+         * @param parentId 当前层级的上级id，程序自动生成
+         * @param floor 嵌套层级，程序自动生成
+         * @param extra 额外数据，程序自动生成
+         */
+        handle: function(data , parentId , floor , extra){
+            parentId    = g.isUndefined(parentId) ? 0 : parentId;
+            floor       = g.isUndefined(floor) ? 1 : floor;
+            extra       = g.isUndefined(extra) ? {id: 0} : extra;
+            var self    = this;
+            data.forEach(function(v){
+                v.id        = ++extra.id;
+                v.floor     = floor;
+                v.parentId  = parentId;
+                if (v.children.length > 0) {
+                    return self.handle(v.children , v.id , floor + 1 , extra);
+                }
+            });
+        } ,
+
+        /**
+         * 自定义函数处理数据集中的每个单元
+         *
+         * @param data
+         * @param callback
+         */
+        uHandle: function(data , callback){
+            var self = this;
+            data.forEach(function(v){
+                if (g.isFunction(callback)) {
+                    callback(v);
+                }
+                if (v.children.length > 0) {
+                    self.uHandle(v.children , callback);
+                }
+            });
+        } ,
+
+        // 数据扁平化
+        flat: function(structData , res){
+            res         = g.isUndefined(res) ? [] : res;
+            var self    = this;
+            structData.forEach(function(v){
+                res.push(v);
+                if (v.children.length > 0) {
+                    self.flat(v.children , res);
+                }
+            });
+            return res;
+        } ,
+
     };
 
     /*
