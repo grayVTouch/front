@@ -145,6 +145,13 @@
             this.focusByItem(item);
         } ,
 
+        focusByIds: function(ids){
+            var self = this;
+            ids.forEach(function(id){
+                self.focusById(id);
+            });
+        } ,
+
         blurById: function(id){
 
         } ,
