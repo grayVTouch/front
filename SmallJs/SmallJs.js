@@ -4931,15 +4931,6 @@
         }
     };
 
-    /**
-     * ***************
-     * ajax 请求简化
-     * ***************
-     */
-    g.get = function(url , option){
-
-    };
-
     /*
      * 销毁一个由 URL.createObjectURL 创建的 blob://URL
      */
@@ -7748,7 +7739,6 @@
         } ,
     };
 
-    // get 请求
     g.get = function(url , option){
         if (this.isString(url)) {
             option['method'] = 'get';
@@ -7759,12 +7749,51 @@
         this.ajax(url , option);
     };
 
-    // post 请求
     g.post = function(url , option){
         if (this.isString(url)) {
             option['method'] = 'post';
         } else {
             url['method'] = 'post';
+        }
+
+        this.ajax(url , option);
+    };
+
+    g.put = function(url , option){
+        if (this.isString(url)) {
+            option['method'] = 'put';
+        } else {
+            url['method'] = 'put';
+        }
+
+        this.ajax(url , option);
+    };
+
+    g.patch = function(url , option){
+        if (this.isString(url)) {
+            option['method'] = 'patch';
+        } else {
+            url['method'] = 'patch';
+        }
+
+        this.ajax(url , option);
+    };
+
+    g.delete = function(url , option){
+        if (this.isString(url)) {
+            option['method'] = 'delete';
+        } else {
+            url['method'] = 'delete';
+        }
+
+        this.ajax(url , option);
+    };
+
+    g.options = function(url , option){
+        if (this.isString(url)) {
+            option['method'] = 'options';
+        } else {
+            url['method'] = 'options';
         }
 
         this.ajax(url , option);
@@ -7805,45 +7834,68 @@
         }
 
         this.default = {
-            header:   {} ,                          // 发送的请求头部信息 格式： {'Content-Type' : 'text/html; charset=utf-8' , 'Cache-Control' : 'false'}
-            method: 'get' ,                          // 请求方法 get | GET | post | POST
-            url: '' ,                                // 请求路径
-            async: true ,                          // 是否异步
-            data: null ,                         // 发送的数据
-            direct: false ,                      // 直接发出请求，这将绕过生命周期钩子的拦截
-            responseType: '' ,                       // 相应类型
-            additionalTimestamp: true , 			 // 是否在 url 末尾追加时间戳
-            wait: 0 ,                         // 请求：设置超时时间，单位：ms，默认值：0
-            withCredentials: false ,					 // 跨域请求是否允许携带 cookie
+            // 发送的请求头部信息 格式： {'Content-Type' : 'text/html; charset=utf-8' , 'Cache-Control' : 'false'}
+            header:   {} ,
+            // 请求方法 get | GET | post | POST
+            method: 'get' ,
+            // 请求路径
+            url: '' ,
+            // 是否异步
+            async: true ,
+            // 发送的数据
+            data: null ,
+            // 相应类型
+            responseType: '' ,
+            // 是否在 url 末尾追加时间戳
+            additionalTimestamp: true ,
+            // 请求：设置超时时间，单位：ms，默认值：0
+            wait: 0 ,
+            // 跨域请求是否允许携带 cookie
+            withCredentials: false ,
 
-            // 下载事件
-            before: null ,  // 发送请求之前（已经创建 xhr）
+            // 发送请求之前（已经创建 xhr）
+            before: null ,
             after: null ,
-            success: null ,                          // 请求：成功时回调
-            netError: null ,                         // 请求：失败时回调
-            error: null ,                            // 请求：失败时回调
-            progress: null ,                         // 请求：加载时回调
-            load: null ,                             // 请求：加载完成时回调
-            timeout: null ,                          // 请求：超时回调
-            abort: null ,                            // 请求：中断是回调
-            loadstart: null ,						 // 请求：接收到响应的时候触发
-            loadend: null , 						 // 请求：响应结束的时候触发（导致结束的原因：error , timeout , load，未知）
+            // 请求：成功时回调
+            success: null ,
+            // 请求：失败时回调
+            netError: null ,
+            // 请求：失败时回调
+            error: null ,
+            // 请求：加载时回调
+            progress: null ,
+            // 请求：加载完成时回调
+            load: null ,
+            // 请求：超时回调
+            timeout: null ,
+            // 请求：中断是回调
+            abort: null ,
+            // 请求：接收到响应的时候触发
+            loadstart: null ,
+            // 请求：响应结束的时候触发（导致结束的原因：error , timeout , load，未知）
+            loadend: null ,
 
-            // 上传事件
-            uLoad: null ,							 // 上传：上传完成时回调
-            uLoadstart: null ,						 // 上传：上传开始时回调
-            uTimeout: null ,						 // 上传：上传开始超时回调
-            uError: null ,							 // 上传：上传发生错误时回调
-            uProgress: null ,						 // 上传：上传中回调
-            uLoadend: null ,						 // 上传：上传终止时超时回调（有可能是发生错误而终止、有可能是超时终止...）
-            uAbort: null ,							 // 上传：上传中断
+            // 上传：上传完成时回调
+            uLoad: null ,
+            // 上传：上传开始时回调
+            uLoadstart: null ,
+            // 上传：上传开始超时回调
+            uTimeout: null ,
+            // 上传：上传发生错误时回调
+            uError: null ,
+            // 上传：上传中回调
+            uProgress: null ,
+            // 上传：上传终止时超时回调（有可能是发生错误而终止、有可能是超时终止...）
+            uLoadend: null ,
+            // 上传：上传中断
+            uAbort: null ,
 
-            // 相关属性
-            isReturnXHR: false ,					 // 是否返回 XHR 对象
-            username: '' ,							 // http 验证的用户名
-            password: '' ,							 // http 验证的密码
-            // isUpload: false ,                        // 上传文件还是下载文件！ 决定了事件时定义在上传对象 还是 在下载对象上！
-
+            // 是否返回 XHR 对象
+            isReturnXHR: false ,
+            // http basic 验证的用户名
+            username: '' ,
+            // http basic 验证的密码
+            password: '' ,
             // 是否允许携带用于区分普通请求 和 ajax 请求的请求头（标识）
             isAllowAjaxHeader: false ,
         };
@@ -7863,10 +7915,10 @@
         // 会根据不同的 responseType 将响应数据做一些转换后在返回给用户
         this.responseTypeRange	 = ['' , 'text' , 'document' , 'json' , 'blob'];
         this.enctypeRange		 = ['text/plain' , 'application/x-www-form-urlencoded' , 'multipart/form-data'];
-        this.header			 = g.type(option['header']) === 'Undefined'				? this.default['header']		: option['header'];
+        this.header			    = g.type(option['header']) === 'Undefined'				? this.default['header']		: option['header'];
 
         // this.method			 = !g.contain(option['method'] , this.methodRange)				? this.default['method']		: option['method'];
-        this.method			 = option.method.toUpperCase();
+        this.method			    = g.isString(option.method) ? option.method.toUpperCase() : this.default.method;
         this.url				 = !g.isValid(option['url'])									? this.default['url']			: option['url'];
         this.async			        = g.type(option['async']) !== 'Boolean'					? this.default['async']		: option['async'];
         this.additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this.default['additionalTimestamp']		: option['additionalTimestamp'];
@@ -7913,23 +7965,22 @@
      * *****************************************
      */
 
-    // 创建 xhr 之前
+    // 拦截器：创建 xhr 之前
     Ajax.before = null;
-    // 创建 xhr 之后
+    // 拦截器：创建 xhr 之后
     Ajax.created = null;
-    // xhr open 之后
+    // 拦截器：xhr open 之后
     Ajax.opened = null;
-    // xhr 接收到响应之后
+    // 拦截器：xhr 接收到响应之后
     Ajax.responded = null;
-    // 发送请求之后
+    // 回调钩子：发送请求之后
     Ajax.after = null;
 
     Ajax.prototype = {
-        version: '1.0' ,
-        cTime: '2016/10/25 17:32:00' ,
-        author: '陈学龙' ,
+        version: '2.0' ,
+        createdAt: '2016/10/25 17:32:00' ,
+        author: 'running' ,
         constructor: Ajax ,
-
         // 调用原生方法
         native: function(event){
             var args = arguments;
@@ -7969,7 +8020,7 @@
         // 创建 ajax
         create: function(){
             var xhr = this.xhr = new XMLHttpRequest();
-            if (!this.direct && g.isFunction(Ajax.created)) {
+            if (g.isFunction(Ajax.created)) {
                 if (Ajax.created.call(this) !== true) {
                     return false;
                 }
@@ -7988,8 +8039,12 @@
             return '&';
         } ,
 
+        hasQueryStringSign: function(){
+            return this.url.indexOf('?') !== -1;
+        } ,
+
         // 初始化 ajax
-        initialize: function(){
+        initAjax: function(){
             /**
              * ***********************
              * 初始化请求
@@ -8040,7 +8095,8 @@
 
         } ,
 
-        beforeOpen: function(){
+        // 发送数据预处理
+        prepare: function(){
             /*
              * *************************************************************
              * 数据测试：
@@ -8049,25 +8105,29 @@
              * 特殊：如果 method = other 情况下，data 必须是一个字符串
              * **************************************************************
              */
+            if (!this.hasQueryStringSign(this.url)) {
+                this.url += '?';
+            }
             if (this.method == 'GET') {
                 if (g.isValid(this.data)) {
                     if (!g.isString(this.data)) {
                         throw new Error('Ajax data 字段类型错误');
                     }
-                    // 附加查询字符串到 url
-                    this.url += this.sign() + this.data;
+                    if (this.data.length > 0) {
+                        this.url += '&' + this.data;
+                    }
                 }
             }
             // 防止缓存
             if (this.additionalTimestamp) {
                 // 先将原有的时间戳清除掉
-                this.url = this.url.replace(/(\?|&)?__timestamp__.*/g , '');
-                // 是否追加时间戳，防止请求被缓存
-                var time = new Date().getTime();
-
+                this.url = this.url.replace(/(\?|&)?__timestamp__(=\d*?)/g , '');
+                // 追加时间戳，防止请求被缓存
+                var timestamp = Date.now();
                 // 附加新的时间戳
-                this.url += this.sign() + '__timestamp__=' + time;
+                this.url += '&__timestamp__=' + timestamp;
             }
+            this.url = this.url.replace(/\?&/ , '?');
         } ,
 
         // 打开 ajax 请求
@@ -8076,7 +8136,7 @@
              * 支持使用了验证的请求
              */
             this.xhr.open(this.method , this.url , this.async , this.username , this.password);
-            if (!this.direct && g.isFunction(Ajax.opened)) {
+            if (g.isFunction(Ajax.opened)) {
                 return Ajax.opened.call(this);
             }
             return true;
@@ -8126,7 +8186,8 @@
                     ) {
                         response = g.jsonDecode(this.response);
                     }
-                    if (!self.direct && g.isFunction(Ajax.responded)) {
+                    if (g.isFunction(Ajax.responded)) {
+                        // 响应拦截
                         var next = Ajax.responded.call(self , response , status);
                         if (next === false) {
                             return ;
@@ -8246,7 +8307,7 @@
 
         // 初始化前调用
         _before_: function() {
-            if (!this.direct && g.isFunction(Ajax.before)) {
+            if (g.isFunction(Ajax.before)) {
                 return Ajax.before.call(this);
             }
             return true;
@@ -8254,7 +8315,7 @@
 
         // 初始化后调用
         _after_: function(){
-            if (!this.direct && g.isFunction(Ajax.after)) {
+            if (g.isFunction(Ajax.after)) {
                 Ajax.after.call(this);
             }
         } ,
@@ -8266,22 +8327,27 @@
 
         // 开始运行程序
         run: function(){
-            if (this._before_() != true) {
+            var next;
+
+            next = this._before_();
+            if (!next) {
                 // 被用户手动拦截
                 return ;
             }
-            if (this.create() != true) {
+            next = this.create();
+            if (!next) {
                 // 被用户手动拦截
                 return ;
             }
-            // 打开之前做一些处理
-            this.beforeOpen();
-            if (this.open() != true) {
+            // 数据预处理
+            this.prepare();
+            next = this.open();
+            if (!next) {
                 // 被用户手动拦截
                 return ;
             }
             // 该方法必须在请求 open 之后调用
-            this.initialize();
+            this.initAjax();
             this.send();
             // 请求在调用之后
             this._after_();
