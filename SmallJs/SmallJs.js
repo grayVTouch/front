@@ -4188,7 +4188,7 @@
     };
 
     g.isEmptyString = function(val){
-        return this.isString(val) && val.length === 0;
+        return !this.isString(val) || val === '';
     };
 
     g.isValidVal = function(val){
@@ -4797,6 +4797,14 @@
     g.getBrowser = function(){
         console.warn('该方法已经不推荐使用，请使用 browser 替代');
         return this.browser();
+    };
+
+    g.getObjectFirstKeyMappingValue = function(object){
+        const keys = Object.keys(object);
+        if (keys.length === 0) {
+            return '';
+        }
+        return object[keys[0]];
     };
 
 
@@ -7842,7 +7850,9 @@
             url: '' ,
             // 是否异步
             async: true ,
-            // 发送的数据
+            // query 发送的数据
+            param: null ,
+            // post 发送的数据
             data: null ,
             // 相应类型
             responseType: '' ,
@@ -7922,6 +7932,7 @@
         this.url				 = !g.isValid(option['url'])									? this.default['url']			: option['url'];
         this.async			        = g.type(option['async']) !== 'Boolean'					? this.default['async']		: option['async'];
         this.additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this.default['additionalTimestamp']		: option['additionalTimestamp'];
+        this.param                  = g.isObject(option.param) ? g.buildQuery(option.param) : g.buildQuery(this.default.param);
         this.data                  = g.type(option.data) != 'FormData' ? (g.isObject(option.data) ? g.buildQuery(option.data) : g.buildQuery(this.default.data)) : option.data;
         this.responseType	 	    = !g.contain(option['responseType'] , this.responseTypeRange)  ? this.default['responseType']	: option['responseType'];
         this.wait		            = g.type(option['wait']) !== 'Number'				? this.default['wait']	: option['wait'];
@@ -8050,6 +8061,10 @@
              * 初始化请求
              * ***********************
              */
+            if (this.withCredentials) {
+                // 设置 cookie 携带
+                this.xhr.withCredentials = this.withCredentials;
+            }
             // 初始化要设置的请求头
             if (g.type(this.data) !== 'FormData') {
                 // 表单提交默认的 content-type
@@ -8108,14 +8123,12 @@
             if (!this.hasQueryStringSign(this.url)) {
                 this.url += '?';
             }
-            if (this.method == 'GET') {
-                if (g.isValid(this.data)) {
-                    if (!g.isString(this.data)) {
-                        throw new Error('Ajax data 字段类型错误');
-                    }
-                    if (this.data.length > 0) {
-                        this.url += '&' + this.data;
-                    }
+            if (g.isValid(this.param)) {
+                if (!g.isString(this.param)) {
+                    throw new Error('Ajax data 字段类型错误');
+                }
+                if (this.param.length > 0) {
+                    this.url += '&' + this.param;
                 }
             }
             // 防止缓存
@@ -8293,16 +8306,8 @@
 
         // 发送请求
         send: function(){
-            if (this.withCredentials) {
-                this.xhr.withCredentials = this.withCredentials;
-            }
-            if (this.method === 'GET') {
-                // get 方法在 url 中发送数据
-                this.xhr.send(null);
-            } else {
-                // post 方法在 send 方法参数中发送数据
-                this.xhr.send(this.data);
-            }
+            // get 方法在 url 中发送数据
+            this.xhr.send(this.data);
         } ,
 
         // 初始化前调用
