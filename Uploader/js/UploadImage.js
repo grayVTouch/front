@@ -269,7 +269,7 @@
 
         // 生成唯一标识
         genID: function(){
-            return G.randomArr(100 , 'mixed').join('');
+            return G.randomArray(100 , 'mixed').join('');
         } ,
 
         // 并行上传：删除上传的 item

@@ -72,7 +72,7 @@
             {
                 cur = this._items.jump(i , true);
                 if (!G.isValid(cur.data('id'))) {
-                    cur.data('id' , G.randomArr(100 , 'mixed' , true));
+                    cur.data('id' , G.randomArray(100 , 'mixed' , true));
                 }
 
                 if (id === null) {

@@ -721,7 +721,7 @@
 
         // 生成随机码
         _genCode: function(){
-            return G.randomArr(256 , 'mixed').join('');
+            return G.randomArray(256 , 'mixed').join('');
         } ,
 
         // 加入聊天室
@@ -750,7 +750,7 @@
 
         // 系统消息通知
         broadcast: function(){
-            
+
         } ,
 
         // 获取房间信息

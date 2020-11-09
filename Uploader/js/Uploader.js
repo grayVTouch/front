@@ -128,7 +128,7 @@
 
         handleFile (files) {
             files.forEach((file) => {
-                file.id = G.randomArr(32 , 'mixed' , true);
+                file.id = G.randomArray(32 , 'mixed' , true);
             });
         } ,
 

@@ -152,46 +152,45 @@
      */
     g.pro = g.prototype = {
         // author
-        author: '陈学龙' ,
+        author: '陈学龙',
 
         // 版本
-        version: '1.0' ,
+        version: '1.0',
 
         // 构造函数
-        constructor: SmallJs ,
+        constructor: SmallJs,
 
         // 专门用于 transition 动画的回调函数列表
-        callbacks: [] ,
+        callbacks: [],
 
-        _initialize: function(){
+        _initialize: function () {
             // 长度
             this.length = this._cur.length;
             // 队列
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 if (g.isUndefined(dom.__smalljs_queue__)) {
                     // 为每一个 dom 元素设置一个队列
                     dom.__smalljs_queue__ = new Queue();
                 }
             });
-        } ,
+        },
 
-        _run: function(){
+        _run: function () {
             this._initialize();
-        } ,
+        },
 
         // 获取 or 设置 transform
-        transform: function(k , v){
+        transform: function (k, v) {
             var self = this;
-            var prefix  = ['' , 'webkit' , 'moz' , 'ms' , 'o'];
+            var prefix = ['', 'webkit', 'moz', 'ms', 'o'];
             if ((g.isUndefined(v) && !g.isObject(k))) {
-                var i       = 0;
-                var cur     = null;
-                var transK  = null;
-                var transV  = null;
-                for (; i < prefix.length; ++i)
-                {
+                var i = 0;
+                var cur = null;
+                var transK = null;
+                var transV = null;
+                for (; i < prefix.length; ++i) {
                     cur = prefix[i];
-                    transK   = cur === '' ? 'transform' : cur + 'Transform';
+                    transK = cur === '' ? 'transform' : cur + 'Transform';
                     transV = this.css(transK);
                     if (G.isValid(transV)) {
                         break;
@@ -201,62 +200,61 @@
                 return returnObj ? g.parseTransform(transV) : transV;
             }
             // 设置样式
-            this.each(function(dom){
+            this.each(function (dom) {
                 dom = g(dom);
                 var val = '';
                 if (G.isValid(v)) {
                     val = k + '(' + v + ')'; //+ ' translate3d(0px , 0px , 0px)';
                 } else {
                     var cur = null;
-                    var k1  = null;
-                    for (k1 in k)
-                    {
+                    var k1 = null;
+                    for (k1 in k) {
                         cur = k[k1];
                         val += k1 + '(' + cur + ') ';
                     }
-                    val = val.replace(/ ^/ , '');
+                    val = val.replace(/ ^/, '');
                     // val += ' translate3d(0px , 0px , 0px)';
                 }
-                prefix.forEach(function(p){
+                prefix.forEach(function (p) {
                     var key = p === '' ? 'transform' : p + 'Transform';
-                    dom.css(key , val);
+                    dom.css(key, val);
                 });
             });
-        } ,
+        },
 
         // 是否 dom
-        isDom: function(){
+        isDom: function () {
             return g.isDom(this.get(0));
-        } ,
+        },
 
-        isDoms: function(){
-            return this._cur.every(function(dom){
+        isDoms: function () {
+            return this._cur.every(function (dom) {
                 return g.isDom(dom);
             });
-        } ,
+        },
 
-        equals: function(dom){
-            return this.jump(0 , true).get(0) === dom;
-        } ,
+        equals: function (dom) {
+            return this.jump(0, true).get(0) === dom;
+        },
 
         // 队列操作
-        _consume: function(queue , context , operation , merge , before , callback , after){
+        _consume: function (queue, context, operation, merge, before, callback, after) {
             merge = g.isBoolean(merge) ? merge : false;
             before = g.isArray(before) ? before : [];
             after = g.isArray(after) ? after : [];
 
             queue.push({
-                context: context ,
-                operation: operation ,
-                merge: merge ,
-                before: before ,
-                callback: callback  ,
+                context: context,
+                operation: operation,
+                merge: merge,
+                before: before,
+                callback: callback,
                 after: after
             });
 
-            queue.consume(function(task , resolve){
+            queue.consume(function (task, resolve) {
                 // 合并操作
-                var callback = function(){
+                var callback = function () {
                     if (g.isFunction(task.callback.callback)) {
                         task.callback.callback();
                     }
@@ -273,73 +271,73 @@
 
                 var args = task.before;
 
-                task.after.forEach(function(v){
+                task.after.forEach(function (v) {
                     args.push(v);
                 });
 
                 // 判断是否合并参数
-                task.operation.apply(task.context , args);
+                task.operation.apply(task.context, args);
             });
-        } ,
+        },
 
-        _selector: function(selector , context){
+        _selector: function (selector, context) {
             return !context ? document.querySelectorAll(selector) : context.querySelectorAll(selector);
-        } ,
+        },
 
         // 针对表单的特殊事件（仅表单有效）
-        selected: function(val){
+        selected: function (val) {
             if (g.isUndefined(val)) {
                 return this.get(0).selected;
             }
 
             val = g.isBoolean(val) ? val : true;
 
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 dom.selected = val;
             });
-        } ,
+        },
 
-        checked: function(val){
+        checked: function (val) {
             if (g.isUndefined(val)) {
                 return this.get(0).checked;
             }
 
             val = g.isBoolean(val) ? val : true;
 
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 dom.checked = val;
             });
-        } ,
+        },
 
         // 触发函数原生的事件
-        trigger: function(event){
+        trigger: function (event) {
             var self = this;
             var args = arguments;
             args = g.array(args);
             args = args.slice(1);
 
-            this.loop(function(dom){
-                dom[event].apply(dom , args);
+            this.loop(function (dom) {
+                dom[event].apply(dom, args);
             });
-        } ,
+        },
 
         // 调用对象原生方法
-        origin: function(event){
+        origin: function (event) {
             var ctx = this.get(0);
             var args = arguments;
             args = g.array(args);
             args = args.slice(1);
-            return ctx[event].apply(ctx , args);
-        } ,
+            return ctx[event].apply(ctx, args);
+        },
 
         /*
          * 1. 获取 DOM 元素
          * 2. 转换为 SmallJs 对象，并将 _cur 属性设置为当前元素
          */
-        _get: function(selector , context){
+        _get: function (selector, context) {
             var res = [];
 
-            if (!g.contain(g.type(selector) , ['Null' , 'Undefined'])) {
+            if (!g.contain(g.type(selector), ['Null', 'Undefined'])) {
                 if (g.isDom(selector)) {
                     res = [selector];
                 } else if (g.isDoms(selector)) {
@@ -347,7 +345,7 @@
                 } else if (g.isObj(selector)) {
                     res = [selector];
                 } else if (g.isString(selector)) {
-                    res = this._selector(selector , context);
+                    res = this._selector(selector, context);
                     res = g.array(res);
                 } else {
                     throw new Error('当前提供的选择器格式错误：' + selector);
@@ -355,10 +353,10 @@
             }
 
             return res;
-        } ,
+        },
 
         // 向当前元素集合增加元素
-        push: function(dom , isCopy){
+        push: function (dom, isCopy) {
             isCopy = g.isBoolean(isCopy) ? isCopy : true;
 
             if (isCopy) {
@@ -369,9 +367,9 @@
 
             this._cur.push(dom);
             return this;
-        } ,
+        },
 
-        unshift: function(dom , isCopy){
+        unshift: function (dom, isCopy) {
             isCopy = g.isBoolean(isCopy) ? isCopy : true;
 
             if (isCopy) {
@@ -382,98 +380,98 @@
 
             this._cur.unshift(dom);
             return this;
-        } ,
+        },
 
         // 获取 DOM 元素|集合，可直接使用 Javascript 原生语法
-        get: function(index){
+        get: function (index) {
             return g.isInt(index) ? this._cur[index] : this._cur;
-        } ,
+        },
 
-        files: function(){
+        files: function () {
             return this.get(0).files;
-        } ,
+        },
 
         // loop 的别名
-        each: function(fn){
+        each: function (fn) {
             this.loop(fn);
-        } ,
+        },
 
         // 循环给定元素
         // 统一 api 是为了以后升级用
-        loop: function(fn){
+        loop: function (fn) {
             var self = this;
 
-            this._cur.forEach(function(v , k , o){
+            this._cur.forEach(function (v, k, o) {
                 // 提供给回调函数三个参数
                 // v 键值
                 // k 键名
                 // o 原数组
-                fn.call(self , v , k , o);
+                fn.call(self, v, k, o);
             });
-        } ,
+        },
 
         // 检查元素内滚动条是否在顶部
-        isTop: function(extraH){
-            return Math.max(this.scrollTop() - extraH , 0) === 0;
-        } ,
+        isTop: function (extraH) {
+            return Math.max(this.scrollTop() - extraH, 0) === 0;
+        },
 
         // 检查元素滚动条是否在底部
-        isBottom: function(extraH){
+        isBottom: function (extraH) {
             extraH = extraH ? extraH : 0;
             var clientH = this.clientHeight();
-            var maxH    = this.scrollHeight();
-            var maxT    = Math.floor(maxH - clientH);
-            var curT    = this.scrollTop();
-            curT    = Math.ceil(curT);
+            var maxH = this.scrollHeight();
+            var maxT = Math.floor(maxH - clientH);
+            var curT = this.scrollTop();
+            curT = Math.ceil(curT);
             return curT + extraH >= maxT;
-        } ,
+        },
 
         // 检查元素是否在最左边
-        isLeft: function(){
+        isLeft: function () {
             return this.scrollLeft() === 0;
-        } ,
+        },
 
         // 检查元素是否在最左边
-        isRight: function(){
+        isRight: function () {
             var clientW = this.clientWidth();
-            var maxW    = this.scrollWidth();
-            var maxL    = maxW - clientW;
-            var curL    = this.scrollLeft();
-            curL    = Math.ceil(curL);
+            var maxW = this.scrollWidth();
+            var maxL = maxW - clientW;
+            var curL = this.scrollLeft();
+            curL = Math.ceil(curL);
 
             return curL >= maxL;
-        } ,
+        },
 
         // 文本
-        text: function(text){
+        text: function (text) {
             if (g.isUndefined(text)) {
                 return this.get(0).textContent;
             }
 
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 dom.textContent = text;
             });
 
             return this;
-        } ,
+        },
 
         // 值
-        val: function(v){
+        val: function (v) {
             if (g.isUndefined(v)) {
                 return this.get(0).value;
             }
 
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 dom.value = v;
             });
 
             return this;
-        } ,
+        },
 
         // html
-        html: function(html , type){
-            var range = ['inner' , 'outer'];
-            type = g.contain(type , range) ? type : 'inner';
+        html: function (html, type) {
+            var range = ['inner', 'outer'];
+            type = g.contain(type, range) ? type : 'inner';
 
             if (g.isNull(html) || g.isUndefined(html)) {
                 return type === 'inner' ? this.get(0).innerHTML : this.get(0).outerHTML;
@@ -488,127 +486,127 @@
             });
 
             return this;
-        } ,
+        },
 
         // 添加节点
-        append: function(node){
+        append: function (node) {
             this.loop(function (dom) {
                 dom.appendChild(node);
             });
 
             return this;
-        } ,
+        },
 
         // 移除节点
-        remove: function(dom){
+        remove: function (dom) {
             return g(this.get(0).removeChild(dom));
-        } ,
+        },
 
         // 插入节点
-        insertBefore: function(node){
-            this.loop(function(dom){
-                node.parentNode.insertBefore(dom , node);
+        insertBefore: function (node) {
+            this.loop(function (dom) {
+                node.parentNode.insertBefore(dom, node);
             });
 
             return this;
-        } ,
+        },
 
         // 克隆节点
-        clone: function(deep){
-            return g(g.clone(this.get(0) , true));
-        } ,
+        clone: function (deep) {
+            return g(g.clone(this.get(0), true));
+        },
 
         // 滚动到顶部
-        top: function(time , fn){
-            this.loop(function(dom){
+        top: function (time, fn) {
+            this.loop(function (dom) {
                 // g.top(dom , time , fn);
-                this._consume(dom.__smalljs_queue__ , g , g.top , false , [dom , time] , {
-                    name: '' ,
+                this._consume(dom.__smalljs_queue__, g, g.top, false, [dom, time], {
+                    name: '',
                     callback: fn
                 });
             });
 
             return this;
-        } ,
+        },
 
         // 滚动到底部
-        bottom: function(time , fn){
-            this.loop(function(dom){
-                this._consume(dom.__smalljs_queue__ , g , g.bottom , false , [dom , time] , {
-                    name: '' ,
+        bottom: function (time, fn) {
+            this.loop(function (dom) {
+                this._consume(dom.__smalljs_queue__, g, g.bottom, false, [dom, time], {
+                    name: '',
                     callback: fn
                 });
             });
 
             return this;
-        } ,
+        },
 
         // 滚动到最左边
-        left: function(time , fn){
+        left: function (time, fn) {
             var self = this;
 
-            this.loop(function(dom){
-                this._consume(dom.__smalljs_queue__ , g , g.left , false , [dom , time] , {
-                    name: '' ,
+            this.loop(function (dom) {
+                this._consume(dom.__smalljs_queue__, g, g.left, false, [dom, time], {
+                    name: '',
                     callback: fn
                 });
             });
 
             return this;
-        } ,
+        },
 
         // 滚动到最右边
-        right: function(time , fn){
-            this.loop(function(dom){
-                this._consume(dom.__smalljs_queue__ , g , g.right , false , [dom , time] , {
-                    name: '' ,
+        right: function (time, fn) {
+            this.loop(function (dom) {
+                this._consume(dom.__smalljs_queue__, g, g.right, false, [dom, time], {
+                    name: '',
                     callback: fn
                 });
             });
 
             return this;
-        } ,
+        },
 
         // 水平滚动
-        hScroll: function(time , v , fn){
-            this.loop(function(dom){
-                this._consume(dom.__smalljs_queue__ , g , g.hScroll , false , [dom , time , v] , {
-                    name: '' ,
+        hScroll: function (time, v, fn) {
+            this.loop(function (dom) {
+                this._consume(dom.__smalljs_queue__, g, g.hScroll, false, [dom, time, v], {
+                    name: '',
                     callback: fn
                 });
             });
 
             return this;
-        } ,
+        },
 
         // 垂直滚动
-        vScroll: function(time , v , fn){
-            this.loop(function(dom){
-                this._consume(dom.__smalljs_queue__ , g , g.vScroll , false , [dom , time , v] , {
-                    name: '' ,
+        vScroll: function (time, v, fn) {
+            this.loop(function (dom) {
+                this._consume(dom.__smalljs_queue__, g, g.vScroll, false, [dom, time, v], {
+                    name: '',
                     callback: fn
                 });
             });
 
             return this;
-        } ,
+        },
 
         // 滚动到指定位置
-        scroll: function(time , pos , x , y , fn) {
-            this.loop(function(dom){
+        scroll: function (time, pos, x, y, fn) {
+            this.loop(function (dom) {
                 // queue , context , operation , merge , before , callback , after
-                this._consume(dom.__smalljs_queue__ , g , g.scroll , false , [dom , time , pos , x , y] , {
-                    name: '' ,
+                this._consume(dom.__smalljs_queue__, g, g.scroll, false, [dom, time, pos, x, y], {
+                    name: '',
                     callback: fn
                 });
             });
 
             return this;
-        } ,
+        },
 
         // 元素滚动到可见位置
         // extra 额外要减去的高度
-        scrollIntoView: function(selector , time , pos , extra , fn){
+        scrollIntoView: function (selector, time, pos, extra, fn) {
             var container = g(selector);
 
             container = container.isDom() ? container : this.scrollParent();
@@ -617,25 +615,24 @@
             var containerSH = container.scrollHeight();
             var containerCW = container.width('padding-box');
             var containerCH = container.height('padding-box');
-            var maxSW       = containerSW - containerCW;
-            var maxSH       = containerSH - containerCH;
+            var maxSW = containerSW - containerCW;
+            var maxSH = containerSH - containerCH;
 
-            maxSW = Math.max(0 , Math.min(maxSW , containerSW));
-            maxSH = Math.max(0 , Math.min(maxSH , containerSH));
+            maxSW = Math.max(0, Math.min(maxSW, containerSW));
+            maxSH = Math.max(0, Math.min(maxSH, containerSH));
 
-            extra = !g.isValid(extra) ? {x: 0 , y: 0} : extra;
+            extra = !g.isValid(extra) ? {x: 0, y: 0} : extra;
 
-            switch (pos)
-            {
+            switch (pos) {
                 case 'x':
                     extra = {
-                        x: extra ,
+                        x: extra,
                         y: 0
                     };
                     break;
                 case 'y':
                     extra = {
-                        x: 0 ,
+                        x: 0,
                         y: extra
                     };
                     break;
@@ -645,30 +642,29 @@
                     break;
             }
 
-            var dom     = this.first(true);
-            var domOT   = dom.getDocOffsetVal('top' , container.get(0));
-            var domOL   = dom.getDocOffsetVal('left' , container.get(0));
-            domOT   = domOT - extra.y;
-            domOL   = domOL - extra.x;
-            var x = Math.min(domOL ,  maxSW);
-            var y = Math.min(domOT , maxSH);
+            var dom = this.first(true);
+            var domOT = dom.getDocOffsetVal('top', container.get(0));
+            var domOL = dom.getDocOffsetVal('left', container.get(0));
+            domOT = domOT - extra.y;
+            domOL = domOL - extra.x;
+            var x = Math.min(domOL, maxSW);
+            var y = Math.min(domOT, maxSH);
 
             if (container.eq(document.body)) {
-                g.scrollTo(time , pos , x , y , fn);
+                g.scrollTo(time, pos, x, y, fn);
             } else {
-                container.scroll(time , pos , x , y , fn);
+                container.scroll(time, pos, x, y, fn);
             }
-        } ,
+        },
 
         // 获取父元素中第一个带有滚动条
-        scrollParent: function(){
+        scrollParent: function () {
             var parents = this.parents();
-            var i   = 0;
+            var i = 0;
             var cur = null;
 
-            for (; i < parents.length; ++i)
-            {
-                cur = parents.jump(i , true);
+            for (; i < parents.length; ++i) {
+                cur = parents.jump(i, true);
 
                 if (cur.width('padding-box') > cur.scrollWidth() || cur.height('padding-box') > cur.scrollHeight()) {
                     return cur;
@@ -676,57 +672,57 @@
             }
 
             return g(document.body);
-        } ,
+        },
 
-        getAttr: function(attr){
+        getAttr: function (attr) {
             console.warn('请使用 attr 代替');
             return this.attr(attr);
-        } ,
+        },
 
-        setAttr: function(attr , val) {
+        setAttr: function (attr, val) {
             console.warn('请使用 attr 代替');
-            return this.attr(attr , val);
-        } ,
+            return this.attr(attr, val);
+        },
 
         // 获取属性
-        attr: function(attr , val){
+        attr: function (attr, val) {
             if (g.isUndefined(val)) {
                 return this.get(0).getAttribute(attr);
             }
 
             this.loop(function (dom) {
-                dom.setAttribute(attr , val);
+                dom.setAttribute(attr, val);
             });
 
             return this;
-        } ,
+        },
 
         // 获取原生属性
-        native: function(attr , val){
+        native: function (attr, val) {
             if (g.isUndefined(val)) {
                 return this.get(0)[attr];
             }
 
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 dom[attr] = val;
             });
 
             return this;
-        } ,
+        },
 
         // 获取|设置数据集属性
-        data: function(attr , val){
+        data: function (attr, val) {
             attr = 'data-' + attr;
 
-            return this.attr(attr , val);
-        } ,
+            return this.attr(attr, val);
+        },
 
         /*
          * 指针移动：第一个元素
          * @param  Boolean  isReturnNewObj 是否返回导航后副本
          * @return Object
          */
-        first: function(isCopy){
+        first: function (isCopy) {
             isCopy = g.isBoolean(isCopy) ? isCopy : false;
 
             if (!isCopy) {
@@ -737,14 +733,14 @@
             }
 
             return g(this.get(0));
-        } ,
+        },
 
         /*
          * 指针移动：最后一个元素
          * @param  Boolean  isReturnNewObj 是否返回导航后副本
          * @return Object
          */
-        last: function(isCopy){
+        last: function (isCopy) {
             isCopy = g.isBoolean(isCopy) ? isCopy : false;
 
             var lastIndex = this._cur.length - 1;
@@ -757,28 +753,28 @@
             }
 
             return g(this.get(lastIndex));
-        } ,
+        },
 
         /*
          * 指针移动：指定元素
          * 1. index 类型不是 number 时，返回 第一个元素
          * 2. index 的大小 大于等于 总长度时 ，返回最后一个元素
          */
-        jump: function(index , isCopy){
+        jump: function (index, isCopy) {
             var min = 0;
             var max = this.length;
             index = !g.isInt(index) ? min : (index > max ? max : (index < min ? min : index));
             isCopy = g.isBoolean(isCopy) ? isCopy : false;
 
             if (!isCopy) {
-                this._cur   = [this.get(index)];
+                this._cur = [this.get(index)];
                 this.length = this._cur.length;
 
                 return this;
             }
 
             return g(this.get(index));
-        } ,
+        },
 
         /*
          * 对象合并（继承），不建议使用。未经测试！
@@ -787,22 +783,21 @@
          * ....
          * @return 继承 SmallJs 后的 HTMLElement
          */
-        _merge: function(){
+        _merge: function () {
             if (g.isDoms(this._cur)) {
                 throw new Error('当前指针所指向的是一个 DOM 元素集合！不是单一的元素！请设置单一元素后在进行合并！');
             }
 
-            var src       = arguments[0];
-            var list      = g.mergeObj.apply(null , g.array(arguments , 1));
-            for (var key in list)
-            {
+            var src = arguments[0];
+            var list = g.mergeObj.apply(null, g.array(arguments, 1));
+            for (var key in list) {
                 if (g.type(src[key]) === 'Undefined') {
                     if (g.type(list[key]) === 'Array') {
                         src[key] = [];
-                        this._merge(src[key] , list[key]);
+                        this._merge(src[key], list[key]);
                     } else if (g.type(list[key]) === 'Object') {
                         src[key] = {};
-                        this._merge(src[key] , list[key]);
+                        this._merge(src[key], list[key]);
                     } else {
                         src[key] = list[key];
                     }
@@ -810,31 +805,31 @@
             }
             return src;
 
-        } ,
+        },
 
         // 获取样式值
-        getStyleVal: function(attr , pseudo){
+        getStyleVal: function (attr, pseudo) {
             pseudo = g.isUndefined(pseudo) ? null : pseudo;
-            return window.getComputedStyle(this.get(0) , pseudo)[attr];
-        } ,
+            return window.getComputedStyle(this.get(0), pseudo)[attr];
+        },
 
         // 设置元素 Css 样式
-        css: function(key , val){
+        css: function (key, val) {
             if (!g.isObject(key) && g.isUndefined(val)) {
                 return this.getStyleVal(key);
             }
             var css3Range = [
-                'translateX' ,
-                'translateY' ,
-                'translateZ' ,
-                'rotateX' ,
-                'rotateY' ,
-                'rotateZ' ,
-                'scaleX' ,
-                'scaleY' ,
-                'scaleZ' ,
-                'skewX' ,
-                'skewY' ,
+                'translateX',
+                'translateY',
+                'translateZ',
+                'rotateX',
+                'rotateY',
+                'rotateZ',
+                'scaleX',
+                'scaleY',
+                'scaleZ',
+                'skewX',
+                'skewY',
                 // 'skewZ'
             ];
             var json = {};
@@ -844,25 +839,24 @@
                 json[key] = val;
             }
             var css3Style = {};
-            this.loop(function(dom){
-                var key  = null;
+            this.loop(function (dom) {
+                var key = null;
                 var val = null;
                 var count = 0;
-                for (key in json)
-                {
+                for (key in json) {
                     val = json[key];
-                    if (g.contain(key , css3Range)) {
+                    if (g.contain(key, css3Range)) {
                         css3Style[key] = val;
                         count++;
-                        continue ;
+                        continue;
                     }
                     dom.style[key] = val;
                 }
                 if (G.isValid(json.transform)) {
-                    return ;
+                    return;
                 }
                 if (count < 1) {
-                    return ;
+                    return;
                 }
                 var transform = '';
                 var translateX = g.isValid(css3Style.translateX) ? css3Style.translateX : false;
@@ -924,44 +918,44 @@
             });
 
             return this;
-        } ,
+        },
         // 第一个设置了除 position: static 以外的父元素
-        offsetParent: function(){
+        offsetParent: function () {
             return g(this.get(0).offsetParent);
-        } ,
+        },
         // 只读属性
-        offsetLeft: function(){
+        offsetLeft: function () {
             return this.get(0).offsetLeft;
-        } ,
+        },
         // 只读属性: 相对于 offsetParent
-        offsetTop: function(){
+        offsetTop: function () {
             return this.get(0).offsetTop;
-        } ,
+        },
         // 只读属性: border + padding +content
-        offsetWidth: function(){
+        offsetWidth: function () {
             return this.get(0).offsetWidth;
-        } ,
+        },
         // 只读属性: border + padding +content
-        offsetHeight: function(){
+        offsetHeight: function () {
             return this.get(0).offsetHeight;
-        } ,
+        },
         // 只读属性
-        clientWidth: function(){
+        clientWidth: function () {
             return this.get(0).clientWidth;
-        } ,
+        },
         // 只读属性
-        clientHeight: function(){
+        clientHeight: function () {
             return this.get(0).clientHeight;
-        } ,
+        },
         // 只读属性
-        scrollWidth: function(){
+        scrollWidth: function () {
             return this.get(0).scrollWidth;
-        } ,
+        },
         // 只读属性
-        scrollHeight: function(){
+        scrollHeight: function () {
             return this.get(0).scrollHeight;
-        } ,
-        scrollTop: function(val){
+        },
+        scrollTop: function (val) {
             if (!g.isNumber(val)) {
                 return this.get(0).scrollTop;
             }
@@ -969,8 +963,8 @@
             this.get(0).scrollTop = val;
 
             return this;
-        } ,
-        scrollLeft: function(val){
+        },
+        scrollLeft: function (val) {
             if (!g.isNumber(val)) {
                 return this.get(0).scrollLeft;
             }
@@ -978,30 +972,30 @@
             this.get(0).scrollLeft = val;
 
             return this;
-        } ,
+        },
         /*
          * 获取盒子 宽度
          * @param   Element  dom       待获取的元素
          * @param   String   boxType   待获取元素的盒子类型，支持 content-box | padding-box | border-box | true <=> content-box
          * @return  Number
          */
-        width: function(boxType){
+        width: function (boxType) {
             // 盒子类型
-            var boxRange = ['border-box' , 'padding-box' , 'content-box'];
-            boxType =  g.contain(boxType , boxRange) ? boxType : 'content-box';
+            var boxRange = ['border-box', 'padding-box', 'content-box'];
+            boxType = g.contain(boxType, boxRange) ? boxType : 'content-box';
             // 宽度
-            var w = Math.max(0 , Math.floor(parseFloat(this.css('width'))));
+            var w = Math.max(0, Math.floor(parseFloat(this.css('width'))));
             // padding
-            var pl = Math.max(0 , Math.floor(parseFloat(this.css('paddingLeft'))));
-            var pr = Math.max(0 , Math.floor(parseFloat(this.css('paddingRight'))));
+            var pl = Math.max(0, Math.floor(parseFloat(this.css('paddingLeft'))));
+            var pr = Math.max(0, Math.floor(parseFloat(this.css('paddingRight'))));
             // 边框
-            var bl = Math.max(0 , Math.floor(parseFloat(this.css('borderLeftWidth'))));
-            var br = Math.max(0 , Math.floor(parseFloat(this.css('borderRightWidth'))));
+            var bl = Math.max(0, Math.floor(parseFloat(this.css('borderLeftWidth'))));
+            var br = Math.max(0, Math.floor(parseFloat(this.css('borderRightWidth'))));
             // 当前的元素 box-sizing 值
             var boxSizing;
             var bReg;
 
-            w  = isNaN(w)  ? 0 : w;
+            w = isNaN(w) ? 0 : w;
             pl = isNaN(pl) ? 0 : pl;
             pr = isNaN(pr) ? 0 : pr;
             bl = isNaN(bl) ? 0 : bl;
@@ -1051,7 +1045,7 @@
             }
 
             return false;
-        } ,
+        },
 
         /*
          * 获取盒子 高度
@@ -1059,32 +1053,32 @@
          * @param   String   boxType   待获取元素的盒子类型，支持 content-box | padding-box | border-box | true <=> content-box
          * @return  Number
          */
-        height: function(boxType){
+        height: function (boxType) {
             // 盒子类型
-            var boxRange = ['border-box' , 'padding-box' , 'content-box'];
-            boxType =  g.contain(boxType , boxRange) ? boxType : 'content-box';
+            var boxRange = ['border-box', 'padding-box', 'content-box'];
+            boxType = g.contain(boxType, boxRange) ? boxType : 'content-box';
 
             // 高度
-            var h = Math.max(0 , Math.floor(parseFloat(this.css('height'))));
+            var h = Math.max(0, Math.floor(parseFloat(this.css('height'))));
             // padding
-            var pt = Math.max(0 , Math.floor(parseFloat(this.css('paddingTop'))));
-            var pb = Math.max(0 , Math.floor(parseFloat(this.css('paddingBottom'))));
+            var pt = Math.max(0, Math.floor(parseFloat(this.css('paddingTop'))));
+            var pb = Math.max(0, Math.floor(parseFloat(this.css('paddingBottom'))));
             // 边框
-            var bt = Math.max(0 , Math.floor(parseFloat(this.css('borderTopWidth'))));
-            var bb = Math.max(0 , Math.floor(parseFloat(this.css('borderBottomWidth'))));
+            var bt = Math.max(0, Math.floor(parseFloat(this.css('borderTopWidth'))));
+            var bb = Math.max(0, Math.floor(parseFloat(this.css('borderBottomWidth'))));
             // 盒子类型范围
-            var boxRange = ['border-box' , 'padding-box' , 'content-box'];
+            var boxRange = ['border-box', 'padding-box', 'content-box'];
             // 当前的元素 box-sizing 值
             var boxSizing;
             var bReg;
 
-            h  = isNaN(h)  ? 0 : h;
+            h = isNaN(h) ? 0 : h;
             pt = isNaN(pt) ? 0 : pt;
             pb = isNaN(pb) ? 0 : pb;
             bt = isNaN(bt) ? 0 : bt;
             bb = isNaN(bb) ? 0 : bb;
 
-            bReg      = /ie|edge/i;
+            bReg = /ie|edge/i;
             // box-sizing
             boxSizing = this.css('boxSizing');
 
@@ -1119,28 +1113,28 @@
             }
 
             return false;
-        } ,
+        },
 
         /*
          * 获取盒子 总宽度(margin + border + padding + width)
          * @return  Number
          */
-        getTW: function(){
+        getTW: function () {
             // 宽度
-            var w = Math.max(0 , Math.floor(parseFloat(this.css('width'))));
+            var w = Math.max(0, Math.floor(parseFloat(this.css('width'))));
             // padding
-            var pl = Math.max(0 , Math.floor(parseFloat(this.css('paddingLeft'))));
-            var pr = Math.max(0 , Math.floor(parseFloat(this.css('paddingRight'))));
+            var pl = Math.max(0, Math.floor(parseFloat(this.css('paddingLeft'))));
+            var pr = Math.max(0, Math.floor(parseFloat(this.css('paddingRight'))));
             // 边框
-            var bl = Math.max(0 , Math.floor(parseFloat(this.css('borderLeftWidth'))));
-            var br = Math.max(0 , Math.floor(parseFloat(this.css('borderRightWidth'))));
+            var bl = Math.max(0, Math.floor(parseFloat(this.css('borderLeftWidth'))));
+            var br = Math.max(0, Math.floor(parseFloat(this.css('borderRightWidth'))));
             // margin
-            var ml = Math.max(0 , Math.floor(parseFloat(this.css('marginLeft'))));
-            var mr = Math.max(0 , Math.floor(parseFloat(this.css('marginRight'))));
+            var ml = Math.max(0, Math.floor(parseFloat(this.css('marginLeft'))));
+            var mr = Math.max(0, Math.floor(parseFloat(this.css('marginRight'))));
             var boxSizing;
             var bReg = /ie|edge/i;
 
-            w  = isNaN(w)  ? 0 : w;
+            w = isNaN(w) ? 0 : w;
             pl = isNaN(pl) ? 0 : pl;
             pr = isNaN(pr) ? 0 : pr;
             bl = isNaN(bl) ? 0 : bl;
@@ -1152,7 +1146,7 @@
             boxSizing = this.css('boxSizing');
 
             if (boxSizing == 'content-box') {
-                return  w + pl + pr + bl + br + ml + mr;
+                return w + pl + pr + bl + br + ml + mr;
             }
 
             if (boxSizing == 'border-box') {
@@ -1160,29 +1154,29 @@
             }
 
             return false;
-        } ,
+        },
 
 
         /*
          * 获取盒子 总高度(margin + border + padding + height)
          * @return  Number
          */
-        getTH: function(){
+        getTH: function () {
             // 高度
-            var h = Math.max(0 , Math.floor(parseFloat(this.css('height'))));
+            var h = Math.max(0, Math.floor(parseFloat(this.css('height'))));
             // padding
-            var pt = Math.max(0 , Math.floor(parseFloat(this.css('paddingTop'))));
-            var pb = Math.max(0 , Math.floor(parseFloat(this.css('paddingBottom'))));
+            var pt = Math.max(0, Math.floor(parseFloat(this.css('paddingTop'))));
+            var pb = Math.max(0, Math.floor(parseFloat(this.css('paddingBottom'))));
             // 边框
-            var bt = Math.max(0 , Math.floor(parseFloat(this.css('borderTopWidth'))));
-            var bb = Math.max(0 , Math.floor(parseFloat(this.css('borderBottomWidth'))));
+            var bt = Math.max(0, Math.floor(parseFloat(this.css('borderTopWidth'))));
+            var bb = Math.max(0, Math.floor(parseFloat(this.css('borderBottomWidth'))));
             // margin
-            var mt = Math.max(0 , Math.floor(parseFloat(this.css('marginTop'))));
-            var mb = Math.max(0 , Math.floor(parseFloat(this.css('marginBottom'))));
+            var mt = Math.max(0, Math.floor(parseFloat(this.css('marginTop'))));
+            var mb = Math.max(0, Math.floor(parseFloat(this.css('marginBottom'))));
             var boxSizing;
             var bReg = /ie|edge/i;
 
-            h  = isNaN(h) ? 0  : h;
+            h = isNaN(h) ? 0 : h;
             pt = isNaN(pt) ? 0 : pt;
             pb = isNaN(pb) ? 0 : pb;
             bt = isNaN(bt) ? 0 : bt;
@@ -1202,18 +1196,18 @@
             }
 
             return false;
-        } ,
+        },
 
         // 获取样式位置值
-        getCoordVal: function(type){
-            var typeRange = ['left' , 'top' , 'right' , 'bottom' , 'marginLeft' , 'marginRight' , 'marginTop' , 'marginBottom'];
+        getCoordVal: function (type) {
+            var typeRange = ['left', 'top', 'right', 'bottom', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom'];
 
-            if (!g.contain(type , typeRange)) {
+            if (!g.contain(type, typeRange)) {
                 throw new RangeError('不支持的位置，受支持的位置有：' + typeRange.join(' '));
             }
 
             return parseFloat(this.css(type));
-        } ,
+        },
 
         /*
          * 视口坐标
@@ -1223,10 +1217,10 @@
          * @param  String  type  获取的类型
          * @return Number
          */
-        getWindowOffsetVal: function(type){
-            var typeRange = ['left' , 'right' , 'top' , 'bottom' , 'all'];
-            var dom	      = this._cur;
-            type = g.contain(type , typeRange) ? type : 'all';
+        getWindowOffsetVal: function (type) {
+            var typeRange = ['left', 'right', 'top', 'bottom', 'all'];
+            var dom = this._cur;
+            type = g.contain(type, typeRange) ? type : 'all';
 
             if (type === 'left') {
                 return this.get(0).getBoundingClientRect().left;
@@ -1247,17 +1241,17 @@
             var rect = this.get(0).getBoundingClientRect();
 
             return {
-                left: rect.left  ,
-                right: rect.right  ,
-                top:  rect.top ,
-                bottom:  rect.bottom
+                left: rect.left,
+                right: rect.right,
+                top: rect.top,
+                bottom: rect.bottom
             }
-        } ,
+        },
 
         // 元素比较
-        eq: function(dom){
+        eq: function (dom) {
             return this.get(0) === dom;
-        } ,
+        },
 
         /*
          * 文档坐标
@@ -1267,23 +1261,22 @@
          * @param  String  type  获取的类型
          * @return Number
          */
-        getDocOffsetVal: function(type , until){
-            var typeRange = ['left' , 'top' , 'all'];
+        getDocOffsetVal: function (type, until) {
+            var typeRange = ['left', 'top', 'all'];
 
-            until   = g.isDom(until) ? until : document.body;
-            until   = g(until);
-            type    = g.contain(type , typeRange) ? type : 'all';
+            until = g.isDom(until) ? until : document.body;
+            until = g(until);
+            type = g.contain(type, typeRange) ? type : 'all';
 
-            var dom		    = this.first(true);
-            var parent      = null;
-            var oPosition   = null;
-            var posTypeRange = ['relative' , 'absolute' , 'fixed'];
-            var isCssDefine= true;
+            var dom = this.first(true);
+            var parent = null;
+            var oPosition = null;
+            var posTypeRange = ['relative', 'absolute', 'fixed'];
+            var isCssDefine = true;
             var leftVal = 0;
-            var topVal  = 0;
+            var topVal = 0;
 
-            while (dom.isDom() && !dom.eq(until.get(0)))
-            {
+            while (dom.isDom() && !dom.eq(until.get(0))) {
                 // 以下代码会导致页面回流，严重影响性能！
                 // 故而不能使用！
                 // parent = dom.parent();
@@ -1297,7 +1290,7 @@
                 //     });
                 // }
                 leftVal += dom.offsetLeft();
-                topVal  += dom.offsetTop();
+                topVal += dom.offsetTop();
                 // 会导致页面回流，故而不能使用
                 // 重置回原始值
                 // if (!isCssDefine) {
@@ -1308,26 +1301,28 @@
                 dom = dom.offsetParent();
             }
 
-            switch (type)
-            {
-                case 'left': return leftVal;
-                case 'top': return topVal;
-                case 'all': return {
-                    left: leftVal ,
-                    top:  topVal
-                };
+            switch (type) {
+                case 'left':
+                    return leftVal;
+                case 'top':
+                    return topVal;
+                case 'all':
+                    return {
+                        left: leftVal,
+                        top: topVal
+                    };
             }
-        } ,
+        },
 
-        offset: function(){
+        offset: function () {
 
-        } ,
+        },
 
         // on 的别名
-        loginEvent: function(){
+        loginEvent: function () {
             console.warn('loginEvent 已经不推荐使用，请使用 on 代替');
-            this.on.apply(this , arguments);
-        } ,
+            this.on.apply(this, arguments);
+        },
 
         /*
          * 事件注册，支持批量操作
@@ -1337,158 +1332,157 @@
          * @param Boolean     isCaptureCatch | option
          * @return undefined
          */
-        on: function(action , fn , isRepeat , mixed){
-            this.loop(function(dom){
-                g.$e.bind(dom , action , fn , isRepeat , mixed);
+        on: function (action, fn, isRepeat, mixed) {
+            this.loop(function (dom) {
+                g.$e.bind(dom, action, fn, isRepeat, mixed);
             });
             return this;
-        } ,
+        },
 
-        off: function(action , fn , mixed){
-            this.loop(function(dom){
-                g.$e.unbind(dom , action , fn , mixed);
+        off: function (action, fn, mixed) {
+            this.loop(function (dom) {
+                g.$e.unbind(dom, action, fn, mixed);
             });
             return this;
-        } ,
+        },
 
-        startTransition: function(className , callback){
+        startTransition: function (className, callback) {
             var self = this;
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 dom = G(dom);
                 self.callbacks.forEach((v) => {
                     if (!dom.equals(v.dom)) {
-                        return ;
+                        return;
                     }
                     if (v.action.toLowerCase() !== 'transitionend') {
-                        return ;
+                        return;
                     }
-                    dom.off(v.action , v.callback , v.option);
+                    dom.off(v.action, v.callback, v.option);
                 });
-                var end = function(e){
+                var end = function (e) {
                     if (e.target !== e.currentTarget) {
-                        return ;
+                        return;
                     }
-                    dom.off('transitionend' , end , false);
+                    dom.off('transitionend', end, false);
                     G.invoke(callback);
                 };
-                dom.on('transitionend' , end , true , false);
+                dom.on('transitionend', end, true, false);
                 self.callbacks.push({
-                    dom: dom.get(0) ,
-                    action: 'transitionend' ,
-                    callback: end ,
-                    option: false ,
+                    dom: dom.get(0),
+                    action: 'transitionend',
+                    callback: end,
+                    option: false,
                 });
-                g.setTimeout(function(){
+                g.setTimeout(function () {
                     dom.addClass(className);
-                } , 1000 / 60 * 1.3);
+                }, 1000 / 60 * 1.3);
             });
-        } ,
+        },
 
         // 移除 css 过渡动画
-        endTransition: function(className , callback){
+        endTransition: function (className, callback) {
             var self = this;
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 dom = G(dom);
                 self.callbacks.forEach((v) => {
                     if (!dom.equals(v.dom)) {
-                        return ;
+                        return;
                     }
                     if (v.action.toLowerCase() !== 'transitionend') {
-                        return ;
+                        return;
                     }
-                    dom.off(v.action , v.callback , v.option);
+                    dom.off(v.action, v.callback, v.option);
                 });
-                var end = function(e){
+                var end = function (e) {
                     if (e.target !== e.currentTarget) {
-                        return ;
+                        return;
                     }
-                    dom.off('transitionend' , end , false);
+                    dom.off('transitionend', end, false);
                     G.invoke(callback);
                 };
-                dom.on('transitionend' , end , true , false);
+                dom.on('transitionend', end, true, false);
                 self.callbacks.push({
-                    dom: dom.get(0) ,
-                    action: 'transitionend' ,
-                    callback: end ,
-                    option: false ,
+                    dom: dom.get(0),
+                    action: 'transitionend',
+                    callback: end,
+                    option: false,
                 });
-                g.setTimeout(function(){
+                g.setTimeout(function () {
                     dom.removeClass(className);
-                } , 1000 / 60 * 1.3);
+                }, 1000 / 60 * 1.3);
             });
-        } ,
+        },
 
         // 监听过渡动画
-        onTransition: function(callback){
+        onTransition: function (callback) {
             var self = this;
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 dom = G(dom);
                 self.callbacks.forEach((v) => {
                     if (!dom.equals(v.dom)) {
-                        return ;
+                        return;
                     }
                     if (v.action.toLowerCase() !== 'transitionend') {
-                        return ;
+                        return;
                     }
-                    dom.off(v.action , v.callback , v.option);
+                    dom.off(v.action, v.callback, v.option);
                 });
-                var end = function(e){
+                var end = function (e) {
                     if (e.target !== e.currentTarget) {
-                        return ;
+                        return;
                     }
-                    dom.off('transitionend' , end , false);
+                    dom.off('transitionend', end, false);
                     G.invoke(callback);
                 };
-                dom.on('transitionend' , end , true , false);
+                dom.on('transitionend', end, true, false);
                 self.callbacks.push({
-                    dom: dom.get(0) ,
-                    action: 'transitionend' ,
-                    callback: end ,
-                    option: false ,
+                    dom: dom.get(0),
+                    action: 'transitionend',
+                    callback: end,
+                    option: false,
                 });
             });
-        } ,
+        },
 
-        cssTransition: function(key , value , callback){
+        cssTransition: function (key, value, callback) {
             var self = this;
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 dom = G(dom);
                 self.callbacks.forEach((v) => {
                     if (!dom.equals(v.dom)) {
-                        return ;
+                        return;
                     }
                     if (v.action.toLowerCase() !== 'transitionend') {
-                        return ;
+                        return;
                     }
-                    dom.off(v.action , v.callback , v.option);
+                    dom.off(v.action, v.callback, v.option);
                 });
-                var end = function(e){
+                var end = function (e) {
                     if (e.target !== e.currentTarget) {
-                        return ;
+                        return;
                     }
-                    dom.off('transitionend' , end , false);
+                    dom.off('transitionend', end, false);
                     g.isFunction(value) ? G.invoke(value) : G.invoke(callback);
                 };
-                dom.on('transitionend' ,  end , true , false);
+                dom.on('transitionend', end, true, false);
                 self.callbacks.push({
-                    dom: dom.get(0) ,
-                    action: 'transitionend' ,
-                    callback: end ,
-                    option: false ,
+                    dom: dom.get(0),
+                    action: 'transitionend',
+                    callback: end,
+                    option: false,
                 });
-                g.setTimeout(function(){
-                    g.isFunction(value) ? self.css(key , value) : self.css(key);
-                } , 1000 / 60 * 1.3);
+                g.setTimeout(function () {
+                    g.isFunction(value) ? self.css(key, value) : self.css(key);
+                }, 1000 / 60 * 1.3);
             });
-        } ,
+        },
 
 
         // 元素方式检查是否存在某父元素
-        existsParent: function(parent){
+        existsParent: function (parent) {
             var pNode = this.get(0).parentNode;
 
-            while (pNode)
-            {
+            while (pNode) {
                 if (pNode === parent) {
                     return true;
                 }
@@ -1501,27 +1495,26 @@
             }
 
             return false;
-        } ,
+        },
 
         // 元素方式检查是否存在某子元素
-        existsChild: function(child){
-            var parent  = this.get(0);
-            var res     = false;
-            var find = function(parent){
+        existsChild: function (child) {
+            var parent = this.get(0);
+            var res = false;
+            var find = function (parent) {
                 if (res) {
-                    return ;
+                    return;
                 }
 
-                var cNodes  = parent.children;
-                var i       = 0;
-                var cur     = null;
+                var cNodes = parent.children;
+                var i = 0;
+                var cur = null;
 
-                for (; i < cNodes.length; ++i)
-                {
+                for (; i < cNodes.length; ++i) {
                     cur = cNodes[i];
                     if (cur === child) {
                         res = true;
-                        return ;
+                        return;
                     }
 
                     if (cur.childElementCount !== 0) {
@@ -1533,10 +1526,10 @@
             find(parent);
 
             return res;
-        } ,
+        },
 
         // 元素方式检查存在某兄弟元素
-        existsSibling: function(sibling){
+        existsSibling: function (sibling) {
 
             if (this.existsTopSibling(sibling)) {
                 return true;
@@ -1547,14 +1540,13 @@
             }
 
             return false;
-        } ,
+        },
 
         // 水平向上查找检查是否存在某元素的某兄弟元素
-        existsTopSibling: function(sibling){
+        existsTopSibling: function (sibling) {
             var prev = this.get(0).previousElementSibling;
 
-            while (prev)
-            {
+            while (prev) {
                 if (prev === sibling) {
                     return true;
                 }
@@ -1563,14 +1555,13 @@
             }
 
             return false;
-        } ,
+        },
 
         // 水平向下查找检查是否存在某元素的某兄弟元素
-        existsBtmSibling: function(sibling){
+        existsBtmSibling: function (sibling) {
             var next = this.get(0).nextElementSibling;
 
-            while (next)
-            {
+            while (next) {
                 if (next === sibling) {
                     return true;
                 }
@@ -1579,7 +1570,7 @@
             }
 
             return false;
-        } ,
+        },
 
         /*
          * 返回当前元素的直系子元素集中具有指定特征的子集
@@ -1587,35 +1578,33 @@
          * @param Boolean isStrict  是否严格查询
          * @param Boolean isCopy    是否生成副本
          */
-        children: function(json , isStrict , isCopy){
-            json        = g.isObj(json) && !g.isNull(json) ? json : {};
-            isStrict    = g.isBoolean(isStrict) ? isStrict : false;
-            isCopy      = g.isBoolean(isCopy) ? isCopy : true;
+        children: function (json, isStrict, isCopy) {
+            json = g.isObj(json) && !g.isNull(json) ? json : {};
+            isStrict = g.isBoolean(isStrict) ? isStrict : false;
+            isCopy = g.isBoolean(isCopy) ? isCopy : true;
 
-            var res 			= [];
-            var cur 			= null;
-            var attrVal 		= '';
-            var checkVal 		= '';
-            var i				= 0;
-            var key				= null;
-            var children		= this.get(0).children;
-            var isSatisfy		= true;
+            var res = [];
+            var cur = null;
+            var attrVal = '';
+            var checkVal = '';
+            var i = 0;
+            var key = null;
+            var children = this.get(0).children;
+            var isSatisfy = true;
 
-            for (i = 0; i < children.length; ++i)
-            {
-                cur 		= children[i];
-                isSatisfy	= true;
-                for (key in json)
-                {
-                    attrVal 	 = g.isValid(cur[key]) ? cur[key] : cur.getAttribute(key);
-                    checkVal 	 = json[key];
+            for (i = 0; i < children.length; ++i) {
+                cur = children[i];
+                isSatisfy = true;
+                for (key in json) {
+                    attrVal = g.isValid(cur[key]) ? cur[key] : cur.getAttribute(key);
+                    checkVal = json[key];
 
                     if (isStrict) {
                         isSatisfy = attrVal === checkVal;
                     } else {
-                        attrVal     = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
-                        checkVal    = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
-                        isSatisfy   = g.isString(attrVal) ? attrVal.search(checkVal) !== -1 : attrVal == checkVal;
+                        attrVal = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
+                        checkVal = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
+                        isSatisfy = g.isString(attrVal) ? attrVal.search(checkVal) !== -1 : attrVal == checkVal;
                     }
 
                     if (!isSatisfy) {
@@ -1629,13 +1618,13 @@
             }
 
             if (!isCopy) {
-                this._cur   = res;
+                this._cur = res;
                 this.length = res.length;
                 return this;
             } else {
                 return g(res);
             }
-        } ,
+        },
 
         /*
          * 向上查找符合条件的所有祖先元素，直到遇到给定的祖先元素为止
@@ -1647,34 +1636,32 @@
          * @res 满足条件的所有父元素集合
          * @return this
          */
-        parents: function(json , until , isStrict ,  isCopy){
-            json        = g.isObj(json) ? json : {};
-            until       = g.isDom(until) ? until : document.body;
-            isStrict    = g.isBoolean(isStrict) ? isStrict : false;
-            isCopy      = g.isBoolean(isCopy) ? isCopy : true;
+        parents: function (json, until, isStrict, isCopy) {
+            json = g.isObj(json) ? json : {};
+            until = g.isDom(until) ? until : document.body;
+            isStrict = g.isBoolean(isStrict) ? isStrict : false;
+            isCopy = g.isBoolean(isCopy) ? isCopy : true;
 
-            var res		= [];
-            var parent 	= this.first(true).parent();
+            var res = [];
+            var parent = this.first(true).parent();
             var attrVal = '';
-            var key     = null;
-            var checkVal    = '';
-            var isSatisfy   = true;
+            var key = null;
+            var checkVal = '';
+            var isSatisfy = true;
 
-            while (!parent.eq(until))
-            {
+            while (!parent.eq(until)) {
                 isSatisfy = true;
 
-                for (key in json)
-                {
-                    attrVal 	    = g.isValid(parent.native(key)) ? parent.native(key) : parent.attr(key);
-                    checkVal 		= json[key];
+                for (key in json) {
+                    attrVal = g.isValid(parent.native(key)) ? parent.native(key) : parent.attr(key);
+                    checkVal = json[key];
 
                     if (isStrict) {
                         isSatisfy = attrVal === checkVal;
                     } else {
-                        attrVal     = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
-                        checkVal    = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
-                        isSatisfy   = g.isString(attrVal) ? attrVal.search(checkVal) !== -1 : attrVal == checkVal;
+                        attrVal = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
+                        checkVal = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
+                        isSatisfy = g.isString(attrVal) ? attrVal.search(checkVal) !== -1 : attrVal == checkVal;
                     }
 
                     if (!isSatisfy) {
@@ -1690,20 +1677,20 @@
             }
 
             if (!isCopy) {
-                this._cur   = res;
+                this._cur = res;
                 this.length = res.length;
                 return this;
             } else {
                 return g(res);
             }
-        } ,
+        },
 
         /**
          * 返回当前元素的直系父元素
          */
-        parent: function(){
+        parent: function () {
             return g(this.get(0).parentNode);
-        } ,
+        },
 
         /*
          * 向下查找所有符合条件的子元素
@@ -1713,34 +1700,32 @@
          * @param Boolean isCopy   是否复制一份，而不是替换当前 context
          * @return Element | false
          */
-        childrens: function(json , isStrict , isCopy){
-            json        = g.isObj(json) ? json : {};
-            isStrict    = g.isBoolean(isStrict) ? isStrict : false;
-            isCopy      = g.isBoolean(isCopy) ? isCopy : true;
+        childrens: function (json, isStrict, isCopy) {
+            json = g.isObj(json) ? json : {};
+            isStrict = g.isBoolean(isStrict) ? isStrict : false;
+            isCopy = g.isBoolean(isCopy) ? isCopy : true;
 
-            var self  			= this;
-            var res   			= [];
-            var cNode 			= false;
-            var isSatisfy 		= true;
-            var attrVal  		= null;
-            var checkVal 		= null;
-            var attrValType		= null;
-            var checkValType 	= null;
-            var i               = 0;
-            var key             = null;
+            var self = this;
+            var res = [];
+            var cNode = false;
+            var isSatisfy = true;
+            var attrVal = null;
+            var checkVal = null;
+            var attrValType = null;
+            var checkValType = null;
+            var i = 0;
+            var key = null;
 
-            var find = function(dom){
+            var find = function (dom) {
                 var cNodes = dom.children;
 
-                for (i = 0; i < cNodes.length; ++i)
-                {
+                for (i = 0; i < cNodes.length; ++i) {
                     isSatisfy = true;
-                    cNode 	  = cNodes[i];
+                    cNode = cNodes[i];
 
-                    for (key in json)
-                    {
-                        attrVal 	    = g.isValid(cNode[key]) ? cNode[key] : cNode.getAttribute(key);
-                        checkVal 		= json[key];
+                    for (key in json) {
+                        attrVal = g.isValid(cNode[key]) ? cNode[key] : cNode.getAttribute(key);
+                        checkVal = json[key];
 
                         if (isStrict) {
                             if (attrVal === checkVal) {
@@ -1751,8 +1736,8 @@
                             }
                         } else {
                             // 字符串值
-                            attrValType 	= g.type(attrVal);
-                            checkValType 	= g.type(checkVal);
+                            attrValType = g.type(attrVal);
+                            checkValType = g.type(checkVal);
 
                             if (attrValType === 'String') {
                                 attrVal = attrVal.toLowerCase();
@@ -1795,46 +1780,44 @@
 
             if (!isCopy) {
                 this._cur = res;
-                this.length  = res.length;
+                this.length = res.length;
                 return this;
             } else {
                 return g(res);
             }
-        } ,
+        },
 
 
         /**
          * 从当前元素集中排除具有指定特征的元素
          */
-        not: function(json , isStrict , isCopy){
-            json        = g.isObj(json) ? json : {};
-            isStrict    = g.isBoolean(isStrict) ? isStrict : false;
-            isCopy      = g.isBoolean(isCopy) ? isCopy : true;
+        not: function (json, isStrict, isCopy) {
+            json = g.isObj(json) ? json : {};
+            isStrict = g.isBoolean(isStrict) ? isStrict : false;
+            isCopy = g.isBoolean(isCopy) ? isCopy : true;
 
-            var doms        = g(this.get());
-            var cur  	 	= null;
-            var attrVal  	= '';
-            var checkVal 	= '';
-            var res      	= [];
-            var isSatisfy 	= true;
-            var i 			= 0;
-            var key			= null;
+            var doms = g(this.get());
+            var cur = null;
+            var attrVal = '';
+            var checkVal = '';
+            var res = [];
+            var isSatisfy = true;
+            var i = 0;
+            var key = null;
 
-            for (i = 0; i < doms.length; ++i)
-            {
+            for (i = 0; i < doms.length; ++i) {
                 isSatisfy = true;
-                cur = doms.jump(i , true);
-                for (key in json)
-                {
-                    attrVal 	 = g.isValid(cur.native(key)) ? cur.native(key) : cur.attr(key);
-                    checkVal 	 = json[key];
+                cur = doms.jump(i, true);
+                for (key in json) {
+                    attrVal = g.isValid(cur.native(key)) ? cur.native(key) : cur.attr(key);
+                    checkVal = json[key];
 
                     if (isStrict) {
                         isSatisfy = attrVal !== checkVal;
                     } else {
-                        attrVal     = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
-                        checkVal    = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
-                        isSatisfy   = g.isString(attrVal) ? attrVal.search(checkVal) === -1 : attrVal != checkVal;
+                        attrVal = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
+                        checkVal = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
+                        isSatisfy = g.isString(attrVal) ? attrVal.search(checkVal) === -1 : attrVal != checkVal;
                     }
 
                     if (!isSatisfy) {
@@ -1848,46 +1831,44 @@
             }
 
             if (!isCopy) {
-                this._cur   = res;
+                this._cur = res;
                 this.length = res.length;
                 return this;
             } else {
                 return g(res);
             }
-        } ,
+        },
 
         /**
          * 从当前元素集中获取具有指定特征的元素
          */
-        filter: function(json , isStrict , isCopy){
-            json        = g.isObj(json) ? json : {};
-            isStrict    = g.isBoolean(isStrict) ? isStrict : false;
-            isCopy      = g.isBoolean(isCopy) ? isCopy : true;
+        filter: function (json, isStrict, isCopy) {
+            json = g.isObj(json) ? json : {};
+            isStrict = g.isBoolean(isStrict) ? isStrict : false;
+            isCopy = g.isBoolean(isCopy) ? isCopy : true;
 
-            var doms        = g(this.get());
-            var cur  	 	= null;
-            var attrVal  	= '';
-            var checkVal 	= '';
-            var res      	= [];
-            var isSatisfy 	= true;
-            var i 			= 0;
-            var key			= null;
+            var doms = g(this.get());
+            var cur = null;
+            var attrVal = '';
+            var checkVal = '';
+            var res = [];
+            var isSatisfy = true;
+            var i = 0;
+            var key = null;
 
-            for (i = 0; i < doms.length; ++i)
-            {
+            for (i = 0; i < doms.length; ++i) {
                 isSatisfy = true;
-                cur = doms.jump(i , true);
-                for (key in json)
-                {
-                    attrVal 	 = g.isValid(cur.native(key)) ? cur.native(key) : cur.attr(key);
-                    checkVal 	 = json[key];
+                cur = doms.jump(i, true);
+                for (key in json) {
+                    attrVal = g.isValid(cur.native(key)) ? cur.native(key) : cur.attr(key);
+                    checkVal = json[key];
 
                     if (isStrict) {
                         isSatisfy = attrVal === checkVal;
                     } else {
-                        attrVal     = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
-                        checkVal    = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
-                        isSatisfy   = g.isString(attrVal) ? attrVal.search(checkVal) !== -1 : attrVal == checkVal;
+                        attrVal = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
+                        checkVal = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
+                        isSatisfy = g.isString(attrVal) ? attrVal.search(checkVal) !== -1 : attrVal == checkVal;
                     }
 
                     if (!isSatisfy) {
@@ -1901,21 +1882,21 @@
             }
 
             if (!isCopy) {
-                this._cur   = res;
+                this._cur = res;
                 this.length = res.length;
                 return this;
             } else {
                 return g(res);
             }
-        } ,
+        },
 
-        nextSibling: function(){
+        nextSibling: function () {
             return g(this.get(0).nextElementSibling);
-        } ,
+        },
 
-        prevSibling: function(){
+        prevSibling: function () {
             return g(this.get(0).previousElementSibling);
-        } ,
+        },
 
         /*
          * 水平查找符合条件的兄弟元素
@@ -1923,17 +1904,17 @@
          * @param Object json
          * @return Element | false
          */
-        siblings: function(json , isStrict , isCopy){
+        siblings: function (json, isStrict, isCopy) {
             var res = [];
 
-            var prevSiblings = this.prevSiblings(json , isStrict , isCopy);
-            var nextSiblings = this.nextSiblings(json , isStrict , isCopy);
+            var prevSiblings = this.prevSiblings(json, isStrict, isCopy);
+            var nextSiblings = this.nextSiblings(json, isStrict, isCopy);
 
-            prevSiblings.loop(function(dom){
+            prevSiblings.loop(function (dom) {
                 res.push(dom);
             });
 
-            nextSiblings.loop(function(dom){
+            nextSiblings.loop(function (dom) {
                 res.push(dom);
             });
 
@@ -1944,35 +1925,33 @@
             } else {
                 return g(res);
             }
-        } ,
+        },
 
         // 兄弟元素 水平向上查找指定特征的兄弟元素
-        prevSiblings: function(json , isStrict , isCopy){
-            json        = g.isObj(json) ? json : {};
-            isStrict    = g.isBoolean(isStrict) ? isStrict : false;
-            isCopy      = g.isBoolean(isCopy) ? isCopy : true;
+        prevSiblings: function (json, isStrict, isCopy) {
+            json = g.isObj(json) ? json : {};
+            isStrict = g.isBoolean(isStrict) ? isStrict : false;
+            isCopy = g.isBoolean(isCopy) ? isCopy : true;
 
             var prevSibling = this.prevSibling();
-            var res			= [];
-            var isSatisfy	= true;
-            var attrVal		= '';
-            var checkVal	= '';
-            var key			 = null;
+            var res = [];
+            var isSatisfy = true;
+            var attrVal = '';
+            var checkVal = '';
+            var key = null;
 
-            while (prevSibling.isDom())
-            {
+            while (prevSibling.isDom()) {
                 isSatisfy = true;
-                for (key in json)
-                {
-                    attrVal  		= g.isValid(prevSibling.native(key)) ? prevSibling.native(key) : prevSibling.attr(key);
-                    checkVal 		= json[key];
+                for (key in json) {
+                    attrVal = g.isValid(prevSibling.native(key)) ? prevSibling.native(key) : prevSibling.attr(key);
+                    checkVal = json[key];
 
                     if (isStrict) {
                         isSatisfy = attrVal === checkVal;
                     } else {
-                        attrVal     = g.isString(attrVal)   ? attrVal.toLowerCase() : attrVal;
-                        checkVal    = g.isString(checkVal)  ? checkVal.toLowerCase() : checkVal;
-                        isSatisfy   = g.isString(attrVal)   ? attrVal.search(checkVal) !== -1 : attrVal == checkVal;
+                        attrVal = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
+                        checkVal = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
+                        isSatisfy = g.isString(attrVal) ? attrVal.search(checkVal) !== -1 : attrVal == checkVal;
                     }
 
                     if (!isSatisfy) {
@@ -1988,41 +1967,39 @@
             }
 
             if (!isCopy) {
-                this._cur   = res;
+                this._cur = res;
                 this.length = res.length;
                 return this;
             } else {
                 return g(res);
             }
-        } ,
+        },
 
         // 兄弟元素 水平向下查找
-        nextSiblings: function(json ,isStrict , isCopy){
-            json        = g.isObj(json) ? json : {};
-            isStrict    = g.isBoolean(isStrict) ? isStrict : false;
-            isCopy      = g.isBoolean(isCopy) ? isCopy : true;
+        nextSiblings: function (json, isStrict, isCopy) {
+            json = g.isObj(json) ? json : {};
+            isStrict = g.isBoolean(isStrict) ? isStrict : false;
+            isCopy = g.isBoolean(isCopy) ? isCopy : true;
 
             var nextSibling = this.nextSibling();
-            var res			= [];
-            var isSatisfy	= true;
-            var attrVal		= '';
-            var checkVal	= '';
-            var key			 = null;
+            var res = [];
+            var isSatisfy = true;
+            var attrVal = '';
+            var checkVal = '';
+            var key = null;
 
-            while (nextSibling.isDom())
-            {
+            while (nextSibling.isDom()) {
                 isSatisfy = true;
-                for (key in json)
-                {
-                    attrVal  		= g.isValid(nextSibling.native(key)) ? nextSibling.native(key) : nextSibling.attr(key);
-                    checkVal 		= json[key];
+                for (key in json) {
+                    attrVal = g.isValid(nextSibling.native(key)) ? nextSibling.native(key) : nextSibling.attr(key);
+                    checkVal = json[key];
 
                     if (isStrict) {
                         isSatisfy = attrVal === checkVal;
                     } else {
-                        attrVal     = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
-                        checkVal    = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
-                        isSatisfy   = g.isString(attrVal) ? attrVal.search(checkVal) !== -1 : attrVal == checkVal;
+                        attrVal = g.isString(attrVal) ? attrVal.toLowerCase() : attrVal;
+                        checkVal = g.isString(checkVal) ? checkVal.toLowerCase() : checkVal;
+                        isSatisfy = g.isString(attrVal) ? attrVal.search(checkVal) !== -1 : attrVal == checkVal;
                     }
 
                     if (!isSatisfy) {
@@ -2038,88 +2015,86 @@
             }
 
             if (!isCopy) {
-                this._cur   = res;
+                this._cur = res;
                 this.length = res.length;
                 return this;
             } else {
                 return g(res);
             }
-        } ,
+        },
 
         // 添加类名
-        addClass: function(cn){
+        addClass: function (cn) {
             var self = this;
             // 移除原有的类名
             this.removeClass(cn);
-            var typeRange = ['String' , 'Array'];
-            if (!G.contain(G.type(cn) , typeRange)) {
+            var typeRange = ['String', 'Array'];
+            if (!G.contain(G.type(cn), typeRange)) {
                 throw new Error('参数 1 类型错误');
             }
             if (g.isString(cn)) {
                 cn = [cn];
             }
             cn = cn.join(' ');
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 var className = dom.className;
                 var endClassName = className === '' ? cn : className + ' ' + cn;
                 endClassName = g.trim(endClassName);
                 dom.className = endClassName;
             });
-        } ,
+        },
 
         // 移除类名
-        removeClass: function(cn){
+        removeClass: function (cn) {
             var self = this;
-            var typeRange = ['String' , 'Array'];
-            if (!G.contain(G.type(cn) , typeRange)) {
+            var typeRange = ['String', 'Array'];
+            if (!G.contain(G.type(cn), typeRange)) {
                 throw new Error('参数 1 类型错误');
             }
             if (g.isString(cn)) {
                 cn = [cn];
             }
-            cn.forEach(function(v){
+            cn.forEach(function (v) {
                 v = v.toLowerCase();
-                self.loop(function(dom){
+                self.loop(function (dom) {
                     var className = dom.className.toLowerCase();
                     var classNameArray = className.split(' ');
                     var i = 0;
                     var cur;
-                    for (i = 0; i < classNameArray.length; ++i)
-                    {
+                    for (i = 0; i < classNameArray.length; ++i) {
                         cur = classNameArray[i];
                         if (cur === v) {
-                            classNameArray.splice(i , 1);
+                            classNameArray.splice(i, 1);
                             i--;
                         }
                     }
                     dom.className = g.trim(classNameArray.join(' '));
                 });
             });
-        } ,
+        },
 
         // 替换类名
-        replaceClass: function(oldCn , newCn){
+        replaceClass: function (oldCn, newCn) {
             this.removeClass(oldCn);
             this.addClass(newCn);
-        } ,
+        },
 
         /*
          * 判断类名是否存在！
          * @param String   cn
          * @param Boolean  isStrict
          */
-        hasClass: function(className , isStrict){
+        hasClass: function (className, isStrict) {
             var cn = this.attr('class');
             if (!g.isValid(cn)) {
                 return false;
             }
             isStrict = g.isBoolean(isStrict) ? isStrict : false;
-            var cnList  = cn.split(' ');
-            var i   = 0;
+            var cnList = cn.split(' ');
+            var i = 0;
             var cur = null;
 
-            for (; i < cnList.length; ++i)
-            {
+            for (; i < cnList.length; ++i) {
                 cur = cnList[i];
                 if (isStrict ? cur === className : cur.toLowerCase() == className) {
                     return true;
@@ -2127,31 +2102,30 @@
             }
 
             return false;
-        } ,
+        },
 
         // 切换内容
-        switch: function(doms){
+        switch: function (doms) {
             doms = g(doms);
 
             var isExists = g.scn('hide');
 
             if (!isExists) {
-                document.styleSheets[0].addRule('.hide','display:none;' , 0);
+                document.styleSheets[0].addRule('.hide', 'display:none;', 0);
             }
 
             this.removeClass('hide');
 
-            var i   = 0;
+            var i = 0;
             var cur = null;
 
-            for (; i < doms.length; ++i)
-            {
-                cur = doms.jump(i , true);
-                if (cur.get(0) !== this.get(0)){
+            for (; i < doms.length; ++i) {
+                cur = doms.jump(i, true);
+                if (cur.get(0) !== this.get(0)) {
                     cur.addClass('hide');
                 }
             }
-        } ,
+        },
 
         /*
          * 突出显示被选中的元素
@@ -2160,16 +2134,15 @@
          * @param reverse 相反操作
          * @return undefined
          */
-        highlight: function(cn , list , reverse){
+        highlight: function (cn, list, reverse) {
             list = g(list);
             reverse = g.type(reverse) === 'Boolean' ? reverse : false;
 
             var i = 0;
             var cur = null;
 
-            for (; i < list.length; ++i)
-            {
-                cur = list.jump(i , true);
+            for (; i < list.length; ++i) {
+                cur = list.jump(i, true);
 
                 if (!reverse) {
                     if (this.get(0) !== cur.get(0)) {
@@ -2185,24 +2158,23 @@
                     }
                 }
             }
-        } ,
+        },
 
         // 获取元素索引
-        index: function(list){
-            list    = g(list);
-            var i   = 0;
+        index: function (list) {
+            list = g(list);
+            var i = 0;
             var cur = null;
 
-            for (; i < list.length; ++i)
-            {
-                cur = list.jump(i , true);
-                if (cur.get(0) === this.get(0)){
+            for (; i < list.length; ++i) {
+                cur = list.jump(i, true);
+                if (cur.get(0) === this.get(0)) {
                     return i;
                 }
             }
 
             return false;
-        } ,
+        },
 
         /*
          * 初始化时间选择器函数
@@ -2212,7 +2184,7 @@
          * @param Number focusN  被命中的数字
          * @return HTML String
          */
-        timeSelector: function(min , max , cur){
+        timeSelector: function (min, max, cur) {
             if (!g.isInt(min)) {
                 throw new Error('参数 1 错误');
             }
@@ -2225,13 +2197,12 @@
                 throw new RangeError('最小值大于最大值');
             }
 
-            var option     = '';
-            var option  = null;
+            var option = '';
+            var option = null;
             var i = 0;
             var _cur = null;
 
-            for (i = min; i <= max; ++i)
-            {
+            for (i = min; i <= max; ++i) {
                 option = document.createElement('option');
                 option.value = i;
                 option.textContent = i;
@@ -2242,16 +2213,16 @@
 
                 this.append(option);
             }
-        } ,
+        },
 
         /*
          * 全屏
          * 一次只能允许一个元素全屏
          */
-        requestFullScreen: function(){
-            var dom				   = this.get(0);
-            var fullScreenEnabled  = document.fullScreenEnabled || document.webkitFullScreenEnabled || document.mozFullScreenEnabled || document.msFullScreenEnabled;
-            var isFullScreen	   = document.fullScreenElement || document.webkitFullScreenElement || document.mozFullScreenElement || document.msFullScreenElement;
+        requestFullScreen: function () {
+            var dom = this.get(0);
+            var fullScreenEnabled = document.fullScreenEnabled || document.webkitFullScreenEnabled || document.mozFullScreenEnabled || document.msFullScreenEnabled;
+            var isFullScreen = document.fullScreenElement || document.webkitFullScreenElement || document.mozFullScreenElement || document.msFullScreenElement;
 
             if (g.type(fullScreenEnabled) === 'Undefined' || fullScreenEnabled) {
                 if (g.type(isFullScreen) === 'Undefined') {
@@ -2289,14 +2260,14 @@
             } else {
                 console.log('不支持全屏模式！');
             }
-        } ,
+        },
 
         /*
          * 退出全屏
          */
-        exitFullScreen: function(){
-            var fullScreenEnabled  = document.fullScreenEnabled || document.webkitFullScreenEnabled || document.mozFullScreenEnabled || document.msFullScreenEnabled;
-            var isFullScreen	   = document.fullScreenElement || document.webkitFullScreenElement || document.mozFullScreenElement || document.msFullScreenElement;
+        exitFullScreen: function () {
+            var fullScreenEnabled = document.fullScreenEnabled || document.webkitFullScreenEnabled || document.mozFullScreenEnabled || document.msFullScreenEnabled;
+            var isFullScreen = document.fullScreenElement || document.webkitFullScreenElement || document.mozFullScreenElement || document.msFullScreenElement;
 
             if (g.type(fullScreenEnabled) === 'Undefined' || fullScreenEnabled) {
                 if (g.type(isFullScreen) === 'Undefined') {
@@ -2338,39 +2309,39 @@
             } else {
                 console.log('不支持全屏模式！');
             }
-        } ,
+        },
 
         // 结合队列的动画方法
-        animateQueue: function(json , callback , time , wait , delay){
-            this.loop(function(dom){
-                this._consume(dom.__smalljs_queue__ , g , g.animate , false , [dom , json] , {
-                    name: '' ,
+        animateQueue: function (json, callback, time, wait, delay) {
+            this.loop(function (dom) {
+                this._consume(dom.__smalljs_queue__, g, g.animate, false, [dom, json], {
+                    name: '',
                     callback: callback
-                } , [time , wait , delay]);
+                }, [time, wait, delay]);
             });
 
             return this;
-        } ,
+        },
 
         // 未结合队列的动画方法
-        animate: function(json , callback , time , wait , delay){
-            this.loop(function(dom){
+        animate: function (json, callback, time, wait, delay) {
+            this.loop(function (dom) {
                 dom.__smalljs_queue__.clear();
 
-                g.animate(dom , json , callback , time , wait , delay);
+                g.animate(dom, json, callback, time, wait, delay);
             });
 
             return this;
-        } ,
+        },
 
         // 动画扩展
-        move: function(con , isLimit){
-            this.loop(function(dom){
-                new Move(dom , con , isLimit);
+        move: function (con, isLimit) {
+            this.loop(function (dom) {
+                new Move(dom, con, isLimit);
             });
 
             return this;
-        } ,
+        },
 
         /*
          * 使元素居中
@@ -2378,28 +2349,27 @@
          * @param Element   container
          * @param String    pos            水平居中（horizontal） | 垂直居中(vertical) | 水平垂直居中（all）
          */
-        center: function(container , pos){
-            var self    = this;
-            var posRange = ['horizontal' , 'vertical' , 'all'];
-            var lv		= null;
-            var tv		= null;
-            var unit    = 'px';
+        center: function (container, pos) {
+            var self = this;
+            var posRange = ['horizontal', 'vertical', 'all'];
+            var lv = null;
+            var tv = null;
+            var unit = 'px';
 
-            pos = g.contain(pos , posRange) ? pos : 'all';
+            pos = g.contain(pos, posRange) ? pos : 'all';
 
-            this.loop(function(dom){
+            this.loop(function (dom) {
                 dom = g(dom);
 
-                var con	   = g(container);
-                var conW   = con.width('padding-box');
-                var conH   = con.height('padding-box');
-                var myW    = dom.width('border-box');
-                var myH    = dom.height('border-box');
+                var con = g(container);
+                var conW = con.width('padding-box');
+                var conH = con.height('padding-box');
+                var myW = dom.width('border-box');
+                var myH = dom.height('border-box');
 
-                switch (pos)
-                {
+                switch (pos) {
                     case 'horizontal':
-                        lv = Math.max(0 , Math.floor((conW - myW) / 2));
+                        lv = Math.max(0, Math.floor((conW - myW) / 2));
 
                         self.css({
                             left: lv + unit
@@ -2407,7 +2377,7 @@
 
                         break;
                     case 'vertical':
-                        tv = Math.max(0 , Math.floor((conH - myH) / 2));
+                        tv = Math.max(0, Math.floor((conH - myH) / 2));
 
                         self.css({
                             top: tv + unit
@@ -2415,11 +2385,11 @@
 
                         break;
                     case 'all':
-                        lv = Math.max(0 , Math.floor((conW - myW) / 2));
-                        tv = Math.max(0 , Math.floor((conH - myH) / 2));
+                        lv = Math.max(0, Math.floor((conW - myW) / 2));
+                        tv = Math.max(0, Math.floor((conH - myH) / 2));
 
                         self.css({
-                            left: lv + unit ,
+                            left: lv + unit,
                             top: tv + unit
                         });
                         break;
@@ -2430,7 +2400,28 @@
             });
 
             return this;
-        }
+        },
+
+        // 获取某个元素滚动条的宽度
+        yScrollbarWidth: function () {
+            return this.width('padding-box') - this.clientWidth();
+        },
+
+        xScrollbarHeight: function () {
+            return this.height('padding-box') - this.clientHeight();
+        },
+
+        hasXScrollbar() {
+            return this.xScrollbarHeight() > 0;
+        },
+
+        hasYScrollbar: function () {
+            return this.yScrollbarWidth() > 0;
+        },
+
+        hasScrollbar: function(){
+            return this.hasXScrollbar() || this.hasYScrollbar();
+        } ,
     };
 
     // 函数调用
@@ -3880,11 +3871,12 @@
 
     /*
      * 返回随机数组
-     * @param  Interger len    长度
-     * @param  String   type   类型
+     * @param  Interger len             长度
+     * @param  String   type            类型
+     * @param  Boolean  isReturnString  是否返回字符串
      * @return Array
      */
-    g.randomArr = function(len , type , isReturnString){
+    g.randomArray = function(len , type , isReturnString){
         var typeRange = ['number' , 'letter' , 'mixed'];
         type      = !g.contain(type , typeRange) ? 'number' : type;
         isReturnString = this.isBoolean(isReturnString) ? isReturnString : false;

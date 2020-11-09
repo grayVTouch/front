@@ -48,7 +48,7 @@
 
         // 元素容器
         this.con = G(selector);
-        
+
         this.option = {};
         this.option.created = G.type(option['created']) !== 'Function' ? this.default.created   : option['created'];
         this.option.deleted = G.type(option['deleted']) !== 'Function' ? this.default.deleted   : option['deleted'];
@@ -89,7 +89,7 @@
 
         initDynamic: function(){
             var self = this;
-            
+
             this.multipleTabW  = this.multipleTab.width('content-box');
             this.tabsW         = this.multipleTabW - this.scrollBarW;
             this.__tabs__      = G('.tab' , this.tabs.get(0));
@@ -262,7 +262,7 @@
          * 生成标签唯一ID
          */
         genID: function(){
-            return G.randomArr(100 , 'mixed').join('');
+            return G.randomArray(100 , 'mixed').join('');
         } ,
 
         /*

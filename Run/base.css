@@ -69,14 +69,14 @@ input , select , button , textarea {
 	-ms-box-sizing:border-box;
 }
 
-input[type=text] , input[type=password] , input[type=search] , input[type=number] ,input[type=range] , input[type=email] , textarea {
-	border:1px solid #ccc;
-	transition:all 0.3s ease-in-out;
-	-webkit-transition:all 0.3s ease-in-out;
-	-moz-transition:all 0.3s ease-in-out;
-	-o-transition:all 0.3s ease-in-out;
-	-ms-transition:all 0.3s ease-in-out;
-}
+/*input[type=text] , input[type=password] , input[type=search] , input[type=number] ,input[type=range] , input[type=email] , textarea {*/
+/*	border:1px solid #ccc;*/
+/*	transition:all 0.3s ease-in-out;*/
+/*	-webkit-transition:all 0.3s ease-in-out;*/
+/*	-moz-transition:all 0.3s ease-in-out;*/
+/*	-o-transition:all 0.3s ease-in-out;*/
+/*	-ms-transition:all 0.3s ease-in-out;*/
+/*}*/
 
 input[type=text] ,
 input[type=password] ,
