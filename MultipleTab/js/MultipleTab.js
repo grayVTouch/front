@@ -141,6 +141,7 @@
             tab.on('dblclick'   , this.tabDoubleClickEvent.bind(this) , true , false);
             tab.on('click'      , this.tabClickEvent.bind(this) , true , false);
             tab.on('mousedown'  , this.tabMousedownEvent.bind(this) , true , false);
+            tab.on('mousedown'  , this.tabMousedownEventForClose.bind(this) , true , false);
         } ,
 
         /**
@@ -251,6 +252,13 @@
         switchById: function(id){
             const tab = this.tab(id);
             this.switchByTab(tab);
+            if (G.type(this.option.focus) === 'Function') {
+                this.option.focus.call(this , id);
+            }
+        } ,
+
+        switch: function(id){
+            this.switchById(id);
         } ,
 
         // 获取当前选中的项的相关属性
@@ -412,6 +420,15 @@
             tab.css({
                 zIndex: '100000000'
             });
+        } ,
+
+        tabMousedownEventForClose (e) {
+            if (e.which !== 2) {
+                return ;
+            }
+            // 鼠标滚轮被按下
+            const tar = e.currentTarget;
+            this.deleteTab(tar);
         } ,
 
         // 鼠标移动后触发事件（拖动标签时）

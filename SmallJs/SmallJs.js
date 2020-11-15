@@ -5194,24 +5194,22 @@
 
         // 设置 cookie
         set: function(k , v , time , path , domain , secure){
+            path = g.isEmptyString(path) ? '/' : path;
             var cookie = k + '=' + v;
 
             if (g.isInt(time)) {
                 cookie += '; max-age=' + time;
             }
 
-            if (g.isValid(path)) {
-                cookie += '; path=' + path;
-            }
+            cookie += '; path=' + path;
 
-            if (g.isValid(domain)) {
+            if (!g.isEmptyString(domain)) {
                 cookie += '; domain=' + domain;
             }
 
-            if (g.isValid(secure)) {
+            if (!g.isEmptyString(secure)) {
                 cookie += '; secure=' + secure;
             }
-
             document.cookie = cookie;
         } ,
 
@@ -5642,6 +5640,24 @@
                     self.loop(v.children , callback);
                 }
             });
+        } ,
+
+        // 附加关联数据
+        link: function(structData , field ,  parent) {
+            field = g.isUndefined(field) ? {id: 'id' , p_id: 'p_id'} : field;
+            for (let i = 0; i < structData.length; ++i)
+            {
+                const cur = structData[i];
+                cur[field['id']] = g.randomArray(32 , 'mixed' , true);
+                if (g.isUndefined(parent)) {
+                    cur[field['p_id']] = null;
+                } else {
+                    cur[field['p_id']] = parent[field['id']];
+                }
+                if (g.isArray(cur.children)) {
+                    this.link(cur.children , field , cur);
+                }
+            }
         } ,
     };
 

@@ -44,6 +44,8 @@
             parent: null ,
             // 子级项点击后回调
             child: null ,
+            // 默认选中首个？
+            spreadFirst: true ,
         };
 
         if (G.isUndefined(option)) {
@@ -62,6 +64,7 @@
         this._amount    = G.isNumber(option.amount) 	? option.amount : this._default.amount;
         this._icon      = G.contain(option.icon , this._iconRange) 	? option.icon : this._default.icon;
         this._exclution  	= G.isBoolean(option.exclution) ? option.exclution : this._default.exclution;
+        this._spreadFirst  	= G.isBoolean(option.spreadFirst) ? option.spreadFirst : this._default.spreadFirst;
         this._spread   	= G.isFunction(option.spread) 	? option.spread : this._default.spread;
         this._shrink   	= G.isFunction(option.shrink) 	? option.shrink : this._default.shrink;
         this._click   	= G.isFunction(option.click) 	? option.click : this._default.click;
@@ -86,7 +89,7 @@
             this._list = G('.list' , this._infiniteClassification.get(0)).first();
             this._items = G('.item' , this._infiniteClassification.get(0));
             this._functions = G('.function' , this._infiniteClassification.get(0));
-            
+
             var _count = 0;
             var initialize = function(container , floor){
                 var list = G('.list' , container).first();
@@ -168,7 +171,9 @@
             if (this._id.length > 0) {
                 this.spreadSpecified(this._id);
             } else {
-                this.spreadFirst();
+                if (this._spreadFirst) {
+                    this.spreadFirst();
+                }
             }
         } ,
 
