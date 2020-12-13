@@ -49,8 +49,18 @@
 	-moz-box-sizing:border-box;
 }
 
-.filter-option .form-text , .filter-option .form-select {
+.filter-option .form-text ,
+.filter-option .form-select
+{
 	min-width:200px;
 	height:30px;
 	line-height: normal;
+	border:1px solid #ccc;
+	transition:all 0.3s;
+}
+
+.filter-option .form-text:focus ,
+.filter-option .form-select:focus
+{
+	border-color: #57a3f3;
 }

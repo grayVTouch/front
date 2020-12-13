@@ -5244,7 +5244,6 @@
             for (k in cookies)
             {
                 v = cookies[k];
-
                 this.del(k);
             }
         }

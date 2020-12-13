@@ -414,6 +414,22 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	margin-top: -3px !important;
 }
 
+.m-t-5 {
+	margin-top: 5px !important;
+}
+
+.m-t-10 {
+	margin-top: 10px !important;
+}
+
+.m-t-15 {
+	margin-top: 15px !important;
+}
+
+.m-t-20 {
+	margin-top: 20px !important;
+}
+
 .m-b-3 {
 	margin-bottom: 3px !important;
 }
@@ -622,6 +638,10 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
 .w-400 {
 	width: 300px !important;
+}
+
+.w-r-100 {
+	width: 100% !important;
 }
 
 /**

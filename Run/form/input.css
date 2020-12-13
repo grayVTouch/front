@@ -36,18 +36,37 @@
  * form-select 即 select 菜单框
  */
 
-.input-table tbody tr td .form-text , .input-table tbody tr td .form-select , .input-table tbody tr td .form-textarea {
+.input-table tbody tr td .form-text ,
+.input-table tbody tr td .form-select ,
+.input-table tbody tr td .form-textarea
+{
 	width: 400px;
 	font-size: 12px;
+	border:1px solid #ccc;
+	transition:all 0.3s;
+	-webkit-transition:all 0.3s;
+	-moz-transition:all 0.3s;
+	-o-transition:all 0.3s;
+	-ms-transition:all 0.3s;
 }
 
-.input-table tbody tr td .form-text , .input-table tbody tr td .form-select {
+.input-table tbody tr td .form-text:focus ,
+.input-table tbody tr td .form-select:focus ,
+.input-table tbody tr td .form-textarea:focus
+{
+	border-color: #57a3f3;
+}
+
+.input-table tbody tr td .form-text ,
+.input-table tbody tr td .form-select
+{
 	height:30px;
 }
 
 .input-table tbody tr td .form-textarea {
 	height: 120px;
 	vertical-align: middle;
+	padding: 10px;
 }
 
 /*
