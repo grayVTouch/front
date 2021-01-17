@@ -1196,8 +1196,9 @@
             this.dom.tracksForVideo = G('track' , this.dom.video.get(0));
             this.dom.itemsForDefinition = G('.item' , this.dom.settingsForDefinition.get(0));
             var definition = this.findDefinitionByDefinition(this.data.definition);
+            console.log('before' , definition);
             if (!G.isValid(definition)) {
-                definition = this.data.playlist[0].definition[0];
+                definition = this.data.playlist[Math.max(0 , this.data.index - 1)].definition[0];
             }
             self.switchVideoByDefinition(definition.name);
         } ,
