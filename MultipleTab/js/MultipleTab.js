@@ -130,6 +130,11 @@
 
         } ,
 
+        // 现有标签列表
+        tabs: function(){
+            return G('.tab' , this.tabs.get(0)).get();
+        } ,
+
         // 注册标签事件
         loginEvent: function(tab){
             tab = G(tab);
@@ -174,7 +179,8 @@
         deleteTab: function(tab){
             if (this.option.saveFirst) {
                 // 是否保留首个标签
-                if (this.__tabs__.jump(0 , true).get(0) === tab) {
+                // if (this.__tabs__.jump(0 , true).get(0) === tab) {
+                if (this.__tabs__.length <= 1) {
                     // 首个标签
                     return ;
                 }
@@ -210,6 +216,18 @@
                 var id = tab.data('id');
                 tab.parent().remove(tab.get(0));
                 self.initDynamic();
+                if (self.option.saveFirst) {
+                    // 保留最后一个标签
+                    if (self.__tabs__.length === 1) {
+                        // 删除关闭按钮
+                        self.__tabs__.jump(0 , true)
+                            .childrens({
+                                tagName: 'div' ,
+                                className: 'close' ,
+                            } , false , true)
+                            .addClass('hide');
+                    }
+                }
                 if (G.type(self.option.deleted) === 'Function') {
                     self.option.deleted.call(self , id , tab.get(0));
                 }
@@ -349,6 +367,16 @@
                 // 还在动画中的标签页无效，所以必须在动画完成之后再次进行
                 // 标签页重新初始化
                 self.initDynamic();
+                // 保留最后一个标签
+                if (self.__tabs__.length > 1) {
+                    // 显示关闭按钮
+                    self.__tabs__.each(function (dom) {
+                       G(dom).childrens({
+                               className: 'close' ,
+                           } , false , true)
+                           .removeClass('hide');
+                    });
+                }
                 if (G.isFunction(self.option.created)) {
                     self.option.created.call(self , id);
                 }
