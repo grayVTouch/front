@@ -5654,7 +5654,7 @@
                     cur[field['p_id']] = parent[field['id']];
                 }
                 if (g.isArray(cur.children)) {
-                    this.link(cur.children , field , cur);
+                    this.openWindow(cur.children , field , cur);
                 }
             }
         } ,
@@ -7858,7 +7858,7 @@
             // 是否异步
             async: true ,
             // query 发送的数据
-            param: null ,
+            query: null ,
             // post 发送的数据
             data: null ,
             // 相应类型
@@ -7939,7 +7939,7 @@
         this.url				 = !g.isValid(option['url'])									? this.default['url']			: option['url'];
         this.async			        = g.type(option['async']) !== 'Boolean'					? this.default['async']		: option['async'];
         this.additionalTimestamp = g.type(option['additionalTimestamp']) !== 'Boolean'					? this.default['additionalTimestamp']		: option['additionalTimestamp'];
-        this.param                  = g.isObject(option.param) ? g.buildQuery(option.param) : g.buildQuery(this.default.param);
+        this.query                  = g.isObject(option.query) ? g.buildQuery(option.query) : g.buildQuery(this.default.query);
         this.data                  = g.type(option.data) != 'FormData' ? (g.isObject(option.data) ? g.buildQuery(option.data) : g.buildQuery(this.default.data)) : option.data;
         this.responseType	 	    = !g.contain(option['responseType'] , this.responseTypeRange)  ? this.default['responseType']	: option['responseType'];
         this.wait		            = g.type(option['wait']) !== 'Number'				? this.default['wait']	: option['wait'];
@@ -8130,12 +8130,12 @@
             if (!this.hasQueryStringSign(this.url)) {
                 this.url += '?';
             }
-            if (g.isValid(this.param)) {
-                if (!g.isString(this.param)) {
+            if (g.isValid(this.query)) {
+                if (!g.isString(this.query)) {
                     throw new Error('Ajax data 字段类型错误');
                 }
-                if (this.param.length > 0) {
-                    this.url += '&' + this.param;
+                if (this.query.length > 0) {
+                    this.url += '&' + this.query;
                 }
             }
             // 防止缓存
