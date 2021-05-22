@@ -150,7 +150,7 @@
         initItemImageByIndex: function(index){
             var item = this.findItemByIndex(index);
             this.initItemImageByItem(item);
-        } , 
+        } ,
 
         // todo
         checkIndex (index) {
@@ -807,8 +807,13 @@
             this.dom.header.on('click' , G.stop);
             this.dom.win.on('keyup' , function(e){
                 // console.log('keycode' , e.keyCode);
-                if (e.keyCode !== 27) {
-                    return ;
+                if (keyCode === 27) {
+                    // esc 关闭
+                    self.hide();
+                } else if (keyCode === 1) {
+
+                } else {
+
                 }
                 self.hide();
             });
