@@ -806,7 +806,8 @@
             this.dom.content.on('click' , this.hide.bind(this));
             this.dom.header.on('click' , G.stop);
             this.dom.win.on('keyup' , function(e){
-                console.log('keycode' , e.keyCode);
+                var keyCode = e.keyCode;
+                console.log('keycode' , keyCode);
                 if (keyCode === 27) {
                     // esc 关闭
                     self.hide();
