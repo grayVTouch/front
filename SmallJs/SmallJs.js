@@ -5654,7 +5654,7 @@
                     cur[field['p_id']] = parent[field['id']];
                 }
                 if (g.isArray(cur.children)) {
-                    this.openWindow(cur.children , field , cur);
+                    this.link(cur.children , field , cur);
                 }
             }
         } ,
