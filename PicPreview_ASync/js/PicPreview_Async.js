@@ -59,6 +59,7 @@
         show: function(index){
             index = G.isUndefined(index) ? this.data.index : parseInt(index);
             var self = this;
+            this.data.visible = true;
             this.dom.picPreviewAsync.removeClass('hide');
             this.dom.picPreviewAsync.startTransition('show' , function(){
                 self.origin(self.data.index);
@@ -75,6 +76,7 @@
 
         hide: function(){
             var self = this;
+            this.data.visible = false;
             this.dom.picPreviewAsync.endTransition('show' , function(){
                 var item = self.findItemByIndex(self.data.index);
                 item = G(item);
@@ -320,6 +322,8 @@
                 initScale: 1 ,
                 // callbacks: [] ,
                 initSImages: false ,
+                visible: true ,
+                scale: 0.2 ,
             };
 
             // 获取数组源
@@ -805,18 +809,32 @@
             this.dom.closeInSImage.on('click' , this.hide.bind(this));
             this.dom.content.on('click' , this.hide.bind(this));
             this.dom.header.on('click' , G.stop);
+
             this.dom.win.on('keyup' , function(e){
+                if (!self.data.visible) {
+                    // 不显示
+                    return ;
+                }
                 var keyCode = e.keyCode;
-                console.log('keycode' , keyCode);
+                // console.log('keycode' , keyCode);
                 if (keyCode === 27) {
                     // esc 关闭
                     self.hide();
-                } else if (keyCode === 1) {
-
+                } else if (keyCode === 39) {
+                    // 下一个
+                    self.next();
+                } else if (keyCode === 37) {
+                    // 上一个
+                    self.prev();
+                } else if (keyCode === 38) {
+                    // 向上
+                    self.grow(self.data.scale);
+                } else if (keyCode === 40) {
+                    // 向下
+                    self.shrink(self.data.scale)
                 } else {
-
+                    // todo 其他
                 }
-                self.hide();
             });
         } ,
 
@@ -824,10 +842,10 @@
             G.prevent(e);
             if (e.deltaY < 0) {
                 // 放大
-                this.grow(0.2);
+                this.grow(this.data.scale);
             } else {
                 // 缩小
-                this.shrink(0.2);
+                this.shrink(this.data.scale);
             }
         } ,
 

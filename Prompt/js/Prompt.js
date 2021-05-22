@@ -1,6 +1,6 @@
 (function(){
     "use strict";
-    
+
     function Prompt(html , option){
         var self = this;
         this.default = {
@@ -120,14 +120,14 @@
 
     p.prototype = {
         constructor: p ,
-        
+
         createPrompt: function(){
             var div = document.createElement('div');
                 div = G(div);
-                div.addClass(['prompt']);
+                div.addClass(['prompt' , 'hide']);
             var html = '';
                 html += '   <!-- 背景颜色 -->';
-                // html += '    <div class="background"></div>';
+                html += '    <div class="background"></div>';
                 html += '    <!-- 内容 -->';
                 html += '    <div class="content">';
                 html += '       <div class="header">';
@@ -184,7 +184,10 @@
             };
             var prompt = this.createPrompt();
             this.dom.root.append(prompt);
+            // throw new Error(1);
             this.dom.prompt    = G(prompt);
+            
+            this.dom.background   = G('.background' , this.dom.prompt.get(0));
             this.dom.content   = G('.content' , this.dom.prompt.get(0));
             this.dom.actions   = G('.actions' , this.dom.content.get(0));
 
@@ -275,23 +278,6 @@
             this.initPosInfo();
         } ,
 
-        // 显示对话框
-        show: function(callback){
-            var self = this;
-
-            this.dom.prompt.removeClass('hide');
-            this.dom.prompt.startTransition('show');
-
-            this.dom.content.startTransition('show' , function(){
-                if (G.isFunction(self.option.success)) {
-                    self.option.success();
-                }
-                if (G.isFunction(callback)) {
-                    callback.call(this);
-                }
-            });
-        } ,
-
         init: function(){
             // 显示隐藏
             if (this.option.status === 'show') {
@@ -301,25 +287,37 @@
             }
         } ,
 
+        // 显示对话框
+        show: function(callback){
+            var self = this;
+
+            this.dom.prompt.removeClass('hide');
+
+            // this.dom.prompt.startTransition('show');
+            //
+            // this.dom.content.startTransition('show' , function(){
+            //     if (G.isFunction(self.option.success)) {
+            //         self.option.success();
+            //     }
+            //     if (G.isFunction(callback)) {
+            //         callback.call(this);
+            //     }
+            // });
+            self.dom.content.addClass('show-layer');
+            // G.nextTick(function(){
+            //     // 显示
+            //     self.dom.content.addClass('show-layer');
+            // });
+        } ,
+
+
+
         // 隐藏对话框
         hide: function(callback){
             var self = this;
 
-            this.dom.prompt.endTransition('show');
-
-            var transform = this.dom.content.css('transform');
-            var transformInfo = G.parseTransform(transform);
-            var translateX = transformInfo.translateX;
-            var translateY = transformInfo.translateY;
-
-            this.dom.content.css({
-                translateX: translateX + 'px' ,
-                translateY: translateY + 'px' ,
-                scaleX:  this.data.initScale ,
-                scaleY: this.data.initScale ,
-            });
-
-            this.dom.content.onTransition(function(){
+            this.dom.background.addClass('hide');
+            this.dom.content.on('animationend' , function(){
                 self.dom.root.remove(self.dom.prompt.get(0));
                 if (G.isFunction(self.option.close)) {
                     self.option.close();
@@ -329,10 +327,8 @@
                 }
             });
 
-            // this.dom.content.endTransition('show' , function(){
-            //
-            //
-            // });
+            this.dom.prompt.removeClass('show');
+            this.dom.content.addClass('hide-layer');
         } ,
 
         calBoundary: function(){
@@ -438,10 +434,11 @@
             this.dom.prompt.on('click' , this.hide.bind(this));
             this.dom.content.on('click' , G.stop);
 
-            this.dom.header.on('mousedown' , this.mouseDownEvent.bind(this));
             this.dom.win.on('resize' , this.initDynamic.bind(this));
-            this.dom.win.on('mousemove' , this.mouseMoveEvent.bind(this));
-            this.dom.win.on('mouseup' , this.mouseUpEvent.bind(this));
+
+            // this.dom.header.on('mousedown' , this.mouseDownEvent.bind(this));
+            // this.dom.win.on('mousemove' , this.mouseMoveEvent.bind(this));
+            // this.dom.win.on('mouseup' , this.mouseUpEvent.bind(this));
         } ,
 
         run: function(){
