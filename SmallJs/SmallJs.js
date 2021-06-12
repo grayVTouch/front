@@ -1339,6 +1339,13 @@
             return this;
         },
 
+        /**
+         *
+         * @param action
+         * @param fn
+         * @param mixed
+         * @returns {SmallJs}
+         */
         off: function (action, fn, mixed) {
             this.loop(function (dom) {
                 g.$e.unbind(dom, action, fn, mixed);
@@ -7638,71 +7645,28 @@
         constructor: Event ,
         _events: [] ,
 
-        /*
-         * 检测某元素上是否已注册某方法
-         */
-        isBind: function(obj , type){
-            var events = this.events(obj);
-
-            if (g.isBoolean(events)) {
-                return false;
-            }
-
-            var k = null;
-
-            for (k in events)
+        isBind: function(obj , event){
+            var i = 0;
+            var cur;
+            for (; i < this._events.length; ++i)
             {
-                if (k === type) {
-                    return events[k];
+                cur = this._events[i];
+                if (cur.obj === obj && cur.event === event) {
+                    return true;
                 }
             }
-
             return false;
-        } ,
-
-        /*
-         * 获取已注册事件的对象列表中当前提供元素所在下标
-         */
-        index: function(obj){
-            var index = false;
-            this._events.forEach(function(v , k){
-                if (index === false && v['obj'] === obj) {
-                    index = k;
-                }
-            });
-
-            return index;
-        } ,
-
-        obj: function(obj){
-            var res = false;
-            this._events.forEach(function(v){
-                if (res === false && v['obj'] === obj) {
-                    res = v;
-                }
-            });
-
-            return res;
-        } ,
-
-        /*
-         * 获取当前提供元素已注册事件列表
-         */
-        events: function(obj){
-            var index = this.index(obj);
-
-            return g.isBoolean(index) ? index : this._events[index]['event'];
         } ,
 
         /**
          * 绑定事件
          */
-        bind: function(obj , action , fn , isRepeat , mixed , context){
-            if (!g.isString(action)) {
+        bind: function(obj , event , callback , isRepeat , mixed , context){
+            if (!g.isString(event)) {
                 throw new TypeError('参数 1 类型错误');
             }
 
-            if (!g.isFunction(fn)) {
+            if (!g.isFunction(callback)) {
                 throw new TypeError('参数 2 类型错误');
             }
 
@@ -7717,28 +7681,21 @@
             }
             context     = g.isObj(context) ? context : obj;
 
-            if (!isRepeat && this.isBind(obj , action)) {
-                console.warn('当前提供元素 ' + obj.toString() + ' 不允许重复绑定 ' + action + " 事件");
-                // throw new Error('当前提供元素 ' + obj.toString() + ' 不允许重复绑定 ' + action + " 事件");
+            if (!isRepeat && this.isBind(obj , event)) {
+                console.warn('当前提供元素 ' + obj.toString() + ' 不允许重复绑定 ' + event + " 事件");
+                // throw new Error('当前提供元素 ' + obj.toString() + ' 不允许重复绑定 ' + event + " 事件");
                 return ;
             }
 
-            obj.addEventListener(action , fn , mixed);
+            obj.addEventListener(event , callback , mixed);
 
-            var _obj = this.obj(obj);
-
-            if (g.isBoolean(_obj)) {
-                var res = {};
-                res[action] = true;
-
-                // 如果未注册过事件，直接添加
-                this._events.push({
-                    obj: obj ,
-                    event: res
-                });
-            } else {
-                _obj['event'][action] = true;
-            }
+            // 记录
+            this._events.push({
+                obj: obj ,
+                event: event ,
+                callback: callback ,
+                options: mixed ,
+            });
         } ,
 
         unbind: function(obj , action , fn , mixed){
@@ -7746,11 +7703,29 @@
                 throw new TypeError('参数 1 类型错误');
             }
 
-            if (!g.isFunction(fn)) {
-                throw new TypeError('参数 2 类型错误');
+            var i;
+            var cur;
+            if (g.isFunction(fn)) {
+                obj.removeEventListener(action , fn , mixed);
+            } else {
+                // 删除当前类型下的所有事件
+                for (i = 0; i < this._events.length; ++i)
+                {
+                    cur = this._events[i];
+                    if (cur.obj === obj && cur.event === action) {
+                        cur.obj.removeEventListener(cur.event , cur.callback , mixed ? mixed : cur.mixed);
+                    }
+                }
             }
-
-            obj.removeEventListener(action , fn , mixed);
+            // 清除
+            for (i = 0; i < this._events.length; ++i)
+            {
+                cur = this._events[i];
+                if (cur.obj === obj && cur.event === action) {
+                    i--;
+                    this._events.splice(i , 1);
+                }
+            }
         } ,
     };
 

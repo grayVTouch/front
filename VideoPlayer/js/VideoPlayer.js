@@ -23,6 +23,8 @@
                 // {
                 //     // 视频名臣
                 //     name: '初音岛 01' ,
+                //     // 索引
+                //     index: 1 ,
                 //     // 视频封面
                 //     thumb: '' ,
                 //     // 视频预览图片
@@ -79,6 +81,8 @@
             switch: null ,
             // 单位：ms
             initPlayerInterval: 6 * 1000 ,
+            minIndex: 1 ,
+            maxIndex: 1 ,
         };
 
         if (!G.isObject(option)) {
@@ -97,7 +101,8 @@
         this.option.soundStep   = G.isNumeric(option.soundStep) && option.soundStep >= 0 && option.soundStep <= 1 ? option.soundStep : this.option.soundStep;
         this.option.playlist        = option.playlist ? option.playlist : this.option.playlist;
         this.option.enableSubtitle  = G.isBoolean(option.enableSubtitle) ? option.enableSubtitle : this.option.enableSubtitle;
-        this.option.initPlayerInterval  = G.isNumeric(option.initPlayerInterval) ? option.initPlayerInterval : this.option.initPlayerInterval;
+        this.option.minIndex  = G.isNumeric(option.minIndex) ? option.minIndex : this.option.minIndex;
+        this.option.maxIndex  = G.isNumeric(option.maxIndex) ? option.maxIndex : this.option.maxIndex;
 
         this.run();
     }
@@ -107,8 +112,8 @@
 
         initData: function(){
             this.data = Object.assign({} , G.copy(this.option , true) , {
-                minIndex: 1 ,
-                maxIndex: this.option.playlist.length ,
+                minIndex: this.option.minIndex ,
+                maxIndex: this.option.maxIndex ,
                 volumeBack: this.option.volume ,
                 minVolume: 0 ,
                 maxVolume: 1 ,
@@ -161,6 +166,7 @@
                 v.subtitle      = v.subtitle    ? v.subtitle : [];
                 v.thumb         = v.thumb       ? v.thumb : '';
                 v.name          = v.name        ? v.name : '';
+                v.index          = v.index        ? v.index : 1;
 
                 v.preview.src       = v.preview.src ? v.preview.src : '';
                 v.preview.width     = v.preview.width ? v.preview.width : '';
@@ -1026,11 +1032,22 @@
             this.data.tempVolume = this.data.volume;
         } ,
 
-        _index: function(index){
-            if (index > this.data.maxIndex || index < this.data.minIndex) {
-                throw new Error('索引 ' + index + ' 超出范围，当前支持索引范围：' + this.data.minIndex + '-' + this.data.maxIndex);
+        // 查找对应的 index
+        findVideoByIndex: function(index){
+            var i;
+            var cur;
+            for (i = 0; i < this.data.playlist.length; ++i)
+            {
+                cur = this.data.playlist[i];
+                if (cur.index === index) {
+                    return cur;
+                }
             }
-            this.data.video = this.data.playlist[index - 1];
+            throw new Error('未找到当前索引【' + index + '】对应的视频');
+        } ,
+
+        _index: function(index){
+            this.data.video = this.findVideoByIndex(index);
             this.data.index = index;
         } ,
 
@@ -1115,17 +1132,9 @@
             this.data.loadedMetaData = false;
         } ,
 
-        checkIndexRange: function(index){
-            if (index >= this.data.minIndex && index <= this.data.maxIndex) {
-                return ;
-            }
-            throw new Error('索引超出范围');
-        } ,
-
         // 切换视频预览
         switchPreviewByIndex: function(index){
-            this.checkIndexRange(index);
-            var video = this.data.playlist[index - 1];
+            var video = this.findVideoByIndex(index);
             this.dom.imageForPreview.native('src' , video.preview.src);
         } ,
 
@@ -1196,9 +1205,10 @@
             this.dom.tracksForVideo = G('track' , this.dom.video.get(0));
             this.dom.itemsForDefinition = G('.item' , this.dom.settingsForDefinition.get(0));
             var definition = this.findDefinitionByDefinition(this.data.definition);
-            console.log('before' , definition);
+            // console.log('before' , definition);
             if (!G.isValid(definition)) {
-                definition = this.data.playlist[Math.max(0 , this.data.index - 1)].definition[0];
+                var video = this.findVideoByIndex(this.data.index);
+                definition = video.definition[0];
             }
             self.switchVideoByDefinition(definition.name);
         } ,

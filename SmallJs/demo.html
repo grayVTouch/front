@@ -5,13 +5,27 @@
     <title>Title</title>
 </head>
 <body>
+<div id="test">测试</div>
+<button id="login">注册</button>
+<button id="unlogin">解绑</button>
+
 <script src="./SmallJs.js"></script>
 <script src="./Canvas.js"></script>
 <script>
 
+    const t = G('#test');
+    const login = G('#login');
+    const unlogin = G('#unlogin');
 
-    G.ajax({"url":"http://api.xq.test/api/admin/pannel/info","method":"get","header":{"Authorization":"4x8y5FB9N6cVyM63832o88Cs50D73Y5k"},"data":null});
+    login.on('click' , () => {
+        t.on('click' , () => {
+            console.log('123');
+        });
+    });
 
+    unlogin.on('click' , () => {
+        t.off('click');
+    });
 </script>
 </body>
 </html>
