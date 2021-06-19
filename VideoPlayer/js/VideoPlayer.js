@@ -83,6 +83,10 @@
             initPlayerInterval: 6 * 1000 ,
             minIndex: 1 ,
             maxIndex: 1 ,
+            // 时间间隔 -
+            timeUpdateInterval: 1 ,
+            // 时间更新触发
+            timeUpdate: null ,
         };
 
         if (!G.isObject(option)) {
@@ -103,6 +107,8 @@
         this.option.enableSubtitle  = G.isBoolean(option.enableSubtitle) ? option.enableSubtitle : this.option.enableSubtitle;
         this.option.minIndex  = G.isNumeric(option.minIndex) ? option.minIndex : this.option.minIndex;
         this.option.maxIndex  = G.isNumeric(option.maxIndex) ? option.maxIndex : this.option.maxIndex;
+        this.option.timeUpdateInterval  = G.isNumeric(option.timeUpdateInterval) ? option.timeUpdateInterval : this.option.timeUpdateInterval;
+        this.option.timeUpdate  = G.isFunction(option.timeUpdate) ? option.timeUpdate : this.option.timeUpdate;
 
         this.run();
     }
@@ -157,7 +163,14 @@
                 onceForPlay: true ,
                 extraH: 15 ,
                 playCtrlTipDuration: 600 ,
-
+                // 上一秒（用来触发用户行为播放记录程序）
+                prevSecond: 0 ,
+                // 当前显示的字幕
+                currentSubtitle: null ,
+                // 当前显示的清晰度
+                currentDefinition: null ,
+                // 当前视频
+                video: null ,
             });
 
             this.data.playlist.forEach(function(v){
@@ -388,10 +401,40 @@
             this.hideLoading();
             this.progress(ratio , false , !this.data.canAjustProgress);
             this.buffered();
+
+            if (currentTime > 0) {
+                if (this.data.prevSecond !== currentTime) {
+                    var numRes = currentTime / this.data.timeUpdateInterval;
+                    var intRes = parseInt(numRes);
+                    var floatRes = numRes - intRes;
+                    if (
+                        floatRes == 0
+                        ||
+                        (Math.abs(currentTime - this.data.prevSecond) > this.data.timeUpdateInterval)
+                    ) {
+                        this.data.prevSecond = currentTime;
+                        if (G.isFunction(this.data.timeUpdate)) {
+                            this.data.timeUpdate.call(this , this.data.index , currentTime);
+                        }
+                    }
+                }
+            }
         } ,
 
         progressEvent: function(e){
             this.buffered();
+        } ,
+
+        getCurrentDefinition: function(){
+            return this.data.currentDefinition;
+        } ,
+
+        getCurrentSubtitle: function(){
+            return this.data.currentSubtitle;
+        } ,
+
+        getCurrentVideo: function(){
+            return this.data.video;
         } ,
 
         soundSeekByClick: function(e){
@@ -614,6 +657,9 @@
             this.pause();
             if (G.isFunction(this.data.ended)) {
                 this.data.ended.call(this);
+            }
+            if (G.isFunction(this.data.timeUpdate)) {
+                this.data.timeUpdate.call(this , this.data.index , this.duration());
             }
         } ,
 
@@ -1156,6 +1202,9 @@
 
             this.initPoster(this.data.video.thumb);
 
+            // 数据重置
+            this.data.prevSecond = 0;
+
             this.dom.settingsForDefinition.html('');
             this.dom.listForSubtitleInMapping.html('');
             this.dom.title.text(this.data.video.name);
@@ -1213,6 +1262,19 @@
             self.switchVideoByDefinition(definition.name);
         } ,
 
+        findSubtitleByName: function(name){
+            var i = 0;
+            var cur;
+            for (; i < this.data.video.subtitle.length; ++i)
+            {
+                cur = this.data.video.subtitle[i];
+                if (cur.name === name) {
+                    return cur;
+                }
+            }
+            throw new Error('未找到当前提供字幕【' + name + '】');
+        } ,
+
         switchSubtitleById: function(id){
             var i;
             var cur;
@@ -1230,6 +1292,7 @@
             var item = G(this.findSubtitleItemById(id));
             item.highlight('cur' , this.dom.itemsForSubtitleInMapping.get());
             this.dom.textForSubtitleInOperation.text(id);
+            this.data.currentSubtitle = this.findSubtitleByName(id);
             this.hideSettings();
         } ,
 

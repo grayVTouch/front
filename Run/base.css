@@ -466,6 +466,14 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	margin-right: 10px !important;
 }
 
+.m-r-12 {
+	margin-right: 12px !important;
+}
+
+.m-r-15 {
+	margin-right: 15px !important;
+}
+
 .m-l-5 {
 	margin-left: 5px !important;
 }
