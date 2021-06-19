@@ -75,6 +75,8 @@
                 } ,
             ] ,
             definition: '480P' ,
+            subtitle: '' ,
+            currentTime: 0 ,
             // 当视频播放结束时的回调
             ended: null ,
             // 视频切换后索引
@@ -109,6 +111,7 @@
         this.option.maxIndex  = G.isNumeric(option.maxIndex) ? option.maxIndex : this.option.maxIndex;
         this.option.timeUpdateInterval  = G.isNumeric(option.timeUpdateInterval) ? option.timeUpdateInterval : this.option.timeUpdateInterval;
         this.option.timeUpdate  = G.isFunction(option.timeUpdate) ? option.timeUpdate : this.option.timeUpdate;
+        this.option.currentTime  = G.isNumeric(option.currentTime) ? option.currentTime : this.option.currentTime;
 
         this.run();
     }
@@ -145,7 +148,7 @@
                 canShowPreview: true ,
                 fullscreen: false ,
                 // 当前播放时间（用于切换视频清晰度的时候重新定位用）
-                currentTime: 0 ,
+                // currentTime: 0 ,
                 formatTime: '--:--' ,
                 formatDuration: '--:--' ,
                 cacheKeyPrefix: 'video_player_ratio_' ,
@@ -1200,7 +1203,9 @@
         initVideo: function(){
             var self = this;
 
-            this.initPoster(this.data.video.thumb);
+            if (this.data.currentTime <= 0) {
+                this.initPoster(this.data.video.thumb);
+            }
 
             // 数据重置
             this.data.prevSecond = 0;
@@ -1325,6 +1330,8 @@
         initPreview: function(){
             this.switchPreviewByIndex(this.data.index);
         } ,
+
+
 
         currentTime: function(){
             return parseInt(this.attr('currentTime'));
