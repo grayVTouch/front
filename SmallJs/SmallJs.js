@@ -4308,6 +4308,7 @@
      * @param String str 将要过滤的字符串
      */
     g.lTrim = function(str){
+        // console.log('str' , str);
         return str.replace(/^( |\r|\n)*/ , '');
     };
 

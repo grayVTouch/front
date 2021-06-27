@@ -443,6 +443,10 @@
             return this.data.video;
         } ,
 
+        getCurrentVolume: function(){
+            return this.data.volume;
+        } ,
+
         soundSeekByClick: function(e){
             G.prevent(e);
             var endX = e.clientX;
@@ -563,7 +567,7 @@
         } ,
 
         mutedEvent: function(){
-            this.muted(false , true);
+            this.muted(false , false);
         } ,
 
         notMutedEvent: function(){
@@ -1348,17 +1352,15 @@
         muted: function(muted , reset){
             reset = G.isBoolean(reset) ? reset : true;
             muted = G.isBoolean(muted) ? muted : true;
-            this.attr('muted' , muted);
             if (muted) {
-                this.dom.muted.removeClass('hide');
-                this.dom.notMuted.addClass('hide');
-                this.data.volumeBack = this.data.volume;
                 this.volume(0);
             } else {
-                this.dom.muted.addClass('hide');
-                this.dom.notMuted.removeClass('hide');
                 if (reset) {
                     this.volume(this.data.volumeBack);
+                } else {
+                    this.attr('muted' , muted);
+                    this.dom.muted.addClass('hide');
+                    this.dom.notMuted.removeClass('hide');
                 }
             }
         } ,
@@ -1377,6 +1379,17 @@
                 translateY: '-50%' ,
             });
             this.data.volume = volume;
+            if (volume == 0) {
+                // 静音
+                this.attr('muted' , true);
+                this.dom.muted.removeClass('hide');
+                this.dom.notMuted.addClass('hide');
+                this.data.volumeBack = this.data.volume;
+            } else {
+                this.dom.muted.addClass('hide');
+                this.dom.notMuted.removeClass('hide');
+            }
+
         } ,
 
         findSpeedBySpeed: function(speed){
