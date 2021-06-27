@@ -6,6 +6,20 @@
   "description": "Run ui 框架必备的一些字体/图标",
   "glyphs": [
     {
+      "icon_id": "5831342",
+      "name": "顺时针旋转",
+      "font_class": "shunshizhenxuanzhuan",
+      "unicode": "e683",
+      "unicode_decimal": 59011
+    },
+    {
+      "icon_id": "13087853",
+      "name": "旋转90度",
+      "font_class": "xuanzhuandu",
+      "unicode": "e7c9",
+      "unicode_decimal": 59337
+    },
+    {
       "icon_id": "963853",
       "name": "月统计",
       "font_class": "yuetongji",

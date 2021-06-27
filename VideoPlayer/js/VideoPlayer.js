@@ -179,6 +179,8 @@
                 currentDefinition: null ,
                 // 当前视频
                 video: null ,
+                // 视频当前旋转角度
+                rotateZ: 0 ,
             });
 
             this.data.playlist.forEach(function(v){
@@ -267,6 +269,7 @@
             this.dom.nameForSpeed = G('.name' , this.dom.speed.get(0));
 
             this.dom.settings = G('.right > .settings' , this.dom.actions.get(0));
+            this.dom.transform = G('.right > .transform' , this.dom.actions.get(0));
             this.dom.set = G('.right > .settings > .set' , this.dom.actions.get(0));
             this.dom.config = G('.config' , this.dom.settings.get(0));
             this.dom.operation = G('.operation' , this.dom.config.get(0));
@@ -686,6 +689,47 @@
             this.soundStep(soundStep);
         } ,
 
+        transformEvent: function(){
+            if (this.data.rotateZ >= 360) {
+                this.data.rotateZ = 90;
+
+            } else {
+                this.data.rotateZ += 90;
+            }
+            var vWrapperW = this.dom.videoWrapper.width();
+            var vWrapperH = this.dom.videoWrapper.height();
+            var vWidth = 'inherit';
+            var vHeight = 'inherit';
+            switch (this.data.rotateZ)
+            {
+                case 0:
+                    vWidth = 'inherit';
+                    vHeight = 'inherit';
+                    break;
+                case 90:
+                    vWidth = vWrapperH + 'px';
+                    vHeight = 'inherit';
+                    break;
+                case 180:
+                    vWidth = vWrapperW + 'px';
+                    vHeight = 'inherit';
+                    break;
+                case 270:
+                    vWidth = vWrapperH + 'px';
+                    vHeight = 'inherit';
+                    break;
+                case 360:
+                    vWidth = 'inherit';
+                    vHeight = 'inherit';
+                    break;
+            }
+            this.dom.video.css({
+                width: vWidth ,
+                height: vHeight ,
+                rotateZ: this.data.rotateZ + 'deg',
+            });
+        },
+
         initEvent: function(){
             var self = this;
 
@@ -715,6 +759,7 @@
 
             // 播放
             this.dom.play.on('click' , this.playEvent.bind(this));
+            this.dom.control.on('dblclick' , G.stop);
             // 暂停
             this.dom.pause.on('click' , this.pauseEvent.bind(this));
             // 静音
@@ -758,6 +803,7 @@
 
             // 播放速度
             this.dom.speed.on('click' , this.speedEvent.bind(this));
+            this.dom.transform.on('click' , this.transformEvent.bind(this));
             this.dom.settingsForSpeed.on('click' , G.stop);
             this.dom.win.on('click' , this.hideSpeed.bind(this));
 

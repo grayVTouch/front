@@ -1,8 +1,8 @@
 @font-face {
   font-family: "run-iconfont"; /* Project id 1125151 */
-  src: url('iconfont.woff2?t=1621584618611') format('woff2'),
-       url('iconfont.woff?t=1621584618611') format('woff'),
-       url('iconfont.ttf?t=1621584618611') format('truetype');
+  src: url('iconfont.woff2?t=1624801705607') format('woff2'),
+       url('iconfont.woff?t=1624801705607') format('woff'),
+       url('iconfont.ttf?t=1624801705607') format('truetype');
 }
 
 .run-iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.run-iconfont-shunshizhenxuanzhuan:before {
+  content: "\e683";
+}
+
+.run-iconfont-xuanzhuandu:before {
+  content: "\e7c9";
 }
 
 .run-iconfont-yuetongji:before {
