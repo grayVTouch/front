@@ -27,12 +27,17 @@
                 //     index: 1 ,
                 //     // 视频封面
                 //     thumb: '' ,
-                //     // 视频预览图片
+                //     // 视频预览图片（以下要求跟服务器同步！）
                 //     preview: {
+                //         // 预览图片
                 //         src: './res/test.jpeg' ,
+                //         // 单张图片的 宽
                 //         width: 160 ,
+                //         // 单张图片的 高
                 //         height: 90 ,
+                //         // 间隔 ?秒 截取一张
                 //         duration: 1 ,
+                //         // 单行显示数量
                 //         count: 5 ,
                 //     } ,
                 //     definition: [
@@ -407,11 +412,9 @@
 
             if (currentTime > 0) {
                 if (this.data.prevSecond !== currentTime) {
-                    var numRes = currentTime / this.data.timeUpdateInterval;
-                    var intRes = parseInt(numRes);
-                    var floatRes = numRes - intRes;
+                    var numRes = currentTime % this.data.timeUpdateInterval;
                     if (
-                        floatRes == 0
+                        numRes == 0
                         ||
                         (Math.abs(currentTime - this.data.prevSecond) > this.data.timeUpdateInterval)
                     ) {
