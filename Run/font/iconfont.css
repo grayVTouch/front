@@ -1,8 +1,8 @@
 @font-face {
   font-family: "run-iconfont"; /* Project id 1125151 */
-  src: url('iconfont.woff2?t=1624801705607') format('woff2'),
-       url('iconfont.woff?t=1624801705607') format('woff'),
-       url('iconfont.ttf?t=1624801705607') format('truetype');
+  src: url('iconfont.woff2?t=1625797349449') format('woff2'),
+       url('iconfont.woff?t=1625797349449') format('woff'),
+       url('iconfont.ttf?t=1625797349449') format('truetype');
 }
 
 .run-iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.run-iconfont-chakan1:before {
+  content: "\e684";
 }
 
 .run-iconfont-shunshizhenxuanzhuan:before {
