@@ -5,25 +5,17 @@
     width:100%;
     height:100%;
     z-index: 1000;
-    transition: all 0.12s;
-    opacity: 0;
-    background-color: rgba(0,0,0,0.6);
 }
 
-.prompt.show {
-    opacity: 1;
+.prompt .background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgb(0 , 0 , 0);
+    opacity: 0.3;
 }
-
-/*.prompt .background {*/
-/*    width: 100%;*/
-/*    height: 100%;*/
-/*    position: absolute;*/
-/*    left: 0;*/
-/*    top: 0;*/
-/*    background-color:black;*/
-/*    opacity:0;*/
-/*    !*opacity:0.7;*!*/
-/*}*/
 
 .prompt > .content {
     position: absolute;
@@ -34,15 +26,14 @@
     border: 1px solid #F0F0F0;
     box-shadow: 1px 1px 50px rgba(0,0,0,.3);
 
-    /*opacity: 0;*/
-    transform: translate(-50% , -50%) scale(0.6 , 0.6);
-    /*transform: translate(-50% , -50%);*/
-    transition: all 0.2s;
 }
 
-.prompt > .content.show {
-    /*opacity: 1;*/
-    transform: translate(-50% , -50%) scale(1 , 1);
+.prompt > .content.show-layer {
+    animation: run-show-prompt 0.3s ease 0s 1 both;
+}
+
+.prompt > .content.hide-layer {
+    animation: run-hide-prompt 0.3s ease 0s 1 both;
 }
 
 .prompt > .content > * {
@@ -219,4 +210,32 @@
 
 .prompt > .content > .actions > .action:nth-of-type(1):active {
     background-color: #6fda8d;
+}
+
+@keyframes run-show-prompt {
+    0% {
+        opacity: 0;
+        transform: scale(0.5 , 0.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1 , 1);
+    }
+}
+
+@keyframes run-hide-prompt {
+    0% {
+        opacity: 1;
+        transform: scale(1 , 1);
+    }
+
+    30% {
+        transform: scale(1.05 , 1.05);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.7 , 0.7);
+    }
 }

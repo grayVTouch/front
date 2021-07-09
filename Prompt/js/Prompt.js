@@ -1,6 +1,6 @@
 (function(){
     "use strict";
-    
+
     function Prompt(html , option){
         var self = this;
         this.default = {
@@ -120,14 +120,15 @@
 
     p.prototype = {
         constructor: p ,
-        
+
         createPrompt: function(){
             var div = document.createElement('div');
                 div = G(div);
+                // div.addClass(['prompt' , 'hide']);
                 div.addClass(['prompt']);
             var html = '';
                 html += '   <!-- 背景颜色 -->';
-                // html += '    <div class="background"></div>';
+                html += '    <div class="background"></div>';
                 html += '    <!-- 内容 -->';
                 html += '    <div class="content">';
                 html += '       <div class="header">';
@@ -184,7 +185,10 @@
             };
             var prompt = this.createPrompt();
             this.dom.root.append(prompt);
+            // throw new Error(1);
             this.dom.prompt    = G(prompt);
+
+            this.dom.background   = G('.background' , this.dom.prompt.get(0));
             this.dom.content   = G('.content' , this.dom.prompt.get(0));
             this.dom.actions   = G('.actions' , this.dom.content.get(0));
 
@@ -204,7 +208,6 @@
             this.dom.actionAtHeader     = G('.action' , this.dom.header.get(0));
             this.dom.close      = G('.close' , this.dom.actionAtHeader.get(0));
             this.dom.message    = G('.message' , this.dom.content.get(0));
-
 
             this.data = {
                 canMove:false ,
@@ -250,6 +253,11 @@
                 marginTop: this.option.margin
             });
 
+            // 居中
+            this.dom.content.center(this.dom.prompt.get(0));
+            // 可移动（限制移动范围）
+            this.dom.content.move(this.dom.prompt.get(0) , true);
+
             // 标题
             this.dom.title.text(this.option.title);
 
@@ -270,26 +278,7 @@
         } ,
 
         initDynamic: function(){
-            // 边界计算
-            this.calBoundary();
-            this.initPosInfo();
-        } ,
 
-        // 显示对话框
-        show: function(callback){
-            var self = this;
-
-            this.dom.prompt.removeClass('hide');
-            this.dom.prompt.startTransition('show');
-
-            this.dom.content.startTransition('show' , function(){
-                if (G.isFunction(self.option.success)) {
-                    self.option.success();
-                }
-                if (G.isFunction(callback)) {
-                    callback.call(this);
-                }
-            });
         } ,
 
         init: function(){
@@ -301,25 +290,20 @@
             }
         } ,
 
+        // 显示对话框
+        show: function(callback){
+            var self = this;
+            this.dom.prompt.removeClass('hide');
+            self.dom.content.addClass('show-layer');
+        } ,
+
+
+
         // 隐藏对话框
         hide: function(callback){
             var self = this;
-
-            this.dom.prompt.endTransition('show');
-
-            var transform = this.dom.content.css('transform');
-            var transformInfo = G.parseTransform(transform);
-            var translateX = transformInfo.translateX;
-            var translateY = transformInfo.translateY;
-
-            this.dom.content.css({
-                translateX: translateX + 'px' ,
-                translateY: translateY + 'px' ,
-                scaleX:  this.data.initScale ,
-                scaleY: this.data.initScale ,
-            });
-
-            this.dom.content.onTransition(function(){
+            this.dom.background.addClass('hide');
+            this.dom.content.on('animationend' , function(){
                 self.dom.root.remove(self.dom.prompt.get(0));
                 if (G.isFunction(self.option.close)) {
                     self.option.close();
@@ -329,119 +313,19 @@
                 }
             });
 
-            // this.dom.content.endTransition('show' , function(){
-            //
-            //
-            // });
-        } ,
-
-        calBoundary: function(){
-            this.data.promptW = this.dom.prompt.width();
-            this.data.promptH = this.dom.prompt.height();
-            this.data.contentW = this.dom.content.getTW();
-            this.data.contentH = this.dom.content.getTH();
-
-            this.data.minXAmount = this.dom.content.getWindowOffsetVal('left');
-            this.data.minYAmount = this.dom.content.getWindowOffsetVal('top');
-            this.data.maxXAmount = this.data.promptW - this.data.minXAmount - this.data.contentW;
-            this.data.maxYAmount = this.data.promptH - this.data.minYAmount - this.data.contentH;
-        } ,
-
-        // 初始位置信息
-        initPosInfo () {
-            var transform = this.dom.content.css('transform');
-            var transformInfo = G.parseTransform(transform);
-
-            this.data.startTranslateX = transformInfo.translateX;
-            this.data.startTranslateY = transformInfo.translateY;
-            this.data.scaleX = transformInfo.scaleX;
-            this.data.scaleY = transformInfo.scaleY;
-        } ,
-
-        mouseDownEvent: function(e){
-            this.data.canMove = true;
-            this.data.startX = e.clientX;
-            this.data.startY = e.clientY;
-
-            // 边界计算
-            this.calBoundary();
-            this.initPosInfo();
-
-
-            // 取消过渡动画
-            this.dom.content.css({
-                transition: 'none' ,
-            });
-        } ,
-
-        mouseMoveEvent (e) {
-            if (!this.data.canMove) {
-                return ;
-            }
-            var endX = e.clientX;
-            var endY = e.clientY;
-            var xAmount = endX - this.data.startX;
-            var yAmount = endY - this.data.startY;
-
-            // xAmount = Math.abs(xAmount) > this.data.maxXAmount ? (xAmount > 0 ? this.data.maxXAmount : -this.data.maxXAmount) : xAmount;
-            // yAmount = Math.abs(yAmount) > this.data.maxYAmount ? (yAmount > 0 ? this.data.maxYAmount : -this.data.maxYAmount) : yAmount;
-            if (xAmount < 0) {
-                console.log('left move');
-                // xAmount = Math.abs(xAmount) > this.data.minXAmount ? -this.data.minXAmount : xAmount;
-                if (Math.abs(xAmount) > this.data.minXAmount) {
-                    xAmount = -this.data.minXAmount
-                    console.log('超出边界：' , this.data.minXAmount , (this.data.promptW - this.data.contentW) / 2);
-                }
-                else {
-                    // xAmount;
-                }
-            } else {
-                xAmount = Math.abs(xAmount) > this.data.maxXAmount ? this.data.maxXAmount : xAmount;
-            }
-
-            if (yAmount < 0) {
-                yAmount = Math.abs(yAmount) > this.data.minYAmount ? -this.data.minYAmount : yAmount;
-            } else {
-                yAmount = Math.abs(yAmount) > this.data.maxYAmount ? this.data.maxYAmount : yAmount;
-            }
-
-            var endTranslateX = this.data.startTranslateX + xAmount;
-            var endTranslateY = this.data.startTranslateY + yAmount;
-
-            // console.log({
-            //     translateX: endTranslateX + 'px' ,
-            //     translateY: endTranslateY + 'px' ,
-            //     scaleX: this.data.scaleX ,
-            //     scaleY: this.data.scaleY
-            // });
-            this.dom.content.css({
-                translateX: endTranslateX + 'px' ,
-                translateY: endTranslateY + 'px' ,
-                scaleX: this.data.scaleX ,
-                scaleY: this.data.scaleY
-            });
-        } ,
-
-        mouseUpEvent: function(){
-            // 重置移动标志
-            this.data.canMove = false;
-            // 回复过渡动画
-            this.dom.content.css({
-                transition: '' ,
-            });
+            this.dom.prompt.removeClass('show');
+            this.dom.content.addClass('hide-layer');
         } ,
 
         initEvent: function(){
             this.dom.message.on('mousedown' , G.stop , true , false);
             this.dom.actions.on('mousedown' , G.stop , true , false);
+
             this.dom.close.on('click' , this.hide.bind(this) , true , false);
             this.dom.prompt.on('click' , this.hide.bind(this));
             this.dom.content.on('click' , G.stop);
 
-            this.dom.header.on('mousedown' , this.mouseDownEvent.bind(this));
             this.dom.win.on('resize' , this.initDynamic.bind(this));
-            this.dom.win.on('mousemove' , this.mouseMoveEvent.bind(this));
-            this.dom.win.on('mouseup' , this.mouseUpEvent.bind(this));
         } ,
 
         run: function(){

@@ -15,7 +15,9 @@
             // poster: './res/poster.jpg' ,
             poster: '' ,
             // 单次步进时间，单位：s
-            step: 30 ,
+            step: 3 ,
+            // 单次快速步进
+            fastStep: 30 ,
             // 音频步进：0-1
             soundStep: 0.08 ,
             // 视频源
@@ -23,14 +25,21 @@
                 // {
                 //     // 视频名臣
                 //     name: '初音岛 01' ,
+                //     // 索引
+                //     index: 1 ,
                 //     // 视频封面
                 //     thumb: '' ,
-                //     // 视频预览图片
+                //     // 视频预览图片（以下要求跟服务器同步！）
                 //     preview: {
+                //         // 预览图片
                 //         src: './res/test.jpeg' ,
+                //         // 单张图片的 宽
                 //         width: 160 ,
+                //         // 单张图片的 高
                 //         height: 90 ,
+                //         // 间隔 ?秒 截取一张
                 //         duration: 1 ,
+                //         // 单行显示数量
                 //         count: 5 ,
                 //     } ,
                 //     definition: [
@@ -73,12 +82,24 @@
                 } ,
             ] ,
             definition: '480P' ,
+            subtitle: '' ,
+            currentTime: 0 ,
             // 当视频播放结束时的回调
             ended: null ,
             // 视频切换后索引
             switch: null ,
             // 单位：ms
             initPlayerInterval: 6 * 1000 ,
+            minIndex: 1 ,
+            maxIndex: 1 ,
+            // 时间间隔 -
+            timeUpdateInterval: 1 ,
+            // 时间更新回调
+            onTimeUpdate: null ,
+            // 清晰度变化回调
+            onDefinitionChange: null ,
+            // 字幕变化回调
+            onSubtitleChange: null ,
         };
 
         if (!G.isObject(option)) {
@@ -91,13 +112,21 @@
         this.option.speed   = G.isNumeric(option.speed) ? option.speed : this.option.speed;
         this.option.speeds  = option.speeds ? option.speeds : this.option.speeds;
         this.option.definition = option.definition ? option.definition : this.option.definition;
+        this.option.subtitle = option.subtitle ? option.subtitle : this.option.subtitle;
         this.option.ended       = option.ended ? option.ended : this.option.ended;
         this.option.switch       = option.switch ? option.switch : this.option.switch;
         this.option.step        = option.step ? option.step : this.option.step;
+        this.option.fastStep        = option.fastStep ? option.fastStep : this.option.fastStep;
         this.option.soundStep   = G.isNumeric(option.soundStep) && option.soundStep >= 0 && option.soundStep <= 1 ? option.soundStep : this.option.soundStep;
         this.option.playlist        = option.playlist ? option.playlist : this.option.playlist;
         this.option.enableSubtitle  = G.isBoolean(option.enableSubtitle) ? option.enableSubtitle : this.option.enableSubtitle;
-        this.option.initPlayerInterval  = G.isNumeric(option.initPlayerInterval) ? option.initPlayerInterval : this.option.initPlayerInterval;
+        this.option.minIndex  = G.isNumeric(option.minIndex) ? option.minIndex : this.option.minIndex;
+        this.option.maxIndex  = G.isNumeric(option.maxIndex) ? option.maxIndex : this.option.maxIndex;
+        this.option.timeUpdateInterval  = G.isNumeric(option.timeUpdateInterval) ? option.timeUpdateInterval : this.option.timeUpdateInterval;
+        this.option.currentTime  = G.isNumeric(option.currentTime) ? option.currentTime : this.option.currentTime;
+        this.option.onTimeUpdate  = G.isFunction(option.onTimeUpdate) ? option.onTimeUpdate : this.option.onTimeUpdate;
+        this.option.onDefinitionChange  = G.isFunction(option.onDefinitionChange) ? option.onDefinitionChange : this.option.onDefinitionChange;
+        this.option.onSubtitleChange  = G.isFunction(option.onSubtitleChange) ? option.onSubtitleChange : this.option.onSubtitleChange;
 
         this.run();
     }
@@ -107,8 +136,8 @@
 
         initData: function(){
             this.data = Object.assign({} , G.copy(this.option , true) , {
-                minIndex: 1 ,
-                maxIndex: this.option.playlist.length ,
+                minIndex: this.option.minIndex ,
+                maxIndex: this.option.maxIndex ,
                 volumeBack: this.option.volume ,
                 minVolume: 0 ,
                 maxVolume: 1 ,
@@ -134,7 +163,7 @@
                 canShowPreview: true ,
                 fullscreen: false ,
                 // 当前播放时间（用于切换视频清晰度的时候重新定位用）
-                currentTime: 0 ,
+                // currentTime: 0 ,
                 formatTime: '--:--' ,
                 formatDuration: '--:--' ,
                 cacheKeyPrefix: 'video_player_ratio_' ,
@@ -152,15 +181,27 @@
                 onceForPlay: true ,
                 extraH: 15 ,
                 playCtrlTipDuration: 600 ,
-
+                // 上一秒（用来触发用户行为播放记录程序）
+                prevSecond: 0 ,
+                // 当前显示的字幕
+                currentSubtitle: null ,
+                // 当前显示的清晰度
+                currentDefinition: null ,
+                // 当前视频
+                video: null ,
+                // 视频当前旋转角度
+                rotateZ: 0 ,
+                pending: {} ,
+                noneSubtitle: '无字幕' ,
             });
-
+            this.data.subtitle = this.data.subtitle ? this.data.subtitle : this.data.noneSubtitle;
             this.data.playlist.forEach(function(v){
                 v.preview       = v.preview     ? v.preview : {};
                 v.definition    = v.definition  ? v.definition : [];
                 v.subtitle      = v.subtitle    ? v.subtitle : [];
                 v.thumb         = v.thumb       ? v.thumb : '';
                 v.name          = v.name        ? v.name : '';
+                v.index          = v.index        ? v.index : 1;
 
                 v.preview.src       = v.preview.src ? v.preview.src : '';
                 v.preview.width     = v.preview.width ? v.preview.width : '';
@@ -173,6 +214,7 @@
         initStatic: function(){
 
             this.dom.win = G(window);
+            this.dom.document = G(document);
             this.dom.html = G(document.documentElement);
             this.dom.body = G(document.body);
             this.dom.videoPlayer = G('.video-player' , this.dom.root.get(0));
@@ -181,6 +223,8 @@
                 className: 'title' ,
                 tagName: 'div'
             } , false , true);
+            this.dom.nameInTitle = G('.name' , this.dom.title.get(0));
+            this.dom.otherInTitle = G('.other' , this.dom.title.get(0));
             this.dom.actions = G('.actions' , this.dom.videoPlayer.get(0));
             this.dom.preview = G('.preview' , this.dom.videoPlayer.get(0));
             this.dom.loading = G('.loading' , this.dom.videoPlayer.get(0));
@@ -240,6 +284,7 @@
             this.dom.nameForSpeed = G('.name' , this.dom.speed.get(0));
 
             this.dom.settings = G('.right > .settings' , this.dom.actions.get(0));
+            this.dom.transform = G('.right > .transform' , this.dom.actions.get(0));
             this.dom.set = G('.right > .settings > .set' , this.dom.actions.get(0));
             this.dom.config = G('.config' , this.dom.settings.get(0));
             this.dom.operation = G('.operation' , this.dom.config.get(0));
@@ -337,19 +382,26 @@
         } ,
 
         init: function(){
+            /**
+             *   this._index(index);
+                 this.initVideoCtrlStyle();
+                 this.initVideo();
+                 this.initPreview();
+             */
             this.showControl();
             this._index(this.data.index);
-            this.initVideoCtrlStyle();
-            this.initVideo();
-            this.initPreview();
-            this.volume(this.data.volume);
-            this.muted(this.data.muted , false);
+            if (this.data.video) {
+                this.initVideoCtrlStyle();
+                this.initVideo();
+                this.initPreview();
+                this.volume(this.data.volume);
+                this.muted(this.data.muted , false);
+            }
             this.data.fullscreen ? this.fullscreen() : this.notFullscreen();
             this.data.onceForInit = false;
             if (G.isFunction(this.data.switch)) {
                 this.data.switch.call(this , this.data.index);
             }
-
         } ,
 
         initPoster: function(poster){
@@ -382,10 +434,46 @@
             this.hideLoading();
             this.progress(ratio , false , !this.data.canAjustProgress);
             this.buffered();
+
+            if (currentTime > 0) {
+                if (this.data.prevSecond !== currentTime) {
+                    var numRes = currentTime % this.data.timeUpdateInterval;
+                    if (
+                        numRes == 0
+                        ||
+                        (Math.abs(currentTime - this.data.prevSecond) > this.data.timeUpdateInterval)
+                    ) {
+                        this.data.prevSecond = currentTime;
+                        if (G.isFunction(this.data.onTimeUpdate)) {
+                            this.data.onTimeUpdate.call(this , this.data.index , currentTime);
+                        }
+                    }
+                }
+            }
         } ,
 
         progressEvent: function(e){
             this.buffered();
+        } ,
+
+        getCurrentDefinition: function(){
+            return this.data.currentDefinition;
+        } ,
+
+        getCurrentSubtitle: function(){
+            return this.data.currentSubtitle;
+        } ,
+
+        getCurrentVideo: function(){
+            return this.data.video;
+        } ,
+
+        getCurrentVolume: function(){
+            return this.data.volume;
+        } ,
+
+        getCurrentTime: function(){
+            return this.currentTime();
         } ,
 
         soundSeekByClick: function(e){
@@ -508,7 +596,7 @@
         } ,
 
         mutedEvent: function(){
-            this.muted(false , true);
+            this.muted(false , false);
         } ,
 
         notMutedEvent: function(){
@@ -595,6 +683,9 @@
             this.data.currentTime = 0;
             this.data.ratio = 0;
             this.data.paused = false;
+            this.data.subtitle = '';
+            this.initTimeInfo();
+
             this._index(index);
             this.initVideoCtrlStyle();
             this.initVideo();
@@ -608,6 +699,9 @@
             this.pause();
             if (G.isFunction(this.data.ended)) {
                 this.data.ended.call(this);
+            }
+            if (G.isFunction(this.data.onTimeUpdate)) {
+                this.data.onTimeUpdate.call(this , this.data.index , this.duration());
             }
         } ,
 
@@ -623,6 +717,75 @@
             }
             this.soundStep(soundStep);
         } ,
+
+        transformEvent: function(){
+            if (this.data.pending.rotateVideo) {
+                return ;
+            }
+            if (this.data.rotateZ >= 360) {
+                this.data.rotateZ = 90;
+            } else {
+                this.data.rotateZ += 90;
+            }
+            var vWrapperW = this.dom.videoWrapper.width();
+            var vWrapperH = this.dom.videoWrapper.height();
+            var vWidth = 'inherit';
+            var vHeight = 'inherit';
+            switch (this.data.rotateZ)
+            {
+                case 0:
+                    vWidth = 'inherit';
+                    vHeight = 'inherit';
+                    break;
+                case 90:
+                    vWidth = vWrapperH + 'px';
+                    vHeight = 'inherit';
+                    break;
+                case 180:
+                    vWidth = vWrapperW + 'px';
+                    vHeight = 'inherit';
+                    break;
+                case 270:
+                    vWidth = vWrapperH + 'px';
+                    vHeight = 'inherit';
+                    break;
+                case 360:
+                    vWidth = 'inherit';
+                    vHeight = 'inherit';
+                    break;
+            }
+            this.dom.video.css({
+                width: vWidth ,
+                height: vHeight ,
+                rotateZ: this.data.rotateZ + 'deg',
+            });
+            var rotateText = this.data.rotateZ + '°';
+            if (this.data.rotateZ >= 360) {
+                rotateText = '';
+            }
+            this.dom.otherInTitle.text(rotateText);
+            this.data.pending.rotateVideo = true;
+            var self = this;
+            this.dom.video.endTransition('' , function(){
+                if (self.data.rotateZ >= 360) {
+                    self.data.rotateZ = 0;
+                    var transition = self.dom.video.css('transition');
+                    // 移除 transition
+                    self.dom.video.css({
+                        transition: 'none' ,
+                        rotateZ: self.data.rotateZ + 'deg' ,
+                    });
+                    G.nextTick(function(){
+                        self.dom.video.css({
+                            transition: transition ,
+                        });
+                        self.data.pending.rotateVideo = false;
+                    });
+                } else {
+                    self.data.pending.rotateVideo = false;
+                }
+            });
+        },
 
         initEvent: function(){
             var self = this;
@@ -653,6 +816,7 @@
 
             // 播放
             this.dom.play.on('click' , this.playEvent.bind(this));
+            this.dom.control.on('dblclick' , G.stop);
             // 暂停
             this.dom.pause.on('click' , this.pauseEvent.bind(this));
             // 静音
@@ -696,6 +860,7 @@
 
             // 播放速度
             this.dom.speed.on('click' , this.speedEvent.bind(this));
+            this.dom.transform.on('click' , this.transformEvent.bind(this));
             this.dom.settingsForSpeed.on('click' , G.stop);
             this.dom.win.on('click' , this.hideSpeed.bind(this));
 
@@ -733,7 +898,17 @@
             // this.dom.win.on('keydown' , G.prevent);
             // this.dom.win.on('keydown' , G.stop);
 
-            this.dom.html.on('keyup' , this.keyboardEvent.bind(this));
+            this.dom.html.on('keydown' , this.keyboardEvent.bind(this));
+
+            this.dom.document.on('keydown' , function(e){
+                var keyCode = e.keyCode;
+                switch (keyCode)
+                {
+                    case 32:
+                        G.prevent(e);
+                        break;
+                }
+            });
         } ,
 
         screenBydblClick: function(){
@@ -759,17 +934,11 @@
             var self = this;
              this.showTitle();
              this.showControl();
-             window.clearTimeout(this.data.videoPlayerTimer);
-             this.data.videoPlayerTimer = window.setTimeout(function(){
-                 self.hideControl();
-                 self.hideTitle();
-                 // console.log('隐藏控制器等');
-             } , this.data.initPlayerInterval);
+             this.delayHideControl();
         } ,
 
         keyboardEvent: function(e){
             var keyCode = e.keyCode;
-            console.log('key up event' , keyCode);
             switch (keyCode)
             {
                 case 13:
@@ -786,18 +955,29 @@
                     break;
                 case 37:
                     // left
-                    this.step(-this.data.step);
+                    // 检测是否按住 ctrl 键
+                    if (e.ctrlKey) {
+                        this.step(-this.data.fastStep);
+                    } else {
+                        this.step(-this.data.step);
+                    }
                     break;
                 case 39:
                     // right
-                    this.step(this.data.step);
+                    if (e.ctrlKey) {
+                        this.step(this.data.fastStep);
+                    } else {
+                        this.step(this.data.step);
+                    }
                     break;
                 case 38:
                     // top
+                    G.prevent(e);
                     this.soundStep(this.data.soundStep);
                     break;
                 case 40:
                     // bottom
+                    G.prevent(e);
                     this.soundStep(-this.data.soundStep);
                     break;
                 case 33:
@@ -821,6 +1001,8 @@
         } ,
 
         step: function(step){
+            this.showControl();
+            this.delayHideControl();
             var duration = this.duration();
             var currentTime = Math.max(0 , Math.min(duration , this.currentTime() + step));
             var ratio = currentTime / duration;
@@ -828,6 +1010,8 @@
         } ,
 
         soundStep: function(step){
+            this.showControl();
+            this.delayHideControl();
             var volume = Math.max(0 , Math.min(1 , this.data.volume + step));
             this.data.tempVolume = volume;
             this.volume(volume , true);
@@ -869,6 +1053,17 @@
             // }
             this.dom.videoPlayer.addClass('not-control');
             this.dom.control.removeClass('hover');
+        } ,
+
+        // 推迟关闭控制台
+        delayHideControl: function(){
+            var self = this;
+            window.clearTimeout(this.data.videoPlayerTimer);
+            this.data.videoPlayerTimer = window.setTimeout(function(){
+                self.hideControl();
+                self.hideTitle();
+                // console.log('隐藏控制器等');
+            } , this.data.initPlayerInterval);
         } ,
 
 
@@ -916,8 +1111,8 @@
             this.data.definitionVisible = false;
             this.data.canShowPreview = true;
             this.data.canHideControl = true;
-            this.hideControl();
-            console.log('hide definition');
+            this.delayHideControl();
+            // console.log('hide definition');
             this.dom.settingsForDefinition.endTransition('show' , function () {
                 self.dom.settingsForDefinition.addClass('hide');
             });
@@ -941,7 +1136,7 @@
             this.data.speedVisible = false;
             this.data.canShowPreview = true;
             this.data.canHideControl = true;
-            this.hideControl();
+            this.delayHideControl();
             this.dom.settingsForSpeed.endTransition('show' , function () {
                 self.dom.settingsForSpeed.addClass('hide');
             });
@@ -967,7 +1162,7 @@
             this.data.settingsVisible = false;
             this.data.canShowPreview = true;
             this.data.canHideControl = true;
-            this.hideControl();
+            this.delayHideControl();
             this.dom.config.endTransition('show' , function () {
                 self.dom.config.addClass('hide');
             });
@@ -1026,11 +1221,22 @@
             this.data.tempVolume = this.data.volume;
         } ,
 
-        _index: function(index){
-            if (index > this.data.maxIndex || index < this.data.minIndex) {
-                throw new Error('索引 ' + index + ' 超出范围，当前支持索引范围：' + this.data.minIndex + '-' + this.data.maxIndex);
+        // 查找对应的 index
+        findVideoByIndex: function(index){
+            var i;
+            var cur;
+            for (i = 0; i < this.data.playlist.length; ++i)
+            {
+                cur = this.data.playlist[i];
+                if (cur.index === index) {
+                    return cur;
+                }
             }
-            this.data.video = this.data.playlist[index - 1];
+            return null;
+        } ,
+
+        _index: function(index){
+            this.data.video = this.findVideoByIndex(index);
             this.data.index = index;
         } ,
 
@@ -1052,10 +1258,8 @@
             this.buffered();
             this.muted(this.data.muted , false);
             this.volume(this.data.volume);
-            if (this.data.video.subtitle.length > 0) {
-                this.switchSubtitleById(this.data.video.subtitle[0].name);
-            } else {
-                this.dom.textForSubtitleInOperation.text('无');
+            if (this.data.video.subtitle.length === 0) {
+                this.dom.textForSubtitleInOperation.text(this.data.noneSubtitle);
             }
             this.speed(this.data.speed);
             if (!this.data.onceForLoadedData) {
@@ -1115,17 +1319,9 @@
             this.data.loadedMetaData = false;
         } ,
 
-        checkIndexRange: function(index){
-            if (index >= this.data.minIndex && index <= this.data.maxIndex) {
-                return ;
-            }
-            throw new Error('索引超出范围');
-        } ,
-
         // 切换视频预览
         switchPreviewByIndex: function(index){
-            this.checkIndexRange(index);
-            var video = this.data.playlist[index - 1];
+            var video = this.findVideoByIndex(index);
             this.dom.imageForPreview.native('src' , video.preview.src);
         } ,
 
@@ -1144,12 +1340,14 @@
 
         initVideo: function(){
             var self = this;
-
-            this.initPoster(this.data.video.thumb);
-
+            if (this.data.currentTime <= 0) {
+                this.initPoster(this.data.video.thumb);
+            }
+            // 数据重置
+            this.data.prevSecond = 0;
             this.dom.settingsForDefinition.html('');
             this.dom.listForSubtitleInMapping.html('');
-            this.dom.title.text(this.data.video.name);
+            this.dom.nameInTitle.text(this.data.video.name);
             this.removeAllTrack();
             // 初始化清晰度
             this.data.video.definition.forEach(function(v){
@@ -1161,10 +1359,21 @@
                 div.on('click' , function(){
                     self.data.currentTime = self.currentTime();
                     self.switchVideoByDefinition(v.name);
+                    if (G.isFunction(self.data.onDefinitionChange)) {
+                        self.data.onDefinitionChange.call(self , self.data.index , v.name);
+                    }
                 });
                 self.dom.settingsForDefinition.append(div.get(0));
             });
 
+            if (this.data.video.subtitle.length > 0) {
+                // 添加 无 字幕
+                this.data.video.subtitle.unshift({
+                    id: 0 ,
+                    name: this.data.noneSubtitle ,
+                    src: '' ,
+                });
+            }
             this.data.video.subtitle.forEach(function(v){
                 // 渲染字幕菜单
                 var div = document.createElement('div');
@@ -1176,8 +1385,15 @@
                     var tar = G(e.currentTarget);
                     var id = tar.data('id');
                     self.switchSubtitleById(id);
+                    if (G.isFunction(self.data.onSubtitleChange)) {
+                        self.data.onSubtitleChange.call(self , self.data.index , id);
+                    }
                 });
                 self.dom.listForSubtitleInMapping.append(div.get(0));
+
+                if (v.id <= 0) {
+                    return ;
+                }
 
                 // 渲染音轨
                 var track = document.createElement('track');
@@ -1195,12 +1411,35 @@
             this.dom.itemsForSubtitleInMapping = G('.item' , this.dom.listForSubtitleInMapping.get(0));
             this.dom.tracksForVideo = G('track' , this.dom.video.get(0));
             this.dom.itemsForDefinition = G('.item' , this.dom.settingsForDefinition.get(0));
+
+            // 切换到默认分辨率
             var definition = this.findDefinitionByDefinition(this.data.definition);
-            console.log('before' , definition);
             if (!G.isValid(definition)) {
-                definition = this.data.playlist[Math.max(0 , this.data.index - 1)].definition[0];
+                var video = this.findVideoByIndex(this.data.index);
+                definition = video.definition[0];
             }
-            self.switchVideoByDefinition(definition.name);
+            if (definition) {
+                this.switchVideoByDefinition(definition.name);
+            }
+
+            console.log('字幕' , this.data.subtitle);
+            // 切换到默认字幕
+            if (this.data.subtitle) {
+                this.switchSubtitleById(this.data.subtitle);
+            }
+        } ,
+
+        findSubtitleByName: function(name){
+            var i = 0;
+            var cur;
+            for (; i < this.data.video.subtitle.length; ++i)
+            {
+                cur = this.data.video.subtitle[i];
+                if (cur.name === name) {
+                    return cur;
+                }
+            }
+            throw new Error('未找到当前提供字幕【' + name + '】');
         } ,
 
         switchSubtitleById: function(id){
@@ -1217,9 +1456,15 @@
                     track.mode = 'disabled';
                 }
             }
-            var item = G(this.findSubtitleItemById(id));
+            var item = this.findSubtitleItemById(id);
+            if (!item) {
+                // 容错处理
+                return ;
+            }
+            item = G(item);
             item.highlight('cur' , this.dom.itemsForSubtitleInMapping.get());
             this.dom.textForSubtitleInOperation.text(id);
+            this.data.currentSubtitle = this.findSubtitleByName(id);
             this.hideSettings();
         } ,
 
@@ -1246,36 +1491,38 @@
                     return cur.get(0);
                 }
             }
-            throw new Error('未找到 id: ' + id  + ' 对应的 track 元素');
+            // throw new Error('未找到 id: ' + id  + ' 对应的 track 元素');
+            return null;
         } ,
 
         initPreview: function(){
             this.switchPreviewByIndex(this.data.index);
         } ,
 
+
+
         currentTime: function(){
             return parseInt(this.attr('currentTime'));
         } ,
 
         duration: function(){
-            return parseInt(this.attr('duration'));
+            var duration = parseInt(this.attr('duration'));
+            return isNaN(duration) ? 0 : duration;
         } ,
 
         // 静音
         muted: function(muted , reset){
             reset = G.isBoolean(reset) ? reset : true;
             muted = G.isBoolean(muted) ? muted : true;
-            this.attr('muted' , muted);
             if (muted) {
-                this.dom.muted.removeClass('hide');
-                this.dom.notMuted.addClass('hide');
-                this.data.volumeBack = this.data.volume;
                 this.volume(0);
             } else {
-                this.dom.muted.addClass('hide');
-                this.dom.notMuted.removeClass('hide');
                 if (reset) {
                     this.volume(this.data.volumeBack);
+                } else {
+                    this.attr('muted' , muted);
+                    this.dom.muted.addClass('hide');
+                    this.dom.notMuted.removeClass('hide');
                 }
             }
         } ,
@@ -1294,6 +1541,17 @@
                 translateY: '-50%' ,
             });
             this.data.volume = volume;
+            if (volume == 0) {
+                // 静音
+                this.attr('muted' , true);
+                this.dom.muted.removeClass('hide');
+                this.dom.notMuted.addClass('hide');
+                this.data.volumeBack = this.data.volume;
+            } else {
+                this.dom.muted.addClass('hide');
+                this.dom.notMuted.removeClass('hide');
+            }
+
         } ,
 
         findSpeedBySpeed: function(speed){
@@ -1428,6 +1686,7 @@
             // 显示时间
             var duration = this.duration();
             var currentTime = parseInt(duration * ratio);
+                currentTime = isNaN(currentTime) ? 0 : currentTime;
 
             // console.log(this.dom.video.native('duration') , this.dom.video.native('currentTime') , 'timeupdate event handler');
 
@@ -1502,7 +1761,7 @@
             var formatTime;
             if (this.data.loadedMetaData) {
                 var duration = this.duration();
-                var currentTime = parseInt(duration * ratio);
+                var currentTime = Math.max(0 , parseInt(duration * ratio));
                 formatTime = this.formatTime(currentTime);
             } else {
                 formatTime = this.data.formatTime;
@@ -1515,9 +1774,19 @@
                 scaleY: this.data.fullscreen ? this.data.moveForPreviewInFullscreen.scaleY : 1 ,
             });
             this.dom.timepointForPreview.text(formatTime);
-            var count = Math.floor(currentTime / this.data.video.preview.duration);
+            /**
+             * 当前位置的计算规则
+             *
+             * 服务端截图从 0s 开始
+             *
+             * 预览图片张数 = 当前时间 / 预览间隔
+             * @type {number}
+             */
+            var countDiv = currentTime % this.data.video.preview.duration;
+            var count = Math.ceil(currentTime / this.data.video.preview.duration + (countDiv ? 0 : 1));
             var x = -Math.max(0 , (count  % this.data.video.preview.count - 1) * this.data.video.preview.width);
             var y = -Math.max(0 , Math.ceil(count / this.data.video.preview.count) - 1) * this.data.video.preview.height;
+            // console.log('count' , count , 'x' , x ,  'y' , y , 'duration'  , currentTime , 'interval' , this.data.video.preview.duration);
             this.dom.imageForPreview.css({
                 translateX: x + 'px' ,
                 translateY: y + 'px'

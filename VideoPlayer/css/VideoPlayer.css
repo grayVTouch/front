@@ -8,7 +8,7 @@
 .video-player > .title {
     color: #fff;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     position: absolute;
     left: 0;
@@ -20,6 +20,7 @@
     transition: all 0.3s;
     z-index: 3;
     padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .video-player > .title.hover {
@@ -29,12 +30,16 @@
 .video-player .video-wrapper {
     width: inherit;
     height: inherit;
-
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .video-player .video-wrapper .video {
     width: inherit;
     height: inherit;
+    transition: all 0.3s;
 }
 
 .video-player .control {
@@ -381,6 +386,15 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    cursor: pointer;
+}
+
+.video-player .actions .transform {
+    width: 40px;
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
 }
 
