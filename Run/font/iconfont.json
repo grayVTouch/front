@@ -6,6 +6,34 @@
   "description": "Run ui 框架必备的一些字体/图标",
   "glyphs": [
     {
+      "icon_id": "5651501",
+      "name": "停止",
+      "font_class": "tingzhi",
+      "unicode": "e686",
+      "unicode_decimal": 59014
+    },
+    {
+      "icon_id": "7541945",
+      "name": "停止_fill1",
+      "font_class": "stop_fill",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "20009306",
+      "name": "stopcircle停止",
+      "font_class": "stopcircletingzhi",
+      "unicode": "e6e6",
+      "unicode_decimal": 59110
+    },
+    {
+      "icon_id": "18926214",
+      "name": "播放",
+      "font_class": "70BasicIcons-all-64",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
       "icon_id": "12771539",
       "name": "查看",
       "font_class": "chakan1",

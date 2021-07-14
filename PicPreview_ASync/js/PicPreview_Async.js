@@ -33,10 +33,21 @@
              */
             screenStatus: 'normal' ,
             // 图片源
-            images: [] ,
+
+            images: [
+                // {
+                //     // 压缩图
+                //     src: '' ,
+                //     // 原图
+                //     originalSrc: '' ,
+                // } ,
+            ] ,
 
             // 索引，下标从 1 开始
             index: 1 ,
+
+            // 幻灯片播放间隔时间
+            interval: 2.5 * 1000 ,
         };
         if (!G.isValid(option)) {
             option = this.default;
@@ -49,6 +60,7 @@
         this.option.visibility = G.contain(option.visibility , visibilityRange) ? option.visibility : this.option.visibility;
         this.option.index = option.index ? option.index : this.option.index;
         this.option.images = option.images ? option.images : this.option.images;
+        this.option.interval = option.interval ? option.interval : this.option.interval;
 
         this.run();
     }
@@ -85,11 +97,11 @@
             })
         } ,
 
-        createItem: function(src){
+        createItem: function(row){
             var div = document.createElement('div');
             div = G(div);
             div.addClass(['item' , 'loading']);
-            var html = '<img src="" data-src="' + src + '" class="image" alt="">';
+            var html = '<img src="" data-src="' + row.src + '" class="image" alt="">';
             div.html(html);
             return div.get(0);
         } ,
@@ -170,9 +182,9 @@
                 return ;
             }
             var self = this;
-            var src = this.data.images[index - 1];
+            var row = this.data.images[index - 1];
             var nextItem = this.findItemByIndex(index + 1);
-            item = this.createItem(src);
+            item = this.createItem(row);
             item = G(item);
             var image = G('.image' , item.get(0));
 
@@ -270,6 +282,9 @@
             this.dom.info = G('.info' , this.dom.header.get(0));
             this.dom.action = G('.action' , this.dom.header.get(0));
 
+            this.dom.play = G('.play' , this.dom.action.get(0));
+            this.dom.pause = G('.pause' , this.dom.action.get(0));
+            this.dom.viewOriginImage = G('.view-origin-image' , this.dom.action.get(0));
             this.dom.origin = G('.origin' , this.dom.action.get(0));
             this.dom.shrink = G('.shrink' , this.dom.action.get(0));
             this.dom.grow = G('.grow' , this.dom.action.get(0));
@@ -292,9 +307,6 @@
             this.dom.title = G('.title' , this.dom.sImages.get(0));
             this.dom.closeInSImage = G('.close' , this.dom.title.get(0));
             this.dom.list = G('.list' , this.dom.sImages.get(0));
-
-            this.switchSpreadOrShrink(this.option.previewStatus , false);
-            this.switchFullOrNormalScreen(this.option.screenStatus , false);
 
             this.data = {
                 images: this.option.images ,
@@ -324,7 +336,13 @@
                 initSImages: false ,
                 visible: true ,
                 scale: 0.2 ,
+                slideshowTimer: null ,
+                slideshowStatus: 'pause' ,
             };
+
+            this.switchSpreadOrShrink(this.option.previewStatus , false);
+            this.switchFullOrNormalScreen(this.option.screenStatus , false);
+            this.switchPlayOrPause(false);
 
             // 获取数组源
             var images = this.dom.picPreviewAsync.data('images');
@@ -344,8 +362,40 @@
                 this.dom.picPreviewAsync.removeClass('hide');
                 this.dom.picPreviewAsync.addClass('show');
             }
+        } ,
 
 
+        startSlideshow: function(){
+            var self = this;
+            this.data.slideshowStatus = 'play';
+            window.clearInterval(this.data.slideshowTimer);
+            this.data.slideshowTimer = window.setInterval(function(){
+                if (self.data.index === self.data.maxIndex) {
+                    window.clearInterval(self.data.slideshowTimer);
+                    self.switchPlayOrPause(false);
+                    return ;
+                }
+                self.next();
+            } , this.option.interval);
+        } ,
+
+        endSlideshow: function(){
+            this.data.slideshowStatus = 'end';
+            window.clearInterval(this.data.slideshowTimer);
+        } ,
+
+        switchPlayOrPause:function(isPlay){
+            var self = this;
+            if (isPlay) {
+                this.dom.pause.removeClass('hide');
+                this.dom.play.addClass('hide');
+                this.switchFullOrNormalScreen('full');
+                this.startSlideshow();
+            } else {
+                this.dom.pause.addClass('hide');
+                this.dom.play.removeClass('hide');
+                this.endSlideshow();
+            }
         } ,
 
         initDynamic: function(){
@@ -376,8 +426,8 @@
             var i = 1;
             var self = this;
             this.data.initSImages = true;
-            this.data.images.forEach(function(src){
-                var item = self.createItem(src);
+            this.data.images.forEach(function(v){
+                var item = self.createItem(v);
                     item = G(item);
                 item.data('index' , i++);
                 self.dom.list.append(item.get(0));
@@ -385,7 +435,7 @@
                 image.native('onload' , function(){
                     item.removeClass('loading');
                 });
-                image.native('src' , src);
+                image.native('src' , v.src);
 
                 item.on('click' , self.indexEvent.bind(self));
             });
@@ -634,6 +684,11 @@
             this.origin(this.data.index);
         } ,
 
+        viewOriginImageEvent: function(){
+            var row = this.data.images[this.data.index - 1];
+            window.open(row.originalSrc , '_blank');
+        } ,
+
         imageMouseDownEvent: function(e){
             G.prevent(e);
             this.data.canMove = true;
@@ -753,7 +808,6 @@
         } ,
 
         showTool: function(){
-            window.clearTimeout(this.data.timer);
             this.dom.header.addClass('show');
             this.dom.prev.addClass('show');
             this.dom.next.addClass('show');
@@ -761,6 +815,7 @@
 
         hideTool: function(){
             var self = this;
+            window.clearTimeout(this.data.timer);
             this.data.timer = window.setTimeout(function(){
                 self.dom.header.removeClass('show');
                 self.dom.prev.removeClass('show');
@@ -769,7 +824,18 @@
 
         } ,
 
-        contentMouseMoveEvent: function(){
+        containerMouseDownEvent: function(){
+            this.showTool();
+            this.hideTool();
+            this.switchPlayOrPause(false);
+        } ,
+
+        containerMouseMoveEvent: function(){
+            this.showTool();
+            this.hideTool();
+        } ,
+
+        containerMouseUpEvent: function(){
             this.showTool();
             this.hideTool();
         } ,
@@ -794,7 +860,21 @@
             this.dom.grow.on('click' , this.grow.bind(this , 1));
             this.dom.shrink.on('click' , this.shrink.bind(this , 1));
             this.dom.origin.on('click' , this.originEvent.bind(this));
+            this.dom.viewOriginImage.on('click' , this.viewOriginImageEvent.bind(this));
+            this.dom.play.on('click' , this.switchPlayOrPause.bind(this , true));
+            this.dom.pause.on('click' , function(){
+                self.switchPlayOrPause(false);
+                self.switchFullOrNormalScreen('normal');
+            });
 
+            // 防止点击后停止幻灯片
+            this.dom.viewOriginImage.on('mousedown' , G.stop);
+            this.dom.spread.on('mousedown' , G.stop);
+            this.dom.narrow.on('mousedown' , G.stop);
+            this.dom.fullScreen.on('mousedown' , G.stop);
+            this.dom.normalScreen.on('mousedown' , G.stop);
+            this.dom.play.on('mousedown' , G.stop);
+            this.dom.pause.on('mousedown' , G.stop);
 
             // this.dom.imagesForBImages.on('click' , G.stop);
             // this.dom.imagesForBImages.on('dblclick' , this.originEvent.bind(this));
@@ -804,7 +884,11 @@
             this.dom.win.on('mouseup' , this.imageMouseupEvent.bind(this));
             this.dom.win.on('resize' , this.initDynamic.bind(this));
             this.dom.content.on('wheel' , this.wheelEvent.bind(this));
-            this.dom.content.on('mousemove' , this.contentMouseMoveEvent.bind(this));
+
+            this.dom.picPreviewAsync.on('mouseup' , this.containerMouseUpEvent.bind(this));
+            this.dom.picPreviewAsync.on('mousedown' , this.containerMouseDownEvent.bind(this));
+            this.dom.picPreviewAsync.on('mousemove' , this.containerMouseMoveEvent.bind(this));
+
             this.dom.close.on('click' , this.hide.bind(this));
             this.dom.closeInSImage.on('click' , this.hide.bind(this));
             this.dom.content.on('click' , this.hide.bind(this));
@@ -816,16 +900,23 @@
                     return ;
                 }
                 var keyCode = e.keyCode;
-                // console.log('keycode' , keyCode);
                 if (keyCode === 27) {
                     // esc 关闭
                     self.hide();
                 } else if (keyCode === 39) {
                     // 下一个
                     self.next();
+                    if (self.data.slideshowStatus === 'play') {
+                        // 重新开始
+                        self.startSlideshow();
+                    }
                 } else if (keyCode === 37) {
                     // 上一个
                     self.prev();
+                    if (self.data.slideshowStatus === 'play') {
+                        // 重新开始
+                        self.startSlideshow();
+                    }
                 } else if (keyCode === 38) {
                     // 向上
                     self.grow(self.data.scale);
