@@ -1,8 +1,8 @@
 @font-face {
   font-family: "run-iconfont"; /* Project id 1125151 */
-  src: url('iconfont.woff2?t=1625797349449') format('woff2'),
-       url('iconfont.woff?t=1625797349449') format('woff'),
-       url('iconfont.ttf?t=1625797349449') format('truetype');
+  src: url('iconfont.woff2?t=1625877349578') format('woff2'),
+       url('iconfont.woff?t=1625877349578') format('woff'),
+       url('iconfont.ttf?t=1625877349578') format('truetype');
 }
 
 .run-iconfont {
@@ -11,6 +11,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.run-iconfont-tupian2:before {
+  content: "\e687";
+}
+
+.run-iconfont-web:before {
+  content: "\e688";
+}
+
+.run-iconfont-web-link:before {
+  content: "\e689";
+}
+
+.run-iconfont-tingzhi:before {
+  content: "\e686";
+}
+
+.run-iconfont-stop_fill:before {
+  content: "\e69f";
+}
+
+.run-iconfont-stopcircletingzhi:before {
+  content: "\e6e6";
+}
+
+.run-iconfont-70BasicIcons-all-64:before {
+  content: "\e685";
 }
 
 .run-iconfont-chakan1:before {
