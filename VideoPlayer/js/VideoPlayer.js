@@ -1421,8 +1421,6 @@
             if (definition) {
                 this.switchVideoByDefinition(definition.name);
             }
-
-            console.log('字幕' , this.data.subtitle);
             // 切换到默认字幕
             if (this.data.subtitle) {
                 this.switchSubtitleById(this.data.subtitle);
@@ -1633,7 +1631,9 @@
             this.switchPlayCtrlTip('play');
             this.hideLoading();
             this.data.playing = true;
-            this.native('play');
+            window.setTimeout(function(){
+                self.native('play');
+            } , 50);
             if (this.data.onceForPlay) {
                 this.data.onceForPlay = false;
                 this.hidePoster();
