@@ -289,6 +289,7 @@
             G.getBlobUrl(file , function(blobUrl){
                 var dom;
                 var ext = G.getFileSuffix(file.name);
+                    ext = ext.toLowerCase();
                 if (G.contain(ext , self.imageExtRange)) {
                     dom = self.createImage(file.id , blobUrl);
                 } else if (G.contain(ext , self.videoExtRange)) {
