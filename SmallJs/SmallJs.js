@@ -4946,10 +4946,23 @@
         var URL = window.URL || window.webkitURL || false;
 
         if (!URL) {
-            throw new Error('浏览器不支持URL对象！请升级浏览器至IE10+');
+            throw new Error('浏览器不支持URL对象！请升级浏览器至IE10+或同级别浏览器');
         }
 
         URL.revokeObjectURL(blobUrl);
+    };
+
+    /*
+    * 销毁一个由 URL.createObjectURL 创建的 blob://URL
+    */
+    g.createBlobUrl = function(object){
+        var URL = window.URL || window.webkitURL || false;
+
+        if (!URL) {
+            throw new Error('浏览器不支持URL对象！请升级浏览器至IE10+或同级别浏览器');
+        }
+
+        return URL.createObjectURL(object);
     };
 
     /*
@@ -8178,7 +8191,8 @@
                         contentType.search('application/json') != -1 &&
                         (
                             !g.isValid(self.responseType) ||
-                            (g.isValid(self.responseType) && self.responseType != 'json'))
+                            self.responseType != 'json'
+                        )
                     ) {
                         response = g.jsonDecode(this.response);
                     }
