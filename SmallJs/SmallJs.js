@@ -5611,7 +5611,7 @@
                 v.id        = ++extra.id;
                 v.floor     = floor;
                 v.parentId  = parentId;
-                if (v.children.length > 0) {
+                if (v.children && v.children.length > 0) {
                     return self.handle(v.children , v.id , floor + 1 , extra);
                 }
             });
@@ -5629,7 +5629,7 @@
                 if (g.isFunction(callback)) {
                     callback(v);
                 }
-                if (v.children.length > 0) {
+                if (v.children && v.children.length > 0) {
                     self.uHandle(v.children , callback);
                 }
             });
@@ -5641,7 +5641,7 @@
             var self    = this;
             structData.forEach(function(v){
                 res.push(v);
-                if (v.children.length > 0) {
+                if (v.children && v.children.length > 0) {
                     self.flat(v.children , res);
                 }
             });
@@ -5656,7 +5656,7 @@
                 if (g.isFunction(callback)) {
                     callback(v);
                 }
-                if (v.children.length > 0) {
+                if (v.children && v.children.length > 0) {
                     self.loop(v.children , callback);
                 }
             });

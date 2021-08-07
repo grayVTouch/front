@@ -29,6 +29,12 @@
             clear: false ,
             // 直接上传
             direct: true ,
+            // 分片上传 - 块大小，单位：MB
+            blockSize: 50 ,
+            // 分片上传 - 分片临界点检测，单位 MB
+            isEnabledBlock: false ,
+            // 分片上传 - 单个块上传成功后的一个检测函数
+            isBlockUploadOk: null ,
         };
         if (G.isUndefined(option)) {
             option = _default;
@@ -45,6 +51,10 @@
         option.timeout = G.isNumber(option.timeout) ? option.timeout : _default.timeout;
         option.clear = G.isBoolean(option.clear) ? option.clear : _default.clear;
         option.direct = G.isBoolean(option.direct) ? option.direct : _default.direct;
+        option.blockSize = G.isNumber(option.blockSize) ? option.blockSize : _default.blockSize;
+        option.parallelUploadBlockNumber = G.isNumber(option.parallelUploadBlockNumber) ? option.parallelUploadBlockNumber : _default.parallelUploadBlockNumber;
+        option.isEnabledBlock = G.isBoolean(option.isEnabledBlock) ? option.isEnabledBlock : _default.isEnabledBlock;
+        option.isBlockUploadOk = G.isFunction(option.isBlockUploadOk) ? option.isBlockUploadOk : _default.isBlockUploadOk;
 
         this.option = option;
         this.dom = {
@@ -71,6 +81,14 @@
             // 文件列表
             this.file = [];
 
+            this.data = Object.assign({} , this.option);
+
+            if (this.data.isEnabledBlock) {
+                if (!G.isFunction(this.data.isBlockUploadOk)) {
+                    throw new Error('分块上传必须提供单个块是否上传成功的检测函数【参数：isBlockUploadOk】');
+                }
+            }
+
             this.imageExtRange = ['jpg' , 'jpeg' , 'png' , 'gif' , 'bmp' , 'ico' , 'tif' , 'webp'];
             this.videoExtRange = ['mp4' , 'mkv' , 'mov' , 'avi' , 'ts' , 'flv' , 'rmvb' , 'webm'];
 
@@ -83,6 +101,9 @@
             };
 
             this.option.timeout *= 1000;
+
+            // 转换成 字节
+            this.data.blockSize = this.option.blockSize * 1024 * 1024;
 
             if (!this.option.clear) {
                 this.dom.clear.addClass('hide');
@@ -360,59 +381,150 @@
                     return ;
                 }
                 var file = this.file.shift();
-                var formData = G.formData(this.option.field , file);
-                G.ajax({
-                    url: this.option.api ,
-                    method: 'post' ,
-                    data: formData ,
-                    wait: this.option.timeout ,
-                    before: function(){
-                        self.progress(file.id , 0);
-                    } ,
-                    uProgress: function(e){
-                        if (!e.lengthComputable) {
-                            return ;
-                        }
-                        var percent = e.loaded / e.total;
-                        percent *= 100;
-                        self.progress(file.id , percent);
-                    } ,
 
-                    success: function () {
-                        // 上传文件完成
-                        self.progress(file.id , 100);
-                        uploaded++;
-                        if (G.isFunction(self.option.uploaded)) {
-                            var args = self.toArray(arguments);
+                if (this.data.isEnabledBlock) {
+                    // 分片上传
+                    var blockNum = Math.ceil(file.size / this.data.blockSize);
+                    var index = 0;
+                    var start = 0;
+                    var end = 0;
+                    this.progress(file.id , 0);
+                    var blockToUpload = function(){
+                        start = index * self.data.blockSize;
+                        end = Math.min(file.size , start + self.data.blockSize);
+
+                        var block = file.slice(start , end);
+                        var sparkMD5 = new SparkMD5.ArrayBuffer();
+                        var fileReader = new FileReader();
+                        fileReader.onload = function(){
+                            sparkMD5.append(this.result);
+                            var blockMd5 = sparkMD5.end();
+                            sparkMD5.destroy();
+
+                            var formData = new FormData();
+                            formData.append('name' , file.name);
+                            formData.append('size' , file.size);
+                            formData.append('total' , blockNum);
+                            formData.append('index' , index + 1);
+                            formData.append('md5' , blockMd5);
+                            formData.append(self.option.field , block);
+                            G.ajax({
+                                url: self.option.api ,
+                                method: 'post' ,
+                                data: formData ,
+                                wait: self.option.timeout ,
+                                success: function(response , status){
+                                    // 上传文件完成
+                                    var ratio = (index + 1) / blockNum * 100;
+                                    self.progress(file.id , ratio);
+                                    if (!self.data.isBlockUploadOk(response , status)) {
+                                        // 其中某个块文件上传失败的情况
+                                        failed++;
+                                        self.status(file.id , false);
+                                        upload.call(self);
+                                        console.log('Chunk Upload Failed!' , 'index' , index , 'response' , response , 'status' , status);
+                                        return ;
+                                    }
+                                    if (index + 1>= blockNum) {
+                                        // 上传完毕的情况
+                                        self.progress(file.id , 100);
+                                        self.status(file.id , true);
+                                        // 上传完成
+                                        uploaded++;
+                                        if (G.isFunction(self.option.uploaded)) {
+                                            self.option.uploaded.apply(self , [file , response , status]);
+                                        }
+                                        upload.call(self);
+                                        return ;
+                                    }
+                                    index++;
+                                    // 上传成功 - 继续
+                                    blockToUpload();
+                                } ,
+                                error: function (e) {
+                                    failed++;
+                                    self.status(file.id , false);
+                                    // 继续消费队列
+                                    upload.call(self);
+
+                                    console.log('error' , e);
+                                } ,
+                                uError: function(e){
+                                    console.log('uError' , e);
+                                } ,
+                                netError: function (e) {
+                                    failed++;
+                                    self.status(file.id , false);
+                                    upload.call(self);
+                                    console.log('netError' , e);
+                                } ,
+                                timeout: function (e) {
+                                    failed++;
+                                    self.status(file.id , false);
+                                    upload.call(self);
+                                    console.log('timeout' , e);
+                                }
+                            });
+                        };
+                        fileReader.readAsArrayBuffer(block);
+                    };
+                    blockToUpload();
+                } else {
+                    // 普通上传
+                    var formData = G.formData(this.option.field , file);
+                    G.ajax({
+                        url: this.option.api ,
+                        method: 'post' ,
+                        data: formData ,
+                        wait: this.option.timeout ,
+                        before: function(){
+                            self.progress(file.id , 0);
+                        } ,
+                        uProgress: function(e){
+                            if (!e.lengthComputable) {
+                                return ;
+                            }
+                            var percent = e.loaded / e.total;
+                            percent *= 100;
+                            self.progress(file.id , percent);
+                        } ,
+
+                        success: function (response , status) {
+                            // 上传文件完成
+                            self.progress(file.id , 100);
+                            uploaded++;
+                            if (G.isFunction(self.option.uploaded)) {
+                                var args = [response , status];
                                 args.unshift(file);
-                            self.option.uploaded.apply(self , args);
-                        }
-                        upload.call(self);
-                    } ,
-                    error: function (e) {
-                        failed++;
-                        self.status(file.id , false);
-                        // 继续消费队列
-                        upload.call(self);
+                                self.option.uploaded.apply(self , args);
+                            }
+                            upload.call(self);
+                        } ,
+                        error: function (e) {
+                            failed++;
+                            self.status(file.id , false);
+                            // 继续消费队列
+                            upload.call(self);
 
-                        console.log('error' , e);
-                    } ,
-                    uError: function(e){
-                        console.log('uError' , e);
-                    } ,
-                    netError: function (e) {
-                        failed++;
-                        self.status(file.id , false);
-                        upload.call(self);
-                        console.log('netError' , e);
-                    } ,
-                    timeout: function (e) {
-                        failed++;
-                        self.status(file.id , false);
-                        upload.call(self);
-                        console.log('timeout' , e);
-                    }
-                });
+                            console.log('error' , e);
+                        } ,
+                        uError: function(e){
+                            console.log('uError' , e);
+                        } ,
+                        netError: function (e) {
+                            failed++;
+                            self.status(file.id , false);
+                            upload.call(self);
+                            console.log('netError' , e);
+                        } ,
+                        timeout: function (e) {
+                            failed++;
+                            self.status(file.id , false);
+                            upload.call(self);
+                            console.log('timeout' , e);
+                        }
+                    });
+                }
             };
             upload.call(this);
         } ,
