@@ -7,7 +7,7 @@
         if (!root.isDom()) {
             throw new Error('参数 1 错误');
         }
-        const _default = {
+        var _default = {
             // 上传地址
             api: '' ,
             // 上传字段
@@ -35,11 +35,15 @@
             isEnabledBlock: false ,
             // 分片上传 - 单个块上传成功后的一个检测函数
             isBlockUploadOk: null ,
+            // mime 类型限定
+            // image - 图片 video - 视频 file - 文件
+            mimeLimit: 'file' ,
         };
         if (G.isUndefined(option)) {
             option = _default;
         }
         var modeRange = ['append' , 'override'];
+        var mimeTypeRange = ['file' , 'image' , 'video' , 'office'];
         option.api      = G.isString(option.api) ? option.api : _default.api;
         option.field    = G.isString(option.field) ? option.field : _default.field;
         option.mode     = G.contain(option.mode , modeRange) ? option.mode : _default.mode;
@@ -55,6 +59,7 @@
         option.parallelUploadBlockNumber = G.isNumber(option.parallelUploadBlockNumber) ? option.parallelUploadBlockNumber : _default.parallelUploadBlockNumber;
         option.isEnabledBlock = G.isBoolean(option.isEnabledBlock) ? option.isEnabledBlock : _default.isEnabledBlock;
         option.isBlockUploadOk = G.isFunction(option.isBlockUploadOk) ? option.isBlockUploadOk : _default.isBlockUploadOk;
+        option.mimeLimit = G.contain(option.mimeLimit , mimeTypeRange) ? option.mimeLimit : _default.mimeLimit;
 
         this.option = option;
         this.dom = {
@@ -72,16 +77,20 @@
         initStatic: function(){
             var self = this;
 
-            this.dom.uploader         = G('.uploader' , this.dom.root.get(0));
-            this.dom.fileInput          = G('.file-input' , this.dom.uploader.get(0));
-            this.dom.handler            = G('.handler' , this.dom.uploader.get(0));
-            this.dom.clear              = G('.clear' , this.dom.uploader.get(0));
+            this.dom.uploader           = G('.uploader' , this.dom.root.get(0));
+            this.dom.upload             = G('.upload' , this.dom.uploader.get(0));
+            this.dom.fileInput          = G('.file-input' , this.dom.upload.get(0));
+            this.dom.handler            = G('.handler' , this.dom.upload.get(0));
+            this.dom.clear              = G('.clear' , this.dom.upload.get(0));
+            this.dom.msg              = G('.msg' , this.dom.upload.get(0));
             this.dom.preview            = G('.preview' , this.dom.uploader.get(0));
 
             // 文件列表
             this.file = [];
 
             this.data = Object.assign({} , this.option);
+
+            this.data.msgText = this.dom.msg.text();
 
             if (this.data.isEnabledBlock) {
                 if (!G.isFunction(this.data.isBlockUploadOk)) {
@@ -90,7 +99,7 @@
             }
 
             this.imageExtRange = ['jpg' , 'jpeg' , 'png' , 'gif' , 'bmp' , 'ico' , 'tif' , 'webp'];
-            this.videoExtRange = ['mp4' , 'mkv' , 'mov' , 'avi' , 'ts' , 'flv' , 'rmvb' , 'webm'];
+            this.videoExtRange = ['mp4','mov','mkv','avi','flv','rm','rmvb','ts','webm' , 'mpg' , '3gp' , 'wmv'];
 
             if (this.option.multiple) {
                 this.dom.fileInput.native('multiple' , true);
@@ -122,6 +131,56 @@
             this.dom.handler.on('click' , this.showFileSelector.bind(this) , true , false);
             this.dom.fileInput.on('change' , this.fileEvent.bind(this) , true , false);
             this.dom.clear.on('click' , this.clearEvent.bind(this) , true , false);
+            this.dom.handler.on('paste' , this.pasteEvent.bind(this) , true , false);
+            this.dom.handler.on('dragover' , this.dragOverEvent.bind(this) , true , false);
+            this.dom.handler.on('drop' , this.dropEvent.bind(this) , true , false);
+        } ,
+
+
+        pasteEvent: function(e){
+            e.preventDefault();
+            var dataTransfer = e.clipboardData;
+            var items = dataTransfer.items;
+            var item;
+            var i = items.length - 1;
+            var files = [];
+            while (i >= 0)
+            {
+                item = items[i--];
+                if (item.kind !== 'file') {
+                    console.log('粘贴的类型' , item.kind , item);
+                    continue ;
+                }
+                // 粘贴的内容是文件
+                var file = item.getAsFile();
+                files.push(file);
+            }
+            this.fileChange(files);
+        } ,
+
+        dragOverEvent: function(e){
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+        } ,
+
+        dropEvent: function(e){
+            e.preventDefault();
+            var dataTransfer = e.dataTransfer;
+            var items = dataTransfer.items;
+            var item;
+            var i = items.length - 1;
+            var files = [];
+            while (i >= 0)
+            {
+                item = items[i--];
+                if (item.kind !== 'file') {
+                    console.log('粘贴的类型' , item.kind , item);
+                    continue ;
+                }
+                var file = item.getAsFile();
+                files.push(file);
+            }
+            this.fileChange(files);
         } ,
 
         clearEvent: function(e){
@@ -147,16 +206,67 @@
             return res;
         } ,
 
-        handleFile (files) {
-            files.forEach((file) => {
-                file.id = G.randomArray(32 , 'mixed' , true);
-            });
+        handleFile (file) {
+            file.id = G.randomArray(32 , 'mixed' , true);
         } ,
 
         fileEvent: function(){
             var files = this.dom.fileInput.native('files');
                 files = this.toArray(files);
-            this.handleFile(files);
+            this.fileChange(files);
+        } ,
+
+        message: function(message , type){
+            var self = this;
+            this.dom.msg.addClass(type);
+            this.dom.msg.text(message);
+            window.setTimeout(function(){
+                self.dom.msg.removeClass(type);
+                self.dom.msg.text(self.data.msgText);
+            } , 5000);
+        } ,
+
+        restoreMessage: function(){
+            this.dom.msg.removeClass(['success' , 'error']);
+            this.dom.msg.text(this.data.msgText);
+        } ,
+
+        fileChange: function(files){
+            var self = this;
+            var i = 0;
+            var file;
+            var ext;
+            var extRange;
+            if (files.length <= 0) {
+                return ;
+            }
+            // 文件类型检查
+            for (i = 0; i < files.length; ++i)
+            {
+                file = files[i];
+                if (this.option.mimeLimit !== 'file') {
+                    ext = G.getFileSuffix(file.name);
+                    switch (this.option.mimeLimit)
+                    {
+                        case 'image':
+                            extRange = this.imageExtRange;
+                            break;
+                        case 'video':
+                            extRange = this.videoExtRange;
+                            break;
+                    }
+                    console.log('文件后缀' , ext);
+                    if (extRange.indexOf(ext) < 0) {
+                        this.message('请按照要求上传文件！当前受支持的格式有：' + extRange.join(',') , 'error');
+                        return ;
+                    }
+                }
+                this.handleFile(file);
+            }
+            this.restoreMessage();
+            files.forEach(function(file){
+                self.handleFile(file);
+            });
             switch (this.option.mode)
             {
                 case 'append':

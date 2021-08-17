@@ -5,17 +5,28 @@
 .uploader .upload {
 	border-bottom: 1px solid #ccc;
 	position:relative;
-	height: 80px;
-	line-height: 80px;
+	height: 124px;
+	padding-bottom: 20px;
+	box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	-o-box-sizing: content-box;
+	-ms-box-sizing: content-box;
 }
 
 .uploader .upload .handler {
 	position: absolute;
 	left: 0;
 	top: 0;
-	width: 200px;
+	width: 250px;
 	cursor: pointer;
-	line-height: normal;
+	padding: 20px;
+	border: 2px dashed #ccc;
+	box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	-o-box-sizing: content-box;
+	-ms-box-sizing: content-box;
 }
 
 .uploader .upload .handler:hover .icon .ico .clear {
@@ -72,9 +83,17 @@
 }
 
 .uploader .upload .msg {
-	margin-left: 200px;
+	margin-left: 314px;
 	font-size: 12px;
 	color: #999;
+	height: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.uploader .upload .msg.error {
+	color: red;
 }
 
 /***

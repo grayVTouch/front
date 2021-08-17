@@ -5662,8 +5662,7 @@
             });
         } ,
 
-        // 附加关联数据
-        link: function(structData , field ,  parent) {
+        buildTree: function(structData , field , parent){
             field = g.isUndefined(field) ? {id: 'id' , p_id: 'p_id'} : field;
             for (let i = 0; i < structData.length; ++i)
             {
@@ -5675,7 +5674,7 @@
                     cur[field['p_id']] = parent[field['id']];
                 }
                 if (g.isArray(cur.children)) {
-                    this.link(cur.children , field , cur);
+                    this.buildTree(cur.children , field , cur);
                 }
             }
         } ,

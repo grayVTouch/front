@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div class="container" id="file">
+<div class="container" id="file" style="padding: 20px;">
 
     <!--
         上传图片组件，仅预览图片的 html 结构用户可以随意使用
@@ -30,7 +30,7 @@
                         <div class="feedback run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-shangchuan"></i></div>
                         <div class="clear run-action-feedback-round" title="清空"><i class="iconfont run-iconfont run-iconfont-qingkong"></i></div>
                     </div>
-                    <div class="text">请选择要上传的文件</div>
+                    <div class="text">请选择要上传的文件或拖拽文件到此</div>
                 </div>
 
             </div>
@@ -263,6 +263,7 @@
         // 单位： ms
         timeout: 0 ,
         clear: true ,
+        mimeLimit: 'image' ,
     });
 
     var uploadBtn = G('#upload');
