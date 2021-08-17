@@ -167,7 +167,7 @@
 }
 
 .input-table tbody > .error td > .msg {
-	display: none;
+	/*display: none;*/
 }
 
 .input-table tbody > .error td > .e-msg {

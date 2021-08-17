@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div class="container" id="file">
+<div class="container" id="file" style="padding: 20px;">
 
     <!--
         上传图片组件，仅预览图片的 html 结构用户可以随意使用
@@ -30,7 +30,7 @@
                         <div class="feedback run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-shangchuan"></i></div>
                         <div class="clear run-action-feedback-round" title="清空"><i class="iconfont run-iconfont run-iconfont-qingkong"></i></div>
                     </div>
-                    <div class="text">请选择要上传的文件</div>
+                    <div class="text">请选择要上传的文件或拖拽文件到此</div>
                 </div>
 
             </div>
@@ -186,35 +186,84 @@
 
 <button id="upload" class="run-button run-button-submit">上传</button>
 
+<input type="file" id="u_file">
+<button type="button">u 上传</button>
+
 <script src="../SmallJs/SmallJs.js"></script>
+<script src="../SparkMD5/spark-md5.min.js"></script>
 <script src="js/Uploader.js"></script>
 <script>
     'use strict';
 
+
+    const uFile = document.querySelector('#u_file');
+    uFile.onchange = (e) => {
+        const tar = e.currentTarget;
+        const files = tar.files;
+        if (files.length <= 0) {
+            return ;
+        }
+        const file = files[0];
+        const size = 100 * 1024 * 1024;
+        const chunk = file.slice(0 , Math.min(file.size , size));
+        const formData = new FormData();
+        formData.append('name' , file.name);
+        formData.append('size' , file.size);
+        formData.append('total' , 10);
+        formData.append('index' , 1);
+        formData.append('file' , chunk);
+
+        fetch('http://api.xq.test/api/admin/upload_video' , {
+            method: 'post' ,
+            mode: 'cors' ,
+            body: formData ,
+        })
+            .then((res) => {
+                return res.text();
+            })
+            .then((res) => {
+                console.log('response' , res);
+            })
+            .catch((err) => {
+                console.log('error' , err);
+            })
+    };
+
+
     var file = G('#file');
     var uploader = new Uploader(file.get(0) , {
         // 上传地址
-        api: 'http://xq.test/api/v1/upload' ,
+        api: 'http://api.xq.test/api/admin/upload_video' ,
         // 上传字段
         field: 'file' ,
         // 模式：append-追加 override-覆盖
-        mode: 'append' ,
+        mode: 'override' ,
         // 单文件上传
-        multiple: true ,
+        multiple: false ,
         direct: true ,
+        // 单位：MB
+        blockSize: 512 ,
+        // 启用分块上传
+        isEnabledBlock: true ,
+        // 检查单个块上传是否成功
+        isBlockUploadOk (res , code) {
+            return code === 200;
+        } ,
         // 单个文件上传完成调用
-        uploaded: function(msg , data , code){
-            // console.log('文件上传完成');
+        uploaded: function(file , data , code){
+            // this.status();
         } ,
 
         // 全部上传完成回调函数
         completed: function (total , uploaded , failed) {
             console.log('文件综述：' , total , uploaded , failed);
+
         } ,
         // 文件上传超时时间，默认：0-不限制
         // 单位： ms
         timeout: 0 ,
         clear: true ,
+        mimeLimit: 'image' ,
     });
 
     var uploadBtn = G('#upload');
