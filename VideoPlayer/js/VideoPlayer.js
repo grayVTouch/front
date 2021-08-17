@@ -632,6 +632,18 @@
         } ,
 
         resizeEvent: function(){
+            // 全盘判断
+            this.data.fullscreen = G.isFullscreen();
+
+            if (this.data.fullscreen) {
+                this.fullscreen();
+            } else {
+                this.notFullscreen();
+            }
+
+            console.log('resize event handle' , G.isFullscreen());
+
+            // 重新初始化参数
             this.initDynamic();
         } ,
 
@@ -1001,8 +1013,8 @@
         } ,
 
         step: function(step){
-            this.showControl();
-            this.delayHideControl();
+            // this.showControl();
+            // this.delayHideControl();
             var duration = this.duration();
             var currentTime = Math.max(0 , Math.min(duration , this.currentTime() + step));
             var ratio = currentTime / duration;

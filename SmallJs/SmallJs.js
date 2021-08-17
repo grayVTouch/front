@@ -2228,41 +2228,26 @@
          */
         requestFullScreen: function () {
             var dom = this.get(0);
-            var fullScreenEnabled = document.fullScreenEnabled || document.webkitFullScreenEnabled || document.mozFullScreenEnabled || document.msFullScreenEnabled;
-            var isFullScreen = document.fullScreenElement || document.webkitFullScreenElement || document.mozFullScreenElement || document.msFullScreenElement;
+            var fullScreenEnabled = document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullscreenEnabled || document.msFullscreenEnabled;
+            var fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullscreenElement || document.msFullscreenElement;
 
-            if (g.type(fullScreenEnabled) === 'Undefined' || fullScreenEnabled) {
-                if (g.type(isFullScreen) === 'Undefined') {
-                    if (dom.requestFullScreen) {
-                        dom.requestFullScreen();
-                    } else if (dom.webkitRequestFullScreen) {
-                        dom.webkitRequestFullScreen();
-                    } else if (dom.mozRequestFullScreen) {
-                        dom.mozRequestFullScreen();
-                    } else if (dom.requestFullscreen) {
-                        dom.requestFullscreen();
-                    } else if (dom.msRequestFullscreen) {
-                        dom.msRequestFullscreen();
-                    } else {
-                        console.log('不存在进入全屏的方法！ => undefined');
-                    }
-                } else if (isFullScreen === null) {
-                    if (dom.requestFullScreen) {
-                        dom.requestFullScreen();
-                    } else if (dom.webkitRequestFullScreen) {
-                        dom.webkitRequestFullScreen();
-                    } else if (dom.mozRequestFullScreen) {
-                        dom.mozRequestFullScreen();
-                    } else if (dom.requestFullscreen) {
-                        dom.requestFullscreen();
-                    } else if (dom.msRequestFullscreen) {
-                        dom.msRequestFullscreen();
-                    } else {
-                        console.log('不存在进入全屏的方法！ => null');
-                    }
-                } else {
+            if (fullScreenEnabled) {
+                if (g.isValid(fullscreenElement)) {
                     console.log('元素已经是全屏状态了！');
                     return true;
+                }
+                if (dom.requestFullscreen) {
+                    dom.requestFullscreen();
+                } else if (dom.requestFullScreen) {
+                    dom.requestFullScreen();
+                } else if (dom.webkitRequestFullScreen) {
+                    dom.webkitRequestFullScreen();
+                } else if (dom.mozRequestFullScreen) {
+                    dom.mozRequestFullScreen();
+                } else if (dom.msRequestFullscreen) {
+                    dom.msRequestFullscreen();
+                } else {
+                    console.log('不存在进入全屏的方法！ => undefined');
                 }
             } else {
                 console.log('不支持全屏模式！');
@@ -2273,45 +2258,28 @@
          * 退出全屏
          */
         exitFullScreen: function () {
-            var fullScreenEnabled = document.fullScreenEnabled || document.webkitFullScreenEnabled || document.mozFullScreenEnabled || document.msFullScreenEnabled;
-            var isFullScreen = document.fullScreenElement || document.webkitFullScreenElement || document.mozFullScreenElement || document.msFullScreenElement;
+            var fullScreenEnabled = document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullscreenEnabled || document.msFullscreenEnabled;
+            var fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullscreenElement || document.msFullscreenElement;
 
-            if (g.type(fullScreenEnabled) === 'Undefined' || fullScreenEnabled) {
-                if (g.type(isFullScreen) === 'Undefined') {
-                    if (document.exitFullScreen) {
-                        document.exitFullScreen();
-                    } else if (document.webkitExitFullScreen) {
-                        document.webkitExitFullScreen();
-                    } else if (document.webkitCancelFullScreen) {
-                        document.webkitCancelFullScreen();
-                    } else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    } else if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    } else {
-                        console.log('不存在退出全屏的方法！ => undefined');
-                    }
-                } else if (isFullScreen !== null) {
-                    if (document.exitFullScreen) {
-                        document.exitFullScreen();
-                    } else if (document.webkitExitFullScreen) {
-                        document.webkitExitFullScreen();
-                    } else if (document.webkitCancelFullScreen) {
-                        document.webkitCancelFullScreen();
-                    } else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    } else if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    } else {
-                        console.log('不存在退出全屏的方法！ => null');
-                    }
-                } else {
+            if (fullScreenEnabled) {
+                if (!g.isValid(fullscreenElement)) {
                     console.log('元素已经是非全屏状态了！');
                     return true;
+                }
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.exitFullScreen) {
+                    document.exitFullScreen();
+                } else if (document.webkitExitFullScreen) {
+                    document.webkitExitFullScreen();
+                } else if (document.webkitCancelFullScreen) {
+                    document.webkitCancelFullScreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else {
+                    console.log('不存在退出全屏的方法！当前浏览器：' + g.browser());
                 }
             } else {
                 console.log('不支持全屏模式！');
@@ -2587,6 +2555,20 @@
      以下是以 SmallJs 作为命名空间的 基础函数库
      * ******************************************
      */
+    g.isFullscreen = function(){
+        var fullScreenEnabled = document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullscreenEnabled || document.msFullscreenEnabled;
+        var fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullscreenElement || document.msFullscreenElement;
+
+        if (fullScreenEnabled) {
+            if (g.isValid(fullscreenElement)) {
+                return true;
+            }
+            return false;
+        }
+        // 不支持全屏
+        return false;
+    };
+
     g.nextTick = function(callback){
         var self = this;
         window.setTimeout(function(){
